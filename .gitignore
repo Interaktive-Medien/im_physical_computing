@@ -1,0 +1,8 @@
+﻿.DS_Store
+__pycache__/
+CrashAutoSave*.toe
+*.dmp
+# *.txt
+# Backup
+*config.*
+*sftp.json
