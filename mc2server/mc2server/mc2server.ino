@@ -3,6 +3,7 @@
 
 #include <WiFi.h>
 #include <HTTPClient.h>
+#include <ArduinoJson.h>  // by Benoit Blanchon
 
 unsigned long lastTime = 0;
 unsigned long timerDelay = 15000; // 15s
@@ -37,6 +38,23 @@ void loop() {
     // Zeit aktualisieren
     lastTime = millis();
 
+    // sensor auslesen
+
+
+    // JSON zusammenbauen
+    JsonDocument jsondocument;
+    jsondocument["sensor"] = "mysensor";
+    jsondocument["wert"] = 2345;
+    jsondocument["api_key"] = "tPmAT5Ab3j7F9";
+    String jsondata;
+    serializeJson(jsondocument, jsondata);  // Generate the minified JSON and write it into String jsondata.
+
+    // Erstellen des JSON-Strings
+    // String jsondata = "{\"sensor\":\"%s\", \"wert\":%d, \"api_key\":\"tPmAT5Ab3j7F9\"}", sensor, wert;
+
+  
+
+
     // Überprüfen, ob Wi-Fi verbunden ist
     if (WiFi.status() == WL_CONNECTED) {
       HTTPClient http;
@@ -50,14 +68,12 @@ void loop() {
       // Definieren des POST-Typs und Inhalts
       http.addHeader("Content-Type", "application/json");
 
-      // Erstellen des JSON-Strings
-      String jsonData = "{\"sensor\":\"sensor1\", \"wert\":43, \"api_key\":\"tPmAT5Ab3j7F9\"}";
-
+     
       // Beispiel-Daten für den POST
       //String httpRequestData = "sensor=value1&wert=42&api_key=apiKeyValue";
 
       // Senden der POST-Anfrage
-      int httpResponseCode = http.POST(jsonData);
+      int httpResponseCode = http.POST(jsondata);
 
       // Prüfen der Antwort
       if (httpResponseCode > 0) {
