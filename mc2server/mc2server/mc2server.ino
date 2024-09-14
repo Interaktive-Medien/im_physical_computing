@@ -3,7 +3,7 @@
 
 #include <WiFi.h>
 #include <HTTPClient.h>
-#include <ArduinoJson.h>  // by Benoit Blanchon
+#include <Arduino_JSON.h> // by Arduino
 
 unsigned long lastTime = 0;
 unsigned long timerDelay = 15000; // 15s
@@ -28,52 +28,37 @@ void setup() {
     delay(500);
     Serial.print(".");
   }
-  
   Serial.printf("\nWiFi connected: SSID: %s, IP Address: %s\n", ssid, WiFi.localIP().toString().c_str());
 }
 
 void loop() {
-  // Sendet alle 10 Sekunden eine POST-Anfrage
+  // alle 10 Sekunden
   if ((millis() - lastTime) > timerDelay) {
-    // Zeit aktualisieren
     lastTime = millis();
 
     // sensor auslesen
-
-
+    String sensor = "mysensor";
+    int wert = 11;    
+    
     // JSON zusammenbauen
-    JsonDocument jsondocument;
-    jsondocument["sensor"] = "mysensor";
-    jsondocument["wert"] = 2345;
-    jsondocument["api_key"] = "tPmAT5Ab3j7F9";
-    String jsondata;
-    serializeJson(jsondocument, jsondata);  // Generate the minified JSON and write it into String jsondata.
-
-    // Erstellen des JSON-Strings
-    // String jsondata = "{\"sensor\":\"%s\", \"wert\":%d, \"api_key\":\"tPmAT5Ab3j7F9\"}", sensor, wert;
+    JSONVar myObject;
+    myObject["sensor"] = sensor;
+    myObject["wert"] = wert;
+    myObject["api_key"] = "tPmAT5Ab3j7F9";
+    String jsonString = JSON.stringify(myObject);
+    // String jsonString = "{\"sensor\":\"%s\", \"wert\":%d, \"api_key\":\"tPmAT5Ab3j7F9\"}", sensor, wert;
 
   
-
-
     // Überprüfen, ob Wi-Fi verbunden ist
     if (WiFi.status() == WL_CONNECTED) {
+
+      // HTTP Verbindung starten und POST-Anfrage senden
       HTTPClient http;
-
-      // Server-URL und Pfad
       String serverURL = String(serverName) + serverPath;
-
-      // Begin der HTTP-Verbindung
       http.begin(serverURL);
-
-      // Definieren des POST-Typs und Inhalts
       http.addHeader("Content-Type", "application/json");
-
-     
-      // Beispiel-Daten für den POST
-      //String httpRequestData = "sensor=value1&wert=42&api_key=apiKeyValue";
-
-      // Senden der POST-Anfrage
-      int httpResponseCode = http.POST(jsondata);
+      //String httpRequestData = "sensor=value1&wert=42&api_key=apiKeyValue";   // Beispiel-Daten für den POST (ohne json-Formatierung)
+      int httpResponseCode = http.POST(jsonString);
 
       // Prüfen der Antwort
       if (httpResponseCode > 0) {
