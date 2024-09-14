@@ -1,6 +1,3 @@
-// https://arduinogetstarted.com/tutorials/arduino-http-request?utm_content=cmp-true
-
-
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <Arduino_JSON.h> // by Arduino
@@ -11,12 +8,11 @@ unsigned long timerDelay = 15000; // 15s
 const char* ssid     = "dreammakers";
 const char* pass     = "dreammakers";
 
-const char* serverName = "http://192.168.0.98"; // Server-Adresse
-String serverPath = "/";  // Pfad der Anfrage
+const char* serverName = "https://192.168.0.98"; // Server-Adresse: hier kann http oder https stehen, aber nicht ohne
+String serverPath = "/05_mc2db/server2db.php";  // Pfad der Anfrage
 
-// Keep this API Key value to be compatible with the PHP code provided in the project page. 
-// If you change the apiKeyValue value, the PHP file /post-esp-data.php also needs to have the same key 
-String apiKeyValue = "tPmAT5Ab3j7F9";
+// Keep this API Key value to be compatible with the PHP code server2db.php. That file also needs to have the same key 
+String apiKeyValue = "im";
 
 void setup() {
   Serial.begin(115200);
@@ -38,15 +34,15 @@ void loop() {
 
     // sensor auslesen
     String sensor = "mysensor";
-    int wert = 11;    
+    int wert = 13;    
     
     // JSON zusammenbauen
-    JSONVar myObject;
-    myObject["sensor"] = sensor;
-    myObject["wert"] = wert;
-    myObject["api_key"] = "tPmAT5Ab3j7F9";
-    String jsonString = JSON.stringify(myObject);
-    // String jsonString = "{\"sensor\":\"%s\", \"wert\":%d, \"api_key\":\"tPmAT5Ab3j7F9\"}", sensor, wert;
+    JSONVar dataObject;
+    dataObject["sensor"] = sensor;
+    dataObject["wert"] = wert;
+    dataObject["api_key"] = apiKeyValue;
+    String jsonString = JSON.stringify(dataObject);
+    // String jsonString = "{\"sensor\":\"fiessling\", \"wert\":77, \"api_key\":\"im\"}";
 
   
     // Überprüfen, ob Wi-Fi verbunden ist
@@ -69,7 +65,6 @@ void loop() {
         Serial.printf("Error on sending POST: %d\n", httpResponseCode);
       }
 
-      // Schließen der Verbindung
       http.end();
     } else {
       Serial.println("WiFi Disconnected");

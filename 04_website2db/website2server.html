@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Example Sender</title>
+    <script>
+        async function submitForm(event) {
+            event.preventDefault(); // Verhindert das normale Absenden des Formulars
+
+            // Sammle die Formulardaten und wandle sie in JSON um
+            const formData = new FormData(event.target);
+            const dataObject = {
+                sensor: formData.get("sensor"),
+                wert: formData.get("wert"),
+                api_key: formData.get("api_key")
+            };
+            const jsonstring = JSON.stringify(dataObject);
+
+            const messageElement = document.querySelector("#message"); // Element für die Nachricht
+
+            try {
+                // Passe die URL auf HTTP an, falls kein SSL verwendet wird
+                const response = await fetch("http://localhost/server/mcdata2db.php", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json' // Setze den Content-Type auf JSON
+                    },
+                    body: jsonstring // Sende die Daten als JSON-String
+                });
+
+                if (response.ok) {
+                    messageElement.textContent = "Message successfully delivered!";
+                    messageElement.style.color = "green";
+                } else {
+                    // Logge den gesamten Fehler, um mehr Details zu bekommen
+                    const errorMessage = await response.text();
+                    messageElement.textContent = `Error: ${response.statusText} - ${errorMessage}`;
+                    messageElement.style.color = "red";
+                }
+            } catch (error) {
+                messageElement.textContent = "An error occurred: " + error.message;
+                messageElement.style.color = "red";
+                console.error("Fetch error:", error); // Logge den Fehler in der Konsole
+            }
+        }
+    </script>
+</head>
+<body>
+    <form method="POST" onsubmit="submitForm(event)">
+        <label for="sensor">Sensor:</label>
+        <input type="text" id="sensor" name="sensor" required><br><br>    
+        <label for="wert">Wert:</label>
+        <input type="text" id="wert" name="wert" required><br><br>     
+        <input type="hidden" name="api_key" value="tPmAT5Ab3j7F9">
+        
+        <input type="submit" name="submit" value="Submit">
+    </form>
+    <br>
+    <p id="message"></p>
+</body>
+</html>

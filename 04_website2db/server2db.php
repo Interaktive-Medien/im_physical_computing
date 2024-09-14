@@ -1,6 +1,6 @@
 <?php
 
-require_once("config.php");
+require_once("server_config.php");
 echo "This script receives HTTP POST messages and pushes their content into the database.";
 
 
@@ -17,15 +17,19 @@ catch(PDOException $e){
 
 
 
+// Empfangen der JSON-Daten
+$inputJSON = file_get_contents('php://input'); // JSON-Daten aus dem Body der Anfrage
+$input = json_decode($inputJSON, true); // Dekodieren der JSON-Daten in ein Array
 
 
-# insert raw incoming HTTP message into a database only for troubleshooting purposes
 
-if (!empty($_POST)) {
-    $msg = json_encode($_POST);
+// Prüfen, ob die JSON-Daten erfolgreich dekodiert wurden
+if (json_last_error() === JSON_ERROR_NONE && !empty($input)) {
+    // Debugging: Die rohen JSON-Daten in die Tabelle receiveddata einfügen
+
     $sql = "INSERT INTO receiveddata (msg) VALUES (?)";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$msg]);
+    $stmt->execute([$inputJSON]);
 }
 
 echo "</br></br> Zeig die letzten 5 empfangenen HTTP Requests";
@@ -40,7 +44,8 @@ foreach ($receiveddata as $data) {
     echo "<li>" . $data['msg'] . "</li>";
 }
 echo "</ul>";
-// }
+
+
 
 
 
@@ -50,25 +55,18 @@ echo "</ul>";
 
 
 # receiving a post request from the ESP32 C6
-
 $received_api_key = $sensor = $wert = "";
 
-if (isset($_POST["api_key"])) {
-
-    echo "API key received: " . $_POST["api_key"];
-    
-    $received_api_key = test_input($_POST["api_key"]);
+if (isset($input["api_key"])) {
+    $received_api_key = test_input($input["api_key"]);
     if($received_api_key == $api_key_value) {
-        echo "received api key matches";
-        $sensor = test_input($_POST["sensor"]);
-        $wert = test_input($_POST["wert"]);
+        $sensor = test_input($input["sensor"]);
+        $wert = test_input($input["wert"]);
 
         # insert new user into db
         $sql = "INSERT INTO sensordata (sensor, wert) VALUES (?, ?)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$sensor, $wert]);
-
-
     }
 }
 
@@ -80,4 +78,3 @@ function test_input($data) {
     return $data;
 }
 ?>
-

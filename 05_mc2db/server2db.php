@@ -1,6 +1,6 @@
 <?php
 
-require_once("config.php");
+require_once("server_config.php");
 echo "This script receives HTTP POST messages and pushes their content into the database.";
 
 
