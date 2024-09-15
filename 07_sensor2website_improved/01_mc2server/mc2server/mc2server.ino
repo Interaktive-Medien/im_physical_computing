@@ -34,17 +34,18 @@ void loop() {
 
     // sensor auslesen
     String sensor = "mysensor";
-    int wert = 13;    
+    float wert1 = (float)random(0, 1000) / 10;  // 0 - 100  
+    float wert2 = (float)random(0, 1000) / 10;  // 0 - 100
     
     // JSON zusammenbauen
     JSONVar dataObject;
     dataObject["sensor"] = sensor;
-    dataObject["wert"] = wert;
+    dataObject["wert1"] = wert1;
+    dataObject["wert2"] = wert2;
     dataObject["api_key"] = apiKeyValue;
     String jsonString = JSON.stringify(dataObject);
     // String jsonString = "{\"sensor\":\"fiessling\", \"wert\":77, \"api_key\":\"im\"}";
 
-  
     // Überprüfen, ob Wi-Fi verbunden ist
     if (WiFi.status() == WL_CONNECTED) {
 
@@ -53,7 +54,6 @@ void loop() {
       String serverURL = String(serverName) + serverPath;
       http.begin(serverURL);
       http.addHeader("Content-Type", "application/json");
-      //String httpRequestData = "sensor=value1&wert=42&api_key=apiKeyValue";   // Beispiel-Daten für den POST (ohne json-Formatierung)
       int httpResponseCode = http.POST(jsonString);
 
       // Prüfen der Antwort

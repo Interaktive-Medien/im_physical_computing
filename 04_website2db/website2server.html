@@ -10,8 +10,7 @@
             const formData = new FormData(event.target);
             const dataObject = {
                 sensor: formData.get("sensor"),
-                wert: formData.get("wert"),
-                api_key: formData.get("api_key")
+                wert: formData.get("wert")
             };
             const jsonstring = JSON.stringify(dataObject);
 
@@ -49,8 +48,7 @@
         <label for="sensor">Sensor:</label>
         <input type="text" id="sensor" name="sensor" required><br><br>    
         <label for="wert">Wert:</label>
-        <input type="text" id="wert" name="wert" required><br><br>     
-        <input type="hidden" name="api_key" value="tPmAT5Ab3j7F9">
+        <input type="text" id="wert" name="wert" required><br><br>    
         
         <input type="submit" name="submit" value="Submit">
     </form>

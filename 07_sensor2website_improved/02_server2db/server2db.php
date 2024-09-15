@@ -60,13 +60,13 @@ $received_api_key = $sensor = $wert = "";
 if (isset($input["api_key"])) {
     $received_api_key = test_input($input["api_key"]);
     if($received_api_key == $api_key_value) {
-        $sensor = test_input($input["sensor"]);
-        $wert = test_input($input["wert"]);
+        $wert1 = test_input($input["wert1"]);
+        $wert2 = test_input($input["wert2"]);
 
         # insert new user into db
-        $sql = "INSERT INTO sensordata (sensor, wert) VALUES (?, ?)";
+        $sql = "INSERT INTO sensordata (wert1, wert2) VALUES (?, ?)";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([$sensor, $wert]);
+        $stmt->execute([$wert1, $wert2]);
     }
 }
 
