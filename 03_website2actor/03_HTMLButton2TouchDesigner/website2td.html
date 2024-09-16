@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="btn">Click</button>
+ 
+    <a href="http://localhost:9970"> Link</a>
+    <script>
+      document.querySelector("#btn").addEventListener("click", function () {
+        fetch("http://localhost:9970", { 
+          method: "GET", // HTTP-Methode
+          mode: "no-cors" 
+        })
+        fetch("http://localhost:9970")
+          .then((data) => {
+            // Handle the response data here
+            console.log("successful");
+          })
+          .catch((error) => {
+            console.error(error);
+            console.log("an error: Status code:", error.status);
+          });
+        console.log("Button clicked!");
+      });
+    </script>
+  </body>
+</html>
