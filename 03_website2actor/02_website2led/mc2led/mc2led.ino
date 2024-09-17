@@ -1,8 +1,3 @@
-// Der HTTP-Server läuft auf Port 80 (WebServer server(80)).
-// Eine Route (/postjson) wird definiert, um POST-Anfragen zu verarbeiten. 
-// Die Methode server.on("/postjson", HTTP_POST, handlePostRequest) 
-// weist die POST-Route der Funktion handlePostRequest() zu.
-
 #include <WiFi.h>
 #include <WebServer.h>
 #include <Arduino_JSON.h>
@@ -13,38 +8,10 @@ int led = BUILTIN_LED;
 const char* ssid = "dreammakers";
 const char* password = "dreammakers";
 
-// HTTP-Server läuft auf Port 80
+// HTTP-Server auf Port 80
 WebServer server(80);
 
-// Funktion zum Verarbeiten von POST-Anfragen
-void handlePostRequest() {
-  if (server.hasArg("plain") == false) {  // Überprüfen, ob der Body vorhanden ist
-    server.send(400, "text/plain", "400: Invalid Request - No Body");
-    return;
-  }
 
-  // JSON-String aus dem Body der Anfrage lesen
-  String jsonstring = server.arg("plain");
-
-  Serial.println(jsonstring);
-
-  // JSON-Daten parsen mit Arduino_JSON
-  JSONVar dataobject = JSON.parse(jsonstring);
-
-  int wert = int(dataobject["wert"]);
-
-  Serial.print("wert: ");
-  Serial.println(wert);
-
-  digitalWrite(led, wert);
-
- 
-
-
-
-
-
-}
 
 // Setup-Funktion
 void setup() {
@@ -80,4 +47,41 @@ void setup() {
 void loop() {
   // Verarbeite eingehende HTTP-Anfragen
   server.handleClient();
+}
+
+
+// Funktion zum Verarbeiten von POST-Anfragen
+void handlePostRequest() {
+  // CORS-Header hinzufügen
+  // Route für OPTIONS-Anfragen (Preflight)
+  server.on("/postjson", HTTP_OPTIONS, []() {
+    server.sendHeader("Access-Control-Allow-Origin", "*");
+    server.sendHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+    server.sendHeader("Access-Control-Allow-Headers", "Content-Type");
+    server.send(204); // No content, da dies nur eine Preflight-Anfrage ist
+  });
+  
+  if (server.hasArg("plain") == false) {  // Überprüfen, ob der Body vorhanden ist
+    server.send(400, "text/plain", "400: Invalid Request - No Body");
+    return;
+  }
+
+  // JSON-String aus dem Body der Anfrage lesen
+  String jsonstring = server.arg("plain");
+
+  // JSON-Daten parsen mit Arduino_JSON
+  JSONVar dataobject = JSON.parse(jsonstring);
+
+  // Prüfen, ob das Parsen erfolgreich war
+  if (JSON.typeof(dataobject) == "undefined") {
+    server.send(400, "application/json", "{\"error\":\"Invalid JSON format\"}");
+    return;
+  }
+  int wert = dataobject["wert"];
+  Serial.println(wert);
+  digitalWrite(led, wert);
+
+  // Antwort zurück an den Client senden
+  String response = "Received: wert = " + wert;
+  server.send(200, "application/json", "{\"status\":\"success\",\"message\":\"" + response + "\"}");
 }

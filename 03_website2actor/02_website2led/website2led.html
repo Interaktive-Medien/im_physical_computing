@@ -12,10 +12,10 @@
       let ledval = 0
       document.querySelector("#btn").addEventListener("click", function () {
         ledval = (ledval + 1) % 2;
+        // ledval = Math.random();
         // JSON-Daten, die gesendet werden
         const jsonData = {
           wert: ledval
-          // wert: Math.random() * 100
         };
         jsonstring = JSON.stringify(jsonData)
         console.log(jsonstring);
@@ -27,7 +27,7 @@
             "Content-Type": "application/json", // Setze den Content-Type auf JSON
           },
           body: jsonstring, // Daten in JSON-String umwandeln und senden
-          mode: "no-cors"
+          // mode: "no-cors"
         })
         .then((response) => {
           if (!response.ok) {
