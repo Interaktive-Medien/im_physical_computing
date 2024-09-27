@@ -1,6 +1,6 @@
 <?php
 
-require_once("../02_server2db/server_config.php");
+require_once("server_config.php");
 // echo "This script fetches database entries and makes them available to use for visualizing.";
 
 try {
@@ -10,7 +10,7 @@ try {
     $pdo = new PDO($dsn, $db_user, $db_pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $sql = "SELECT * FROM sensordata ORDER BY id DESC LIMIT 5"; # nur letzten 200 Daten holen
+    $sql = "SELECT * FROM sensordata ORDER BY id DESC LIMIT 100"; # nur letzten 200 Daten holen
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute();

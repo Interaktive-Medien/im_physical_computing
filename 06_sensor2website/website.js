@@ -1,6 +1,7 @@
 async function fetchData() {
     try{
-        const response = await fetch('https://localhost/06_sensor2website/03_db2website/db2website.php');
+        // const response = await fetch('https://localhost/06_sensor2website/db2website.php');
+        const response = await fetch('https://650665-4.web.fhgr.education/06_sensor2website/db2website.php');
         const data = await response.json();
         console.log(data);
         return data;
