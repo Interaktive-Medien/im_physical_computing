@@ -5,8 +5,8 @@
 int led = BUILTIN_LED;
 
 // Wi-Fi Zugangsdaten
-const char* ssid = "dreammakers";
-const char* password = "dreammakers";
+const char* ssid = "Igloo";
+const char* password = "1glooVision";
 
 // HTTP-Server auf Port 80
 WebServer server(80);
