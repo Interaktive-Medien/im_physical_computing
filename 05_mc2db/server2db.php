@@ -4,7 +4,6 @@ echo "This script receives HTTP POST messages and pushes their content into the 
 
 
 ###################################### connect to db
-
 try{
     $pdo = new PDO($dsn, $db_user, $db_pass, $options); 
     echo "</br> DB Verbindung ist erfolgreich";
