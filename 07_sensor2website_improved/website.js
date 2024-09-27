@@ -1,6 +1,7 @@
 async function fetchData() {
     try{
-        const response = await fetch('https://localhost/07_sensor2website/03_db2website/db2website.php');
+        // const response = await fetch('https://localhost/07_sensor2website_improved/db2website.php');
+        const response = await fetch('https://650665-4.web.fhgr.education/07_sensor2website_improved/db2website.php');
         const data = await response.json();
         console.log(data);
         return data;
@@ -13,8 +14,7 @@ async function main() {
     let data = await fetchData();
     console.log(data);
 
-    let wert1 = data.data.wert1;
-    let wert2 = data.data.wert2;
+    let wert = data.data.wert;
     let zeit = data.data.zeit;
 
     // Hier legst du die Art des Diagramms (Line Chart) fest und fütterst die beiden Datenarrays rein
@@ -24,20 +24,12 @@ async function main() {
             labels: zeit,
             datasets: 
             [{
-                label: 'Wert 1',
-                data: wert1,
+                label: 'Wert',
+                data: wert,
                 backgroundColor: 'red',
                 borderColor: 'red',
                 borderWidth: 1
-            },
-            {
-                label: 'Wert 2',
-                data: wert2,
-                backgroundColor: 'green',
-                borderColor: 'green',
-                borderWidth: 1
-            }
-        ]
+            }]
         }
     };
 

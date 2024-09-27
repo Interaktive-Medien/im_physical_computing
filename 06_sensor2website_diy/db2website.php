@@ -1,7 +1,5 @@
 <?php
 
-########################################################## Wenn website.js dieses Script per HTTP aufruft (fetch()), bekommt es einen JSON-String im Body der Return-HTTP-Nachricht zurück.
-
 require_once("server_config.php");
 // echo "This script fetches database entries and makes them available to use for visualizing.";
 

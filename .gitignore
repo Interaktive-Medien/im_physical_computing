@@ -4,5 +4,5 @@ CrashAutoSave*.toe
 *.dmp
 # *.txt
 # Backup
-*config.*
+# *config.*
 *sftp.json
