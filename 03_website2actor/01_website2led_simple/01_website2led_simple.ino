@@ -1,34 +1,32 @@
-// Load Wi-Fi library
+/******************************************************************************************************
+ * 01_website2led_simple.ino
+ * ESP32-C6 fungiert als Webserver, mit dem man sich z. B. per Browser verbinden kann.
+ * Dort kann per UI-Button die LED am ESP32-C6 ein- und ausgeschaltet werden.
+ * Gib im Browser am Laptop die IP-Adresse deines ESP32-C6 ein, z. B.: 192.168.0.190
+ * Die individuelle IP Adresse wird bei erfolgreicher Verbindung an die serielle Schnittstelle gedruckt.
+ ******************************************************************************************************/
+
 #include <WiFi.h>
 
 // Replace with your network credentials
-const char* ssid = "Igloo";
-const char* password = "1glooVision";
+const char* ssid = "dreammakers";
+const char* password = "dreammakers";
 
 // Set web server port number to 80
 WiFiServer server(80);
-
-// Variable to store the HTTP request
 String header;
 
 // Auxiliar variables to store the current output state
 String ledstate = "off";
+const int led = BUILTIN_LED;
 
-// Assign output variables to GPIO pins
-const int led = BUILTIN_LED;  // BUILTIN_LED
-
-// Current time
 unsigned long currentTime = millis();
-// Previous time
 unsigned long previousTime = 0; 
-// Define timeout time in milliseconds (example: 2000ms = 2s)
 const long timeoutTime = 2000;
 
 void setup() {
   Serial.begin(115200);
-  // Initialize the output variables as outputs
   pinMode(led, OUTPUT);
-  // Set outputs to LOW
   digitalWrite(led, LOW);
 
   // Connect to Wi-Fi network with SSID and password

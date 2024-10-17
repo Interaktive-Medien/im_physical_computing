@@ -1,3 +1,9 @@
+/******************************************************************************************************
+ * Button.ino
+ * receive eg.  button / reed sensor / touch sensor (TTB223B)/ light sensor (LM393) input 
+ * and print value to serial port
+ ******************************************************************************************************/
+
 const int buttonPin = 7;
 const int ledPin =  BUILTIN_LED; 
 int buttonState = 0;         

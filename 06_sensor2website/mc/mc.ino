@@ -1,3 +1,8 @@
+/******************************************************************************************
+ * mc.ino
+ * Sensordaten sammeln und per HTTP POST Request an Server schicken (-> load.php)
+ ******************************************************************************************/
+
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <Arduino_JSON.h> // by Arduino
@@ -9,7 +14,7 @@ const char* ssid     = "Igloo";
 const char* pass     = "1glooVision";
 
 // const char* serverURL = "https://192.168.0.98/06_sensor2website/server2db.php"; // Server-Adresse: hier kann http oder https stehen, aber nicht ohne
-const char* serverURL = "https://650665-4.web.fhgr.education/06_sensor2website/server2db.php"; 
+const char* serverURL = "https://650665-4.web.fhgr.education/06_sensor2website/load.php"; 
 
 void setup() {
   Serial.begin(115200);

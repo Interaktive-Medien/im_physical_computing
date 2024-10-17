@@ -1,3 +1,9 @@
+/******************************************************************************
+ * Distanzsensor.ino
+ * receive ultrasonic sensor input (HC-SR04) and print value to serial port
+ ******************************************************************************/
+
+
 const int trigPin = 12;
 const int echoPin = 13;
 

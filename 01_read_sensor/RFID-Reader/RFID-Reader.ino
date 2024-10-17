@@ -1,6 +1,7 @@
 /****************************************************************************
+* RFID-Reader.ino
 * use RFID Reader RFID-RC522 with ESP32-C6
-* Install library RFID_MFRC522v2
+* Installiere "MFRC522v2 library" by GithubCommunity
 * verbinde ESP32-C6 und RFID-RC522 wie folgt
 *  -  Clock am RFID-RC522  <->  GPIO 16 am ESP32-C6
 *  -  MISO am RFID-RC522   <->  GPIO 2 am ESP32-C6

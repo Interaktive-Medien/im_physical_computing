@@ -29,19 +29,19 @@
                     cubicInterpolationMode: 'monotone',
                     tension: 0.4
                 }, 
-                {
-                    label: 'Cubic interpolation',
-                    data: datapoints,
-                    borderColor: 'blue', 
-                    fill: false,
-                    tension: 0.4
-                }, 
-                {
-                    label: 'Linear interpolation (default)',
-                    data: datapoints,
-                    borderColor: 'green', 
-                    fill: false
-                }
+                // {
+                //     label: 'Cubic interpolation',
+                //     data: datapoints,
+                //     borderColor: 'blue', 
+                //     fill: false,
+                //     tension: 0.4
+                // }, 
+                // {
+                //     label: 'Linear interpolation (default)',
+                //     data: datapoints,
+                //     borderColor: 'green', 
+                //     fill: false
+                // }
             ]
         };
 
@@ -82,7 +82,7 @@
         };
 
         // Erstellen des Charts
-        const ctx = document.getElementById('myChart').getContext('2d');
+        const ctx = document.querySelector('#myChart').getContext('2d');
         new Chart(ctx, config);
 
     </script>

@@ -1,3 +1,10 @@
+/********************************************************************
+ * Temperatursensor.ino
+ * receive sensor input from DHT11 and print value to serial port
+ * Installiere "DHT sensor library" by Adafruit
+ ********************************************************************/
+
+
 #include "DHT.h"
 
 #define DHTPIN 7    

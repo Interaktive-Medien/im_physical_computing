@@ -1,24 +1,27 @@
+/***************************************************************************
+ * mc2led.ino
+ * Conreol LED from a website.
+ * Der ESP32-C6 fungiert hier nicht als Server.
+ * funktioniert nur im lokalen WLAN (oder z. B. per VPN oder port forwarding)
+ * Er empfängt HTTP POST Nachrichten und schaltet LED entsprechend
+ * send JSON-formatted string to <IP address of ESP3-C6>/postjson
+ * Install library "Arduino_JSON" by Arduino
+ ***************************************************************************/
+
 #include <WiFi.h>
 #include <WebServer.h>
 #include <Arduino_JSON.h>
 
 int led = BUILTIN_LED;
 
-// Wi-Fi Zugangsdaten
-const char* ssid = "Igloo";
-const char* password = "1glooVision";
+const char* ssid = "dreammakers";
+const char* password = "dreammakers";
 
-// HTTP-Server auf Port 80
 WebServer server(80);
 
 
-
-// Setup-Funktion
 void setup() {
-  // Start der seriellen Kommunikation
   Serial.begin(115200);
-
-  // init LED
   pinMode(led, OUTPUT);
 
   // Verbindung zum WLAN herstellen
@@ -43,7 +46,6 @@ void setup() {
   Serial.println("HTTP server started.");
 }
 
-// Loop-Funktion
 void loop() {
   // Verarbeite eingehende HTTP-Anfragen
   server.handleClient();

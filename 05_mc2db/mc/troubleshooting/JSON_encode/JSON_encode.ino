@@ -1,3 +1,10 @@
+/*********************************************
+ * JSON_encode.ino
+ * Turn  object into JSON-formatted string (stringify)
+ * Install library "Arduino_JSON" by Arduino
+ *********************************************/
+
+
 #include <Arduino_JSON.h> // by Arduino
 
 void setup() {

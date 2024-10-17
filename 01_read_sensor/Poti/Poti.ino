@@ -1,7 +1,9 @@
-// Potentiometer is connected to GPIO 34 (Analog ADC1_CH6) 
-const int potPin = 4;
+/************************************************************************
+ * Poti.ino
+ * receive eg.  potentiometer input and print value to serial port
+ ************************************************************************/
 
-// variable for storing the potentiometer value
+const int potPin = 4;
 int potValue = 0;
 
 void setup() {

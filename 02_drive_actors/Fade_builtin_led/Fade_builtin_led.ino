@@ -1,7 +1,8 @@
+// fade builtin LED
+
 void setup() {
 }
 
-// the loop function runs over and over again forever
 void loop() {
 #ifdef RGB_BUILTIN
   digitalWrite(RGB_BUILTIN, HIGH);  // Turn the RGB LED white

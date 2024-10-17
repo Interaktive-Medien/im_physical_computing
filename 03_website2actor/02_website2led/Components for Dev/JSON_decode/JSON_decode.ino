@@ -1,3 +1,9 @@
+/*********************************************
+ * JSON_decode.ino
+ * Turn JSON string into an object
+ * Install library "Arduino_JSON" by Arduino
+ *********************************************/
+
 #include <Arduino_JSON.h>
 
 const char input[] = "{\"result\":true,\"count\":42,\"foo\":\"bar\"}";

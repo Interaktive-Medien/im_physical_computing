@@ -1,15 +1,14 @@
 <?php
-// db host
-$db_host = "localhost";  // geht sowohl bei lokalem als auch bei remote server -> PHP sucht die DB auch demselben Server, wo es sich selbst befindet
+/*************************************************************
+ * server_config.php
+ * Datenbank-Verbindung
+ * https://fiessling.ch/05_mc2db/server_config.php
+ *************************************************************/
 
-$db_name = "650665_4_1";
-$db_user = "650665_4_1";
-$db_pass = "=rTjuEQDYvC9";
-
-// $db_name = "sensor2website";
-// $db_user = "root";
-// $db_pass = "";
-
+$db_host = "rv9w2f.myd.infomaniak.com";  // beim FHGR Edu-Server und xampp steht hier "localhost"
+$db_name = "rv9w2f_fiessling";  //  Edu-Server: "650665_4_1", xampp: "sensor2website"
+$db_user = "rv9w2f_fiessling";  //  Edu-Server: "650665_4_1", xampp: "root"
+$db_pass = "Strenggehe1m";      //  Edu-Server: "=rTjuEQDYvC9", xampp: ""
 
 $db_charset = "utf8";
 

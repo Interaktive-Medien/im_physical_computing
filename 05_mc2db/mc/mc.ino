@@ -1,3 +1,12 @@
+/******************************************************************************************
+ * mc.ino
+ * Install library "Arduino_JSON" by Arduino
+ * Sensordaten sammeln und per HTTP POST Request an Server schicken (-> load.php).
+ * load.php schreibt die Werte dann in die Datenbank
+ ******************************************************************************************/
+
+
+
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <Arduino_JSON.h> // by Arduino

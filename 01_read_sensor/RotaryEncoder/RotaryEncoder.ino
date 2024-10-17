@@ -1,11 +1,9 @@
-/* Based on Oleg Mazurov's code for rotary encoder interrupt service routines for AVR micros
-   here https://chome.nerpa.tech/mcu/reading-rotary-encoder-on-arduino/
-   and using interrupts https://chome.nerpa.tech/mcu/rotary-encoder-interrupt-service-routine-for-avr-micros/
+/***********************************************************************
+ * RotaryEncoder.ino
+ * receive rotary encoder input and print value to serial port
+ ***********************************************************************/
 
-   This example does not use the port read method. Tested with Nano and ESP32
-   both encoder A and B pins must be connected to interrupt enabled pins, see here for more info:
-   https://www.arduino.cc/reference/en/language/functions/external-interrupts/attachinterrupt/
-*/
+
 
 // Define rotary encoder pins
 #define ENC_A 2 
