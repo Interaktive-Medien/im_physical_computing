@@ -3,7 +3,7 @@
 /*************************************************************
  * server_config.php
  * Datenbank-Verbindung
- * https://fiessling.ch/06_sensor2website_diy/server_config.php
+ * https://fiessling.ch/iot1/06_sensor2website_diy/server_config.php
  *************************************************************/
 
 // Datenbankverbindungsparameter

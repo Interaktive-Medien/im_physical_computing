@@ -2,7 +2,7 @@
 /*************************************************************
  * server_config.php
  * Datenbank-Verbindung
- * https://fiessling.ch/04_website2db/server_config.php
+ * https://fiessling.ch/iot1/04_website2db/server_config.php
  *************************************************************/
 
 $db_host = "rv9w2f.myd.infomaniak.com";  // beim FHGR Edu-Server und xampp steht hier "localhost"

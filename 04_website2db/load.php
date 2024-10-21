@@ -1,7 +1,7 @@
 <?php
 /************************************************************************
  * load.php
- * https://fiessling.ch/04_website2db/load.php
+ * https://fiessling.ch/iot1/04_website2db/load.php
  * Daten als JSON-String vom MC empfangen und Daten in die Datenbank einfügen
  ************************************************************************/ 
 

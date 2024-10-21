@@ -2,15 +2,15 @@
  * 01_website2led_simple.ino
  * ESP32-C6 fungiert als Webserver, mit dem man sich z. B. per Browser verbinden kann.
  * Dort kann per UI-Button die LED am ESP32-C6 ein- und ausgeschaltet werden.
- * Gib im Browser am Laptop die IP-Adresse deines ESP32-C6 ein, z. B.: 192.168.0.190
+ * Gib im Browser am Laptop die IP-Adresse deines ESP32-C6 ein, z. B.: http://192.168.0.118/
  * Die individuelle IP Adresse wird bei erfolgreicher Verbindung an die serielle Schnittstelle gedruckt.
  ******************************************************************************************************/
 
 #include <WiFi.h>
 
 // Replace with your network credentials
-const char* ssid = "dreammakers";
-const char* password = "dreammakers";
+const char* ssid = "Igloo";
+const char* password = "1glooVision";
 
 // Set web server port number to 80
 WiFiServer server(80);

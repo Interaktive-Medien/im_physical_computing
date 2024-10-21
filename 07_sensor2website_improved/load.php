@@ -1,4 +1,13 @@
 <?php
+
+
+/***************************************************************************************************************************
+ * load.php 
+ * https://fiessling.ch/iot1/07_sensor2website_improved/load.php
+ * Daten als JSON-String vom MC empfangen und Daten in die Datenbank einfügen
+***************************************************************************************************************************/
+
+
 require_once("server_config.php");
 echo "This script receives HTTP POST messages and pushes their content into the database.";
 

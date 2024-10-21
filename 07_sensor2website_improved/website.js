@@ -1,3 +1,10 @@
+/*****************************************************************************************************************
+ *  website.js 
+ *  https://fiessling.ch/iot1/07_sensor2website_improved/website.js
+ *  Daten als JSON-String vom Server holen (unload.php), sobald website.js dieses Script per HTTP aufruft (fetch())
+******************************************************************************************************************/
+
+
 async function fetchData() {
     try{
         // const response = await fetch('https://localhost/07_sensor2website_improved/db2website.php');

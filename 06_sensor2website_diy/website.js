@@ -1,6 +1,6 @@
 /*****************************************************************************************************************
  *  website.js 
- *  https://fiessling.ch/06_sensor2website_diy/website.js
+ *  https://fiessling.ch/iot1/06_sensor2website_diy/website.js
  *  Daten als JSON-String vom Server holen (unload.php), sobald website.js dieses Script per HTTP aufruft (fetch())
 ******************************************************************************************************************/
 

@@ -1,6 +1,8 @@
 <!-- 
   03_website2actor/02_website2led.html
-  Conreol LED at ESP32-C6 from this website.
+  Conrol LED at ESP32-C6 from this website.
+  Wichtig: ändere die IP-Adresse bei fetch("http://...") zu der deines ESP32-C6
+  kein Upload auf Webserver notwendig
   funktioniert nur im lokalen WLAN (oder z. B. per VPN oder port forwarding)
   send JSON-formatted string via HTTP POST request to <IP address of ESP3-C6>/postjson to control LED
 -->
@@ -29,7 +31,7 @@
         console.log(jsonstring);
 
         // POST-Request mit fetch
-        fetch("http://192.168.0.94/postjson", {
+        fetch("http://192.168.0.118/postjson", {
           method: "POST", // HTTP-Methode
           headers: {
             "Content-Type": "application/json", // Setze den Content-Type auf JSON

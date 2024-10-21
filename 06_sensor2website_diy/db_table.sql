@@ -1,3 +1,6 @@
+-- db_table.sql
+-- Datenbanktabelle bauen (geht auch per UI mit phpmyadmin)
+
 CREATE TABLE sensordata (
     id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     wert DECIMAL(5,2), -- wert: 1. Gesamtzahl der Stellen inkl. Nachkommastellen,   2. Nachkommastellen

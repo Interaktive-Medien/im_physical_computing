@@ -1,3 +1,11 @@
 Header set Access-Control-Allow-Origin "*"
 Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
 Header set Access-Control-Allow-Headers "Content-Type"
+
+# Diesen Code in die vorhandene .htaccess kopieren
+# "meine-domain" in eigenen Domainnamen ändern
+# ggfs. ".ch" in eigene TopLevelDomain ändern (.com .de .fr .it)
+RewriteCond %{HTTP_HOST} ^(.*)\.fiessling\.ch [NC]
+RewriteCond %{DOCUMENT_ROOT}/%1/ -d
+RewriteCond %1::%{REQUEST_URI} !^(.*?)::/\1/?
+RewriteRule "^(.*)$" "%{DOCUMENT_ROOT}/%1/$1" [L]
