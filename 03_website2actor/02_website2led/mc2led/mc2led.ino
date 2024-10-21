@@ -4,7 +4,7 @@
  * Der ESP32-C6 fungiert hier nicht als Server.
  * funktioniert nur im lokalen WLAN (oder z. B. per VPN oder port forwarding)
  * Er empfängt HTTP POST Nachrichten und schaltet LED entsprechend
- * send JSON-formatted string to <IP address of ESP3-C6>/postjson
+ * JSON-formatted string is sent to <IP address of ESP3-C6>/postjson.
  * Install library "Arduino_JSON" by Arduino
  ***************************************************************************/
 
@@ -18,7 +18,6 @@ const char* ssid = "dreammakers";
 const char* password = "dreammakers";
 
 WebServer server(80);
-
 
 void setup() {
   Serial.begin(115200);
@@ -38,6 +37,14 @@ void setup() {
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
 
+  // Route für OPTIONS-Anfragen (Preflight)
+  server.on("/postjson", HTTP_OPTIONS, []() {
+    server.sendHeader("Access-Control-Allow-Origin", "*");
+    server.sendHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+    server.sendHeader("Access-Control-Allow-Headers", "Content-Type");
+    server.send(204); // No content, da dies nur eine Preflight-Anfrage ist
+  });
+
   // Route für POST-Anfragen
   server.on("/postjson", HTTP_POST, handlePostRequest);
 
@@ -51,18 +58,13 @@ void loop() {
   server.handleClient();
 }
 
-
 // Funktion zum Verarbeiten von POST-Anfragen
 void handlePostRequest() {
   // CORS-Header hinzufügen
-  // Route für OPTIONS-Anfragen (Preflight)
-  server.on("/postjson", HTTP_OPTIONS, []() {
-    server.sendHeader("Access-Control-Allow-Origin", "*");
-    server.sendHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-    server.sendHeader("Access-Control-Allow-Headers", "Content-Type");
-    server.send(204); // No content, da dies nur eine Preflight-Anfrage ist
-  });
-  
+  server.sendHeader("Access-Control-Allow-Origin", "*");
+  server.sendHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  server.sendHeader("Access-Control-Allow-Headers", "Content-Type");
+
   if (server.hasArg("plain") == false) {  // Überprüfen, ob der Body vorhanden ist
     server.send(400, "text/plain", "400: Invalid Request - No Body");
     return;
@@ -79,11 +81,12 @@ void handlePostRequest() {
     server.send(400, "application/json", "{\"error\":\"Invalid JSON format\"}");
     return;
   }
+
   int wert = dataobject["wert"];
   Serial.println(wert);
   digitalWrite(led, wert);
 
   // Antwort zurück an den Client senden
-  String response = "Received: wert = " + wert;
+  String response = "Received: wert = " + String(wert);
   server.send(200, "application/json", "{\"status\":\"success\",\"message\":\"" + response + "\"}");
 }
