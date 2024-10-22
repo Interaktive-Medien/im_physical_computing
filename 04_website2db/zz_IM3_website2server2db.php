@@ -2,7 +2,7 @@
 /***********************************************************************************
  * zz_IM3_website2server2db.php
  * Formular und PHP-Serverscript in Einem -> Formulardaten werden in DB geschrieben
- * https://fiessling.ch/04_website2db/zz_IM3_website2server2db.php
+ * https://fiessling.ch/iot1/04_website2db/zz_IM3_website2server2db.php
  ***********************************************************************************/
 
 require_once("server_config.php");

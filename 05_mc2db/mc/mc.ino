@@ -3,6 +3,7 @@
  * Install library "Arduino_JSON" by Arduino
  * Sensordaten sammeln und per HTTP POST Request an Server schicken (-> load.php).
  * load.php schreibt die Werte dann in die Datenbank
+ * Beachte: Passe den Pfad zur load.php in const char* serverURL auf deinen eigenen an.
  ******************************************************************************************/
 
 
@@ -18,7 +19,7 @@ const char* ssid     = "Igloo";
 const char* pass     = "1glooVision";
 
 // const char* serverURL = "https://192.168.0.98/05_mc2db/server2db.php"; // Server-Adresse: hier kann http oder https stehen, aber nicht ohne
-const char* serverURL = "https://650665-4.web.fhgr.education/05_mc2db/server2db.php"; 
+const char* serverURL = "https://fiessling.ch/iot1/05_mc2db/load.php"; 
 
 void setup() {
   Serial.begin(115200);
