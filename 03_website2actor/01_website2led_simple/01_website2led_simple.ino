@@ -27,7 +27,7 @@ const long timeoutTime = 2000;
 void setup() {
   Serial.begin(115200);
   pinMode(led, OUTPUT);
-  digitalWrite(led, LOW);
+  digitalWrite(led, 0);
 
   // Connect to Wi-Fi network with SSID and password
   Serial.print("Connecting to ");

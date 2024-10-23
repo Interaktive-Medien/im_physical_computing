@@ -9,7 +9,7 @@ async function fetchData() {
     try{
         // const response = await fetch('https://localhost/06_sensor2website/unload.php');
         // const response = await fetch('https://650665-4.web.fhgr.education/06_sensor2website/unload.php');
-        const response = await fetch('https://fiessling.ch/06_sensor2website_diy/unload.php');
+        const response = await fetch('https://fiessling.ch/iot1/06_sensor2website_diy/unload.php');
         const data = await response.json();   // wenn's nicht klappt, zeig den ganzen Text erst mit .text() an
         return data;
     } catch (error) {
