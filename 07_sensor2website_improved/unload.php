@@ -18,7 +18,7 @@ try {
     $pdo = new PDO($dsn, $db_user, $db_pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    $sql = "SELECT * FROM sensordata ORDER BY id DESC LIMIT 100"; # nur letzten 200 Daten holen
+    $sql = "SELECT * FROM sensordata ORDER BY id LIMIT 100"; # nur letzten 200 Daten holen
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
