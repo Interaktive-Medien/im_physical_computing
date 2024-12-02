@@ -1,5 +1,5 @@
 /******************************************************************************************
- * mc.ino
+ * awake.ino
  * Sensordaten sammeln und per HTTP POST Request an Server schicken (-> load.php)
  ******************************************************************************************/
 
@@ -8,13 +8,15 @@
 #include <Arduino_JSON.h> // by Arduino
 
 unsigned long lastTime = 0;
-unsigned long timerDelay = 15000; // alle 15s wird ein neuer Wert verschickt
+unsigned long timerDelay = 60000; // alle 1 min wird ein neuer Wert verschickt
 
-const char* ssid     = "tinkergarden";
-const char* pass     = "strenggeheim";
+const char* ssid     = "Igloo";
+const char* pass     = "1glooVision";
 
-// const char* serverURL = "https://192.168.0.98/06_sensor2website/server2db.php"; // Server-Adresse: hier kann http oder https stehen, aber nicht ohne
-const char* serverURL = "https://650665-4.web.fhgr.education/06_sensor2website/load.php"; 
+/* Sensor */
+const int sensorPin = 4;
+
+const char* serverURL = "https://fiessling.ch/iot1/06_sensor2website_diy/load.php"; 
 
 void setup() {
   Serial.begin(115200);
@@ -39,7 +41,7 @@ void loop() {
 
     ////////////////////////////////////////////////////////////// sensor auslesen
 
-    float wert = (float)random(0, 1000) / 10;  // 0 - 100
+    float wert = analogRead(sensorPin); /* Poti, Lichtsensor, ... */
     Serial.println(wert);
 
     

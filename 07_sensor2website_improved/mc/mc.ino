@@ -9,7 +9,8 @@ const char* ssid     = "Igloo";
 const char* pass     = "1glooVision";
 
 // const char* serverURL = "https://192.168.0.98/07_sensor2website_improved/server2db.php"; // Server-Adresse: hier kann http oder https stehen, aber nicht ohne
-const char* serverURL = "https://650665-4.web.fhgr.education/07_sensor2website_improved/server2db.php"; 
+// const char* serverURL = "https://650665-4.web.fhgr.education/07_sensor2website_improved/server2db.php"; 
+const char* serverURL = "https://fiessling.ch/iot1/06_sensor2website_diy/load.php"; 
 String apiKeyValue = "im";
 
 void setup() {

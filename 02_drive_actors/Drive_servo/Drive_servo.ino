@@ -1,6 +1,6 @@
 #include <ESP32Servo.h>
 Servo myServo;
-int servoPin = 5;
+int servoPin = 2;
 void setup() {
   myServo.attach(servoPin);
 }
