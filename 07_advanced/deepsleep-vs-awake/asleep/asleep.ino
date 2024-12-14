@@ -14,8 +14,8 @@
 RTC_DATA_ATTR int bootCount = 0;
 
 /* WLAN */
-const char* ssid     = "Igloo";
-const char* pass     = "1glooVision";
+const char* ssid     = "tinkergarden";
+const char* pass     = "strenggeheim";
 
 /* Sensor */
 const int sensorPin = 4;

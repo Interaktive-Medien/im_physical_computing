@@ -11,9 +11,9 @@ int prev_buttonState = 0;
 
 void setup() {  
     Serial.begin(115200); 
-    pinMode(buttonPin, INPUT);  // initialize the pushbutton pin as an input:
-    pinMode(ledPin, OUTPUT);    // initialize the LED pin as output:
-    digitalWrite(ledPin, 0);    // turn LED off:
+    pinMode(buttonPin, INPUT_PULLDOWN);  // initialize the pushbutton pin as an input:
+    pinMode(ledPin, OUTPUT);             // initialize the LED pin as output:
+    digitalWrite(ledPin, 0);             // turn LED off:
 }
 
 void loop(){

@@ -15,8 +15,8 @@
 unsigned long lastTime = 0;
 unsigned long timerDelay = 15000; // alle 15s wird ein neuer Wert verschickt
 
-const char* ssid     = "Igloo";
-const char* pass     = "1glooVision";
+const char* ssid     = "tinkergarden";
+const char* pass     = "strenggeheim";
 
 // const char* serverURL = "https://192.168.0.98/05_mc2db/server2db.php"; // Server-Adresse: hier kann http oder https stehen, aber nicht ohne
 const char* serverURL = "https://fiessling.ch/iot1/hs24_sensor2website/load.php"; 

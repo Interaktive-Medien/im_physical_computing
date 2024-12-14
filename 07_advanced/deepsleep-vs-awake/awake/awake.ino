@@ -10,8 +10,8 @@
 unsigned long lastTime = 0;
 unsigned long timerDelay = 60000; // alle 1 min wird ein neuer Wert verschickt
 
-const char* ssid     = "Igloo";
-const char* pass     = "1glooVision";
+const char* ssid     = "tinkergarden";
+const char* pass     = "strenggeheim";
 
 /* Sensor */
 const int sensorPin = 4;

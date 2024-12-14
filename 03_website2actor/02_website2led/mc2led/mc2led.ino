@@ -14,8 +14,8 @@
 
 int led = BUILTIN_LED;
 
-const char* ssid = "Igloo";
-const char* password = "1glooVision";
+const char* ssid = "tinkergarden";
+const char* password = "strenggeheim";
 
 WebServer server(80);
 
