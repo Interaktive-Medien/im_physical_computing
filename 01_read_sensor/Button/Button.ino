@@ -1,7 +1,10 @@
 /******************************************************************************************************
  * Button.ino
- * receive eg.  button / reed sensor / touch sensor (TTB223B)/ light sensor (LM393) input 
+ * receive eg.  button / reed sensor / PIR sensor / touch sensor (TTB223B)/ light sensor (LM393) input 
  * and print value to serial port
+ * Sensor: Vin  <->  ESP32-C6: 3.3V 
+ * Sensor: GND  <->  ESP32-C6: GND
+ * Sensor: Data <->  ESP32-C6: GPIO7
  ******************************************************************************************************/
 
 const int buttonPin = 7;
