@@ -1,6 +1,6 @@
 /************************************************************************
  * Poti.ino
- * receive eg.  potentiometer input and print value to serial port
+ * receive eg.  potentiometer analog vibration sensor input and print value to serial port
  *  Sensor: rechts  <->  ESP32-C6: 3.3V 
  *  Sensor: links   <->  ESP32-C6: GND
  *  Sensor: mitte   <->  ESP32-C6: GPIO4
