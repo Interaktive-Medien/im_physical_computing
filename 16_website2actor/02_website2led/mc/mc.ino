@@ -1,9 +1,9 @@
 /***************************************************************************
- * mc2led.ino
+ * mc.ino
  * Conreol LED from a website.
  * Der ESP32-C6 fungiert hier nicht als Server.
  * funktioniert nur im lokalen WLAN (oder z. B. per VPN oder port forwarding)
- * Er empfängt HTTP POST Nachrichten und schaltet LED entsprechend
+ * Er empfängt HTTP Nachrichten (POST-Methode) und schaltet LED entsprechend
  * JSON-formatted string is sent to <IP address of ESP3-C6>/postjson.
  * Install library "Arduino_JSON" by Arduino
  ***************************************************************************/

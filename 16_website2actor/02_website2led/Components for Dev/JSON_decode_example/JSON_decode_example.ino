@@ -1,5 +1,5 @@
 /*********************************************
- * JSON_decode.ino
+ * JSON_decode_example.ino
  * Turn JSON string into an object
  * Install library "Arduino_JSON" by Arduino
  *********************************************/
