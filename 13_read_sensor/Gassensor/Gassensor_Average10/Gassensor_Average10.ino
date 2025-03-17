@@ -3,7 +3,7 @@ int readings[numReadings];
 int readIndex = 0;
 int total = 0;
 int average = 0;
-int sensorpin = 0;
+int sensorpin = 4;
 
 void setup() {
   Serial.begin(115200);

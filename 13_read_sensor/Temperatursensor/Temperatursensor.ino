@@ -2,6 +2,10 @@
  * Temperatursensor.ino
  * receive sensor input from DHT11 and print value to serial port
  * Installiere "DHT sensor library" by Adafruit
+ *  Anschluss an ESP32-C6
+ *  Sensor: Vin  <->  ESP32-C6: 3.3V 
+ *  Sensor: GND  <->  ESP32-C6: GND
+ *  Sensor: DATA <->  ESP32-C6: GPIO7
  ********************************************************************/
 
 

@@ -1,8 +1,9 @@
 /**********************************************************************************************
+*  Distanzsensor_TOF050C.ino
 *  TOF050C Time-of-flight sensor mit V16180x
 *  optimale Entfernungs-Range: 0 - 22cm
 *  Installiere Adafruit_VL6180X Library von Adafruit.
-*  Anschluss an ESP32-C6 (Kommunikation per I2C -> dafür die Wire-Library):
+*  Anschluss an ESP32-C6 (Kommunikation per I2C -> dafür braucht es die vorinstallierte Wire-Library):
 *  Sensor: Vin  <->  ESP32-C6: 3.3V 
 *  Sensor: GND  <->  ESP32-C6: GND
 *  Sensor: SDA  <->  ESP32-C6: GPIO6

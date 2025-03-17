@@ -1,7 +1,15 @@
 /************************************************************************
  * Gassensor.ino
  * receive analog input from MQ-135 and print value to serial port
+ * Sensor: AO oder DO  <->  ESP32-C6: 4 
+ * Sensor: VCC  <->  ESP32-C6: 5V 
+ * Sensor: GND  <->  ESP32-C6: GND
+ * Für bessere Ergebnisse und mehr Langlebigkeit des Microcontrollers 
+ * sollte das Datensignal des Gas-Sensors (max. 5V) mit einem Level Shifter
+ * oder einem Spannungsteiler auf den Wertebereich 0...3.3V heruntergeregelt werden.   
  ************************************************************************/
+
+
 
 
 int sensorValue;

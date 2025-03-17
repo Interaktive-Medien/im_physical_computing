@@ -1,8 +1,8 @@
 /******************************************************************
  * Read NFC tags and RFID cards (I2C mode)
  * turn on I2C mode by switching physical switches to 1 / 0
- * PN532: SDA -> ESP32-C6: GPIO 5
- * PN532: SCL -> ESP32-C6: GPIO 6
+ * PN532: SDA -> ESP32-C6: GPIO 6
+ * PN532: SCL -> ESP32-C6: GPIO 7
  * Put libraries PN532, PN532_I2C, NDEF into Documents>Arduino>libraries 
  * (download on https://github.com/elechouse/PN532)
 ********************************************************************/
@@ -22,7 +22,7 @@ long prevDetectedTimestamp = 0;
 void setup(void){
   Serial.begin(115200);
   Serial.println("*** Testing Module PN532 NFC RFID ***");
-  Wire.begin(5, 6);  // SDA = Pin 5, SCL = Pin 6 für ESP32-C6
+  Wire.begin(6, 7);  // SDA = Pin 6, SCL = Pin 7 für ESP32-C6
 }
 
 void loop(void){

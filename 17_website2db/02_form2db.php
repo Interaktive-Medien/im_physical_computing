@@ -1,8 +1,7 @@
 <?php
 /***********************************************************************************
- * zz_IM3_website2server2db.php
- * Formular und PHP-Serverscript in Einem -> Formulardaten werden in DB geschrieben
- * https://fiessling.ch/iot1/04_website2db/zz_IM3_website2server2db.php
+ * https://github.com/Interaktive-Medien/im_physical_computing/blob/main/17_website2db/02_form2db.php
+ * Client-seitiges Formular und PHP-Serverscript in Einem -> Formulardaten werden in DB geschrieben
  ***********************************************************************************/
 
 require_once("server_config.php");

@@ -1,4 +1,5 @@
-/*****************
+/***************************************************
+ *  GPS.ino
  *  Kommunikation zw. GPS-Modul und ESP32-C6 via UART
  *  Installiere Library TinyGPSPlus by Mikal Hart
  *  Verbinde:
@@ -7,7 +8,7 @@
  *  GPS-Modul: Vcc <-> ESP32-C6: 3V3
  *  GPS-Modul: GND <-> ESP32-C6: GND
  *  sollte das GPS Modul noch weitere Pins haben, einfach ignorieren
- *****************/
+ ***************************************************/
 
 #include <TinyGPS++.h>
 #include <HardwareSerial.h>

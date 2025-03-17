@@ -1,6 +1,6 @@
 /***************************************************************************
  * mc.ino
- * Conreol LED from a website.
+ * Control LED from a website.
  * Der ESP32-C6 fungiert hier nicht als Server.
  * funktioniert nur im lokalen WLAN (oder z. B. per VPN oder port forwarding)
  * Er empfängt HTTP Nachrichten (POST-Methode) und schaltet LED entsprechend
