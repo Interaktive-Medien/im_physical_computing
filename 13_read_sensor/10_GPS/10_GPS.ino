@@ -1,5 +1,5 @@
 /***************************************************
- *  GPS.ino
+ *  10_GPS.ino
  *  Kommunikation zw. GPS-Modul und ESP32-C6 via UART
  *  Installiere Library TinyGPSPlus by Mikal Hart
  *  Verbinde:

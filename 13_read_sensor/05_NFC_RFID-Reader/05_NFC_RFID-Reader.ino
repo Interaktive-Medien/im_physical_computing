@@ -1,8 +1,10 @@
 /******************************************************************
+ * 05_NFC_RFID-Reader.ino
  * Read NFC tags and RFID cards (I2C mode)
- * turn on I2C mode by switching physical switches to 1 / 0
- * PN532: SDA -> ESP32-C6: GPIO 6
- * PN532: SCL -> ESP32-C6: GPIO 7
+ * turn on I2C mode by switching physical switches on the PN532 to 1 / 0 (I2C)
+ * Anschluss:
+ * PN532: SDA <-> ESP32-C6: GPIO 6
+ * PN532: SCL <-> ESP32-C6: GPIO 7
  * Put libraries PN532, PN532_I2C, NDEF into Documents>Arduino>libraries 
  * (download on https://github.com/elechouse/PN532)
 ********************************************************************/

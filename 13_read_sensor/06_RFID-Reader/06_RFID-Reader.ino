@@ -2,14 +2,14 @@
 * RFID-Reader.ino
 * use RFID Reader RFID-RC522 with ESP32-C6
 * Installiere "MFRC522v2 library" by GithubCommunity
-* verbinde ESP32-C6 und RFID-RC522 wie folgt
-*  -  Clock am RFID-RC522  <->  GPIO 16 am ESP32-C6
-*  -  MISO am RFID-RC522   <->  GPIO 2 am ESP32-C6
-*  -  MOSI am RFID-RC522   <->  GPIO 7 am ESP32-C6
-*  -  SDA am RFID-RC522    <->  GPIO 5 am ESP32-C6
-*  -  Reset am RFID-RC522  <->  Rst am ESP32-C6
-*  -  3.3V am RFID-RC522   <->  3.3V am ESP32-C6
-*  -  GND am RFID-RC522    <->  GND am ESP32-C6
+* verbinde ESP32-C6 und RFID-RC522 wie folgt (SPI):
+* Clock am RFID-RC522  <->  GPIO 16 am ESP32-C6
+* MISO am RFID-RC522   <->  GPIO 2 am ESP32-C6
+* MOSI am RFID-RC522   <->  GPIO 7 am ESP32-C6
+* SDA am RFID-RC522    <->  GPIO 5 am ESP32-C6
+* Reset am RFID-RC522  <->  Rst am ESP32-C6
+* 3.3V am RFID-RC522   <->  3.3V am ESP32-C6
+* GND am RFID-RC522    <->  GND am ESP32-C6
 *****************************************************************************/
 
 
@@ -20,7 +20,7 @@
 #include <SPI.h>
 
 // Definiere die Pins für SPI
-#define SDA_PIN 5        // SDA/SS Pin (GPIO 5)
+#define SDA_PIN 5       // SDA/SS Pin (GPIO 5)
 #define SCK_PIN 6       // SPI Clock (GPIO 6 fix beim ESP32-C6, 11 beim UNO)
 #define MISO_PIN 2      // SPI MISO (GPIO 2 fix beim ESP32-C6, 12 beim UNO)
 #define MOSI_PIN 7      // SPI MOSI (GPIO 7 fix beim ESP32-C6, 13 beim UNO)

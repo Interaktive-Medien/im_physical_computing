@@ -1,13 +1,13 @@
 /***********************************************************************
- * RotaryEncoder_Button.ino
+ * 09_RotaryEncoder_Button.ino
  * receive rotary encoder input and button input, print values to serial port
  * Seite am Rotary Encoder mit 2 Anschlüssen (Button): 
  * Sensor: 1. von links  <->  ESP32-C6: 3.3V 
  * Sensor: 2. von links  <->  ESP32-C6: GPIO 7
  * Seite am Rotary Encoder mit 3 Anschlüssen (Rotary Encoder): 
- * Sensor: 1. von links (A)  <->  ESP32-C6: GPIO 2
+ * Sensor: 1. von links (A)    <->  ESP32-C6: GPIO 2
  * Sensor: 2. von links (GND)  <->  ESP32-C6: GND
- * Sensor: 3. von links (B)  <->  ESP32-C6: GPIO 3
+ * Sensor: 3. von links (B)    <->  ESP32-C6: GPIO 3
  ***********************************************************************/
 
 // Define rotary encoder pins
