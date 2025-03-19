@@ -1,4 +1,5 @@
-# 12: Gassensor MQ-135
+# Kap. 13: Sensoren testen
+## 12: Gassensor MQ-135
 
 ![Steckplan](Steckplan.png)
 

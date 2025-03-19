@@ -4,23 +4,23 @@
  * Sensordaten sammeln und per HTTP POST Request an Server schicken (-> load.php).
  * load.php schreibt die Werte dann in die Datenbank
  * Beachte: Passe den Pfad zur load.php in const char* serverURL auf deinen eigenen an.
+ * Gib SSID und Passwort deines WLANs an.
  ******************************************************************************************/
 
 
 
 #include <WiFi.h>
 #include <HTTPClient.h>
-#include <Arduino_JSON.h> // by Arduino
+#include <Arduino_JSON.h> 
 
 unsigned long lastTime = 0;
-unsigned long timerDelay = 15000; // alle 15s wird ein neuer Wert verschickt
+unsigned long timerDelay = 15000;                              // alle 15s wird ein neuer Wert verschickt
 
-const char* ssid     = "tinkergarden";
-const char* pass     = "strenggeheim";
+const char* ssid     = "<your_ssid>";                          // WLAN
+const char* pass     = "<your_password>";                      // WLAN
 
-// const char* serverURL = "https://192.168.0.98/05_mc2db/server2db.php"; // Server-Adresse: hier kann http oder https stehen, aber nicht ohne
-const char* serverURL = "https://fiessling.ch/iot1/05_mc2db/load.php"; 
-
+const char* serverURL = "https://<your_website.ch>/load.php";  // Server-Adresse: hier kann http oder https stehen, aber nicht ohne
+                                                               // Beispiel: https://fiessling.ch/im4/18_mc2db/load.php
 void setup() {
   Serial.begin(115200);
   
@@ -38,7 +38,7 @@ void setup() {
 
 void loop() {
   
-  if ((millis() - lastTime) > timerDelay) {   // alle 15 Sekunden...
+  if ((millis() - lastTime) > timerDelay) {                     // alle 15 Sekunden...
     lastTime = millis();
 
 
@@ -59,7 +59,7 @@ void loop() {
   
      ////////////////////////////////////////////////////////////// JSON string per HTTP POST request an den Server schicken (server2db.php)
 
-    if (WiFi.status() == WL_CONNECTED) {   // Überprüfen, ob Wi-Fi verbunden ist
+    if (WiFi.status() == WL_CONNECTED) {                        // Überprüfen, ob Wi-Fi verbunden ist
       // HTTP Verbindung starten und POST-Anfrage senden
       HTTPClient http;
       http.begin(serverURL);

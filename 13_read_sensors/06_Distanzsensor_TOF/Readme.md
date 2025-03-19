@@ -1,4 +1,5 @@
-# 06: Distanzsensor (TOF)
+# Kap. 13: Sensoren testen
+## 06: Distanzsensor (TOF)
 
 ![Steckplan](Steckplan.png)
 

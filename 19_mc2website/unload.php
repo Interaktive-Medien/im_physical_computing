@@ -3,7 +3,8 @@
 /***************************************************************************************************************************
  * unload.php 
  * https://fiessling.ch/iot1/06_sensor2website/unload.php
- * Daten aus der Datenbank holen und als JSON-String zurückgeben, sobald website.js dieses Script per HTTP aufruft (fetch())
+ * Wenn website.js diese Datei mit fetch() aufruft, holt dieses Script Daten aus der Datenbank 
+ * und gibt sie als JSON-String zurück
 ***************************************************************************************************************************/
 
 

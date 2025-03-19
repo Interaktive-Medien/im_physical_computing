@@ -1,5 +1,4 @@
-# 16: 9 Degrees of Freedom
+# Kap. 13: Sensoren testen
+## 16: 9 Degrees of Freedom
 
-![Steckplan](Steckplan.png)
-
-![Demo](Demo.gif)
+Wer legt hier vor?

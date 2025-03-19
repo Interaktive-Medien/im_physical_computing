@@ -1,22 +1,25 @@
 /******************************************************************************************
  * mc.ino
  * Sensordaten sammeln und per HTTP POST Request an Server schicken (-> load.php)
+ * load.php schreibt die Werte dann in die Datenbank
+ * Beachte: Passe den Pfad zur load.php in const char* serverURL auf deinen eigenen an.
+ * Gib SSID und Passwort deines WLANs an.
  ******************************************************************************************/
 
 #include <WiFi.h>
 #include <HTTPClient.h>
-#include <Arduino_JSON.h> // by Arduino
+#include <Arduino_JSON.h> 
 
 unsigned long lastTime = 0;
-unsigned long timerDelay = 15000; // alle 15s wird ein neuer Wert verschickt
+unsigned long timerDelay = 15000;                              // alle 15s wird ein neuer Wert verschickt
 
-const char* ssid     = "tinkergarden";
-const char* pass     = "strenggeheim";
+const char* ssid     = "<your_ssid>";                          // WLAN
+const char* pass     = "<your_password>";                      // WLAN
 
-// const char* serverURL = "https://192.168.0.98/06_sensor2website/server2db.php"; // Server-Adresse: hier kann http oder https stehen, aber nicht ohne
-// const char* serverURL = "https://650665-4.web.fhgr.education/06_sensor2website/load.php"; 
-const char* serverURL = "https://fiessling.ch/iot1/06_sensor2website/load.php"; 
-
+// const char* serverURL = "https://192.168.0.98/im4/19_mc2website/server2db.php"; // Server-Adresse: hier kann http oder https stehen, aber nicht ohne
+// const char* serverURL = "https://650665-4.web.fhgr.education/im4/19_mc2website/load.php"; 
+const char* serverURL = "https://<your_website.ch>/load.php";  // Server-Adresse: hier kann http oder https stehen, aber nicht ohne
+                                                               // Beispiel: https://fiessling.ch/im4/19_mc2website/load.php
 void setup() {
   Serial.begin(115200);
   

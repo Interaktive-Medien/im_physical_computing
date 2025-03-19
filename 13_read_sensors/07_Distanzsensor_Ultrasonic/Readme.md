@@ -1,4 +1,5 @@
-# 07: Distanzsensor (Ultrasonic)
+# Kap. 13: Sensoren testen
+## 07: Distanzsensor (Ultrasonic)
 
 ![Steckplan](Steckplan.png)
 
