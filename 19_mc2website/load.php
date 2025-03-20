@@ -2,11 +2,11 @@
 
 /***************************************************************************************************************************
  * load.php 
- * https://fiessling.ch/im4/19_mc2website/load.php
+ * Beispiel: https://fiessling.ch/im4/19_mc2website/load.php
  * Daten als JSON-String vom MC empfangen und Daten in die Datenbank einfügen
 ***************************************************************************************************************************/
 
-require_once("server_config.php");
+require_once("db_config.php");
 echo "This script receives HTTP POST messages and pushes their content into the database.";
 
 

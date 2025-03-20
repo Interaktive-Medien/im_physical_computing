@@ -5,7 +5,7 @@
  * Daten als JSON-String vom MC serverseitig empfangen und Daten in die Datenbank einfügen
  ************************************************************************/ 
 
-require_once("server_config.php");
+require_once("db_config.php");
 echo "This script receives HTTP POST messages and pushes their content into the database.";
 
 

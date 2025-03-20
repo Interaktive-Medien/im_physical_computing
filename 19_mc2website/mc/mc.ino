@@ -16,9 +16,7 @@ unsigned long timerDelay = 15000;                              // alle 15s wird 
 const char* ssid     = "<your_ssid>";                          // WLAN
 const char* pass     = "<your_password>";                      // WLAN
 
-// const char* serverURL = "https://192.168.0.98/im4/19_mc2website/server2db.php"; // Server-Adresse: hier kann http oder https stehen, aber nicht ohne
-// const char* serverURL = "https://650665-4.web.fhgr.education/im4/19_mc2website/load.php"; 
-const char* serverURL = "https://<your_website.ch>/load.php";  // Server-Adresse: hier kann http oder https stehen, aber nicht ohne
+const char* serverURL = "https://<your_website.ch>/im4/19_mc2website/load.php";  // Server-Adresse: hier kann http oder https stehen, aber nicht ohne
                                                                // Beispiel: https://fiessling.ch/im4/19_mc2website/load.php
 void setup() {
   Serial.begin(115200);

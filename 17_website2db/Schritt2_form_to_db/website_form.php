@@ -5,7 +5,7 @@
  * Client-seitiges Formular und PHP-Serverscript in Einem -> Formulardaten werden in DB geschrieben
  ***********************************************************************************/
 
-require_once("server_config.php");
+require_once("db_config.php");
 
 
 ###################################### connect to db

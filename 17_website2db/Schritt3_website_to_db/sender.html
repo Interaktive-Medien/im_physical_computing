@@ -1,6 +1,6 @@
 <!----------------------------------------------------------------------------------------------------------- 
     sender.html
-    https://fiessling.ch/im4/17_website2db/Schritt3_website_to_db/sender.html
+    Beispiel: https://fiessling.ch/im4/17_website2db/Schritt3_website_to_db/sender.html
     Diese HTML Seite zeigt ein Formular. Wird es abgeschickt, wreden die Werte als JSON string formattiert
     und per HTTP POST Request an load.php übermittelt.
     Beachte: Bei const response = await fetch("...") unbedingt deinen eigenen Pfad zur load.php eingeben
@@ -28,9 +28,7 @@
 
             try {
                 // URL auf HTTP anpassen, falls kein SSL verwendet wird
-                // const response = await fetch("http://localhost/17_website2db/Schritt3_website_to_db/load.php", {
-                // const response = await fetch("https://650665-4.web.fhgr.education/17_website2db/Schritt3_website_to_db/load.php", {
-                const response = await fetch("https://fiessling.ch/im4/17_website2db/Schritt3_website_to_db/load.php", {
+                const response = await fetch("load.php", {
                     method: "POST",
                     headers: {
                         'Content-Type': 'application/json' // Setze den Content-Type auf JSON

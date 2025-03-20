@@ -2,7 +2,7 @@
 
 /***************************************************************************************************************************
  * unload.php 
- * https://fiessling.ch/iot1/06_sensor2website/unload.php
+ * Beispiel: https://fiessling.ch/im4/19_mc2website/unload.php
  * Wenn website.js diese Datei mit fetch() aufruft, holt dieses Script Daten aus der Datenbank 
  * und gibt sie als JSON-String zurück
 ***************************************************************************************************************************/
@@ -11,7 +11,7 @@
 
 ########################################################## Wenn website.js dieses Script per HTTP aufruft (fetch()), bekommt es einen JSON-String im Body der Return-HTTP-Nachricht zurück.
 header('Content-Type: application/json');
-require_once("server_config.php");
+require_once("db_config.php");
 // echo "This script fetches database entries and makes them available to use for visualizing.";
 
 try {

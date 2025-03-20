@@ -6,4 +6,4 @@ CrashAutoSave*.toe
 # Backup
 # *config.*
 *sftp.json
-*server_config.php
+*db_config.php
