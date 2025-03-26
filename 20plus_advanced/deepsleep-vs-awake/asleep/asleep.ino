@@ -18,10 +18,10 @@ const char* ssid     = "tinkergarden";
 const char* pass     = "strenggeheim";
 
 /* Sensor */
-const int sensorPin = 4;
+const int sensorPin = 7;
 
 /* Server */ 
-const char* serverURL = "https://fiessling.ch/iot1/06_sensor2website_diy/load.php"; 
+const char* serverURL = "https://fiessling.ch/im4/18_mc2db/load.php"; 
 
 
 void setup() {
