@@ -29,7 +29,6 @@ $input = json_decode($inputJSON, true); // Dekodieren der JSON-Daten in ein Arra
 
 
 
-
 ###################################### Prüfen, ob die JSON-Daten erfolgreich dekodiert wurden
 ### folgender Block nicht zwingend notwendig, nur für Troubleshooting: Die rohen JSON-Daten in die Tabelle receiveddata einfügen
 
@@ -59,5 +58,6 @@ $wert = $input["wert"];
 $sql = "INSERT INTO sensordata (wert) VALUES (?)";
 $stmt = $pdo->prepare($sql);
 $stmt->execute([$wert]);
+// $stmt->execute(["42"]);
 
 ?>
