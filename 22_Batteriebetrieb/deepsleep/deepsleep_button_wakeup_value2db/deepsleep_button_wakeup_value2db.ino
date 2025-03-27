@@ -27,25 +27,11 @@ RTC_DATA_ATTR int bootCount = 0;
 #include <HTTPClient.h>
 #include <Arduino_JSON.h> 
 
-// const char* ssid      = "<your_ssid>";                          // WLAN
-// const char* pass      = "<your_password>";                      // WLAN
-// const char* serverURL = "https://<your_website.ch>/im4/18_mc2db/load.php";  // Server-Adresse: hier kann http oder https stehen, aber nicht ohne
-const char* ssid      = "tinkergarden";                          // WLAN
-const char* pass      = "strenggeheim";                      // WLAN
-const char* serverURL = "https://fiessling.ch/im4/18_mc2db/load.php";  // Server-Adresse: hier kann http oder https stehen, aber nicht ohne
+const char* ssid      = "<your_ssid>";                          // WLAN
+const char* pass      = "<your_password>";                      // WLAN
+const char* serverURL = "https://<your_website.ch>/im4/18_mc2db/load.php";  // Server-Adresse: hier kann http oder https stehen, aber nicht ohne
+                                            // Beispiel: https://fiessling.ch/im4/18_mc2db/load.php
     
-
-//////////////////////////////////////////////// Deep Sleep
-
-void print_wakeup_reason() {
-  esp_sleep_wakeup_cause_t wakeup_reason = esp_sleep_get_wakeup_cause();
-
-  switch (wakeup_reason) {
-    case ESP_SLEEP_WAKEUP_EXT1: Serial.println("Wakeup caused by external signal using RTC_CNTL"); break;
-    case ESP_SLEEP_WAKEUP_TIMER: Serial.println("Wakeup caused by timer"); break;
-    default: Serial.printf("Wakeup was not caused by deep sleep: %d\n", wakeup_reason); break;
-  }
-}
 
 void setup() {
   Serial.begin(115200);
@@ -61,7 +47,6 @@ void setup() {
 
   ++bootCount;
   Serial.println("Boot number: " + String(bootCount));
-  print_wakeup_reason();
 
   // RTC IO Konfiguration für Pulldown im Deep Sleep (ansonsten braucht es einen hochohmigen Widerstand zwischden GPIO7 und Ground)
   rtc_gpio_init((gpio_num_t)BUTTON_PIN);
@@ -99,10 +84,6 @@ void setup() {
 
 
 
-
-
-
-
   if (WiFi.status() == WL_CONNECTED) {                        // Überprüfen, ob Wi-Fi verbunden ist
       // HTTP Verbindung starten und POST-Anfrage senden
     HTTPClient http;
@@ -124,18 +105,17 @@ void setup() {
     Serial.println("WiFi Disconnected");
   }
 
-    
-
-
-  
+   
 
   //////////////////////////////////////////////// Deep Sleep
 
   // Wakeup auf HIGH-Signal (wenn der Button gedrückt wird)
+  
   esp_sleep_enable_ext1_wakeup(BUTTON_PIN_BITMASK, ESP_EXT1_WAKEUP_ANY_HIGH);
 
   Serial.println("Going to sleep now");
   Serial.flush();
+  delay(1000);
   esp_deep_sleep_start();
 }
 

@@ -1,37 +1,18 @@
 /*********************************************************************************
- * deep_sleep_timer_wakeup_basic.ino
+ * deepsleep_timer_wakeup_basic.ino
  * Deep sleep - wacht alle 5s auf
  * Es muss nichts an den ESP32 angeschlossen werden
  * source: https://randomnerdtutorials.com/esp32-deep-sleep-arduino-ide-wake-up-sources/
- * code from File > Examples > ESP32 Deep Sleep > TimerWakeUp
+ * code adapted from File > Examples > ESP32 Deep Sleep > TimerWakeUp
  * Author: Pranav Cherukupalli <cherukupallip@gmail.com>
  * *******************************************************************************/
 
 
 #define uS_TO_S_FACTOR 1000000  /* Conversion factor for micro seconds to seconds */
 #define TIME_TO_SLEEP  5        /* Time ESP32 will go to sleep (in seconds) */
+RTC_DATA_ATTR int bootCount = 0;  /* Um den Zähler im Speicher (8kB - wird im Deep Sleep nicht gelöscht) zu speichern, muss "RTC_DATA_ATTR" davor gechrieben werden*/
 
-RTC_DATA_ATTR int bootCount = 0;  /* Um den Zähler im Speicher (8kB - wird im Deep Sleep nicht gelöscht) zu speichern, muss "RTC_DATA_ATTR" davor gechrieben werden
 
-/*
-Method to print the reason by which ESP32
-has been awaken from sleep
-*/
-void print_wakeup_reason(){
-  esp_sleep_wakeup_cause_t wakeup_reason;
-
-  wakeup_reason = esp_sleep_get_wakeup_cause();
-
-  switch(wakeup_reason)
-  {
-    case ESP_SLEEP_WAKEUP_EXT0 : Serial.println("Wakeup caused by external signal using RTC_IO"); break;
-    case ESP_SLEEP_WAKEUP_EXT1 : Serial.println("Wakeup caused by external signal using RTC_CNTL"); break;
-    case ESP_SLEEP_WAKEUP_TIMER : Serial.println("Wakeup caused by timer"); break;
-    case ESP_SLEEP_WAKEUP_TOUCHPAD : Serial.println("Wakeup caused by touchpad"); break;
-    case ESP_SLEEP_WAKEUP_ULP : Serial.println("Wakeup caused by ULP program"); break;
-    default : Serial.printf("Wakeup was not caused by deep sleep: %d\n",wakeup_reason); break;
-  }
-}
 
 void setup(){
   Serial.begin(115200);
@@ -41,13 +22,8 @@ void setup(){
   ++bootCount;
   Serial.println("Boot number: " + String(bootCount));
 
-  //Print the wakeup reason for ESP32
-  print_wakeup_reason();
 
-  /*
-  First we configure the wake up source
-  We set our ESP32 to wake up every 5 seconds
-  */
+  /*  We set our ESP32 to wake up every 5 seconds */
   esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP * uS_TO_S_FACTOR);
   Serial.println("Setup ESP32 to sleep for every " + String(TIME_TO_SLEEP) +
   " Seconds");

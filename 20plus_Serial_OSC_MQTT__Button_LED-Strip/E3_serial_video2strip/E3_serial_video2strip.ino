@@ -1,5 +1,12 @@
-// Get light data via serial communication from TouchDesigner
-// install library "Adafruit NeoPixel by Adafruit"
+/*******************************************************************************
+ * Empfange Lichtdaten per serieller Kommunikation von z. B. TouchDesigner
+ * installiere Library "Adafruit NeoPixel" by Adafruit
+ * Verbinde 12 WS2812B LEDs (z. B. LED-Ring) mit ESP32-C6:
+ * WS2812B: Data in (Di)  <->  ESP32-C6: GPIO 2
+ * WS2812B: 5V            <->  5V (Externe Stromversorgung, falls zu viele LEDs)
+ * WS2812B: GND           <->  GND (Externe Stromversorgung, falls zu viele LEDs) 
+ ********************************************************************************/
+
 
 #include <Adafruit_NeoPixel.h>
 
@@ -7,8 +14,8 @@
  #include <avr/power.h> // Required for 16 MHz Adafruit Trinket
 #endif
 
-int led_pin = 6; 
-const int numpixels = 10; 
+int led_pin = 2; 
+const int numpixels = 12; 
 
 Adafruit_NeoPixel pixels(numpixels, led_pin, NEO_GRB + NEO_KHZ800);
 char inputBuffer[numpixels * 3];

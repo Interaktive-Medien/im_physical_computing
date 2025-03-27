@@ -2,8 +2,7 @@
  * deepsleep_button_wakeup_basic.ino
  * Deep sleep mit Timer - wacht auf, wenn ein Button gedruckt wird.
  * Beim ESP32-C6 stehen nur GPIOs 6, 7, 8, 9, 10 und 11 für esp_sleep_enable_ext0_wakeup() zur Verfügung
- * Verbinde Button Input mit GPIO7.
- * Es muss nichts an den ESP32 angeschlossen werden
+ * Verbinde Button mit GPIO7 des ESP32-C6 DevKit.
  * source: https://randomnerdtutorials.com/esp32-deep-sleep-arduino-ide-wake-up-sources/
  * code from File > Examples > ESP32 Deep Sleep > ExternalWakeUp
  * Author: Pranav Cherukupalli <cherukupallip@gmail.com>

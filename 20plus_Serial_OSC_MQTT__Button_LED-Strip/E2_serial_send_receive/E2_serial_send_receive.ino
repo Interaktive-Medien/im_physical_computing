@@ -1,7 +1,10 @@
-/*
-SEND DATA FROM TOUCHDESIGNER TO ESP32
-SEND BUTTON DATA FROM ESP32 TO TOUCHDESIGNER
-*/
+/*******************************************************************************
+ * Sende Button-Signal per serieller Kommunikation (zur Nutzung in z. B. TouchDesigner)
+ * Empfange Signal per serieller Kommunikation von z. B. TouchDesigner.
+ * Es gibt visuelles Feedback auf der RGB_BUILTIN led: Senden: gelb, empfangen: blau
+ * Verbinde Button Input mit ESP32-C6 an GPIO 7
+ ********************************************************************************/
+
 
 // set pin numbers:
 
@@ -14,7 +17,7 @@ int prev_buttonState = 0;
 void setup() 
 {  
   Serial.begin(115200);
-  pinMode(buttonPin, INPUT);  
+  pinMode(buttonPin, INPUT_PULLDOWN);  
   pinMode(led, OUTPUT);    
   digitalWrite(led, 0);
 }

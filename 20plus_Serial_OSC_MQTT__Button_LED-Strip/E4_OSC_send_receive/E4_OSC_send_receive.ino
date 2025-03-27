@@ -1,8 +1,7 @@
 /******************************************************************************************
- * mc.ino
- * Button signal to TouchDesigner and back via OSC
+ * Button Signal zu TouchDesigner aund zurück via OSC
  * LED leuchtet gelb, wenn der angeschlossene Hardware-Button am ESP32 gedrückt wird
- * LED leuchtet blau, wenn der ESP32 OSC-Nachricht mit Topic "from_td" und Payload 0 empfängt
+ * LED leuchtet blau, wenn der ESP32 OSC-Nachricht mit Topic "from_td" und Payload 1 empfängt
  * Install library "OSC" by Adrian Freed
  * specify your Wifi ssid and pw, and IP address of your receiver PC
  ******************************************************************************************/
@@ -17,8 +16,8 @@
 const char* ssid = "tinkergarden";   // @todo: add your wifi name
 const char* pass = "strenggeheim";   // @todo: add your wifi pw
 
-WiFiUDP Udp;                                // A UDP instance to let us send and receive packets over UDP
-const IPAddress remoteIp(192, 168, 0, 20);  // @todo: add receiver IP address
+WiFiUDP Udp;                                 // A UDP instance to let us send and receive packets over UDP
+const IPAddress remoteIp(192, 168, 0, 102);  // @todo: add receiver IP address
 const unsigned int remotePort = 9000;      
 const unsigned int localPort = 8000;       
 
@@ -32,7 +31,7 @@ void setup() {
   connectWiFi();
   connectUdp();
 
-  pinMode(buttonPin, INPUT);  
+  pinMode(buttonPin, INPUT_PULLDOWN);  
   pinMode(led, OUTPUT);    
   digitalWrite(led, 0);
 }

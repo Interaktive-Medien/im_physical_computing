@@ -1,12 +1,15 @@
-/******************************************************************************************
- * mc.ino
- * Button signal from ESP32 to TouchDesigner and LED data to ESP32 via OSC
+/*******************************************************************************
+ * Empfange Lichtdaten per OSC von z. B. TouchDesigner
+ * installiere Library "Adafruit NeoPixel" by Adafruit
  * LED leuchtet gelb, wenn der angeschlossene Hardware-Button am ESP32 gedrückt wird
- * LED leuchtet blau, wenn der ESP32 OSC-Nachricht mit Topic "from_td" und Payload 0 empfängt
- * Install library "OSC" by Adrian Freed
- * Install library "NeoPixel" by Adafruit
- * specify your Wifi ssid and pw, and IP address of your receiver PC
- ******************************************************************************************/
+ * LED leuchtet blau, wenn der ESP32 OSC-Nachricht mit key "from_td" und Value 1 empfängt
+ * Verbinde 12 WS2812B LEDs (z. B. LED-Ring) mit ESP32-C6:
+ * WS2812B: Data in (Di)  <->  ESP32-C6: GPIO 2
+ * WS2812B: 5V            <->  5V (Externe Stromversorgung, falls zu viele LEDs)
+ * WS2812B: GND           <->  GND (Externe Stromversorgung, falls zu viele LEDs) 
+ * Ändere ssid, password, remote IP adress 
+ ********************************************************************************/
+
 
 
 #include <WiFi.h>
@@ -19,19 +22,19 @@ const char* ssid = "tinkergarden";            // @todo: add your wifi name
 const char* pass = "strenggeheim";            // @todo: add your wifi pw
 
 WiFiUDP Udp;                               
-const IPAddress remoteIp(192, 168, 0, 20);    // @todo: add receiver IP address
+const IPAddress remoteIp(192, 168, 0, 102);   // @todo: add receiver IP address
 const unsigned int remotePort = 9000;          
 const unsigned int localPort = 8000;        
 
-// button
+/////////////////////////////////////////////////// button
 const int buttonPin = 7; 
 int buttonState = 0;         
 int prev_buttonState = 0;
 const int led = RGB_BUILTIN;
 
-// ws2812
-const int stripPin = 6;      
-const int num_leds = 10; 
+//////////////////////////////////////////////////// ws2812
+const int stripPin = 2;      
+const int num_leds = 12; 
 Adafruit_NeoPixel strip(num_leds, stripPin, NEO_GRB + NEO_KHZ800);
 
 void setup() {
@@ -40,7 +43,7 @@ void setup() {
   connectUdp();
   setupStrip();
 
-  pinMode(buttonPin, INPUT);   
+  pinMode(buttonPin, INPUT_PULLDOWN);   
   pinMode(led, OUTPUT);
   digitalWrite(led, 0);   // LED off
 }
