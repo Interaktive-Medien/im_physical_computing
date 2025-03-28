@@ -1,4 +1,5 @@
 /******************************************************************************************
+ * Video2Strip_MQTT.ino
  * Empfange Lichtdaten per MQTT von z. B. TouchDesigner
  * LED-Ring zeigt Video, das in TouchDesigner für die LEDs portioniert wurde
  * LED leuchtet gelb, wenn der angeschlossene Hardware-Button am ESP32 gedrückt wird (MQTT msg to TouchDesigner)
@@ -7,6 +8,8 @@
  * specify your Wifi ssid and pw, and IP address of your running MQTT message broker
  ******************************************************************************************/
 
+
+#include <Adafruit_NeoPixel.h>
 
 ///////////////////////////////////////////////// WiFi & MQTT
 
@@ -87,6 +90,14 @@ void connectMQTT() {
   mqttclient.onMessage(messageReceived);
 }
 
+////////////////////////////////////////////////// LED-Strip
+
+void setupStrip(){
+  strip.begin();       
+  strip.show();            
+  strip.setBrightness(255); 
+}
+
 
 void loop() {
   mqttclient.loop();
@@ -98,24 +109,29 @@ void loop() {
 
 ///////////////////////////////////////////////// steuere LED strip bei entsprechender MQTT Nachricht (callback Funktion: see mqttclient.onMessage(messageReceived);)
 
+
 void messageReceived(String &topic, String &payload) {
-  Serial.println("incoming: " + topic + " - " + payload);
-  if (topic == "from_td"){
-    Serial.println("from_td");
-    if (payload.toInt() == 1) digitalWrite(led2Pin, 0); 
-    else digitalWrite(led2Pin, 1); 
+  // Serial.println("incoming: " + topic + " - " + payload);
 
+  if (topic == "colors") { 
+    int values[num_leds * 3];  // RGB-Werte als Integer speichern
+    
+    // wandle CSV String in ein Int-Array um
+    int index = 0;
+    char *token = strtok((char*)payload.c_str(), ","); // Zerlege String an Kommas
 
-/*
-    for(int i=0; i < num_leds; i++) {
-      //strip.setPixelColor(i, msg.getInt(i*3), msg.getInt((i*3)+1), msg.getInt((i*3)+2));
-      payload.toInt()
-      strip.setPixelColor(i, msg.getInt(i*3), msg.getInt((i*3)+1), msg.getInt((i*3)+2));
+    while (token != nullptr && index < num_leds * 3) {
+      values[index++] = atoi(token);  // String in Integer umwandeln
+      token = strtok(nullptr, ",");
     }
-    strip.show(); // Update strip with new contents
-    delay(15);   
 
-    */
+    // schreibe Werte aus dem Int-Array aan die WS2812B LEDs
+    for (int i = 0; i < num_leds; i++) {
+      strip.setPixelColor(i, strip.Color(values[i * 3], values[i * 3 + 1], values[i * 3 + 2]));
+    }
+
+    strip.show(); // Update LEDs
+    delay(15);
   }
 }
 
