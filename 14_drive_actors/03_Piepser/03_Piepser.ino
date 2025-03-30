@@ -1,15 +1,20 @@
 /*******************************************
  * 03_Piepser.ino (Code gleich wie 01_LED.ino)
+ * Bauteil: KY-012
  * Empfange entweder eine 1 oder eine 0 am seriellen Port
- * und schalte die LED an GPIO8 entsorechend.
+ * und schalte die LED an GPIO8 entsprechend.
+ * Verbinde:
+ * Piepser: - (linkes Bein)     <->  ESP32-C6: GND
+ * Piepser: + (mittleres Bein)  <->  ESP32-C6: 5V (lauter) oder 3.3V
+ * Piepser: S (rechtes Bein)    <->  ESP32-C6: GPIO 8
  *******************************************/
 
-const int ledPin = 8;  
+const int piepserPin = 8;  
 
 void setup() {
-  pinMode(ledPin, OUTPUT);
+  pinMode(piepserPin, OUTPUT);
   Serial.begin(115200);
-  digitalWrite(ledPin, 0);
+  digitalWrite(piepserPin, 0);
 }
 
 void loop() {
@@ -22,7 +27,7 @@ void loop() {
     in den numerischen Wert umgewandelt */
     int receivedInt = receivedChar - '0';
     if (receivedInt == 0 || receivedInt == 1) {
-      digitalWrite(ledPin, receivedInt);  // LED schalten
+      digitalWrite(piepserPin, receivedInt);  // LED schalten
       Serial.println(receivedInt);
     }
   }

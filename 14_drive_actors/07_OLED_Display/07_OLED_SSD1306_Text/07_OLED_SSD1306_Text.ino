@@ -5,10 +5,10 @@
  * Dependency libraries Adafruit BusIO and Adafruit GFX Library 
  * will be installed automatically as well.
  * Connect: 
- * ESP32-C6: 3.3V   <->  SSD1306: VDD
- * ESP32-C6: GND    <->  SSD1306: GND
- * ESP32-C6: GPIO6  <->  SSD1306: SDA
- * ESP32-C6: GPIO7  <->  SSD1306: SCK
+ * ESP32-C6: 3.3V / 5V   <->  SSD1306: VDD
+ * ESP32-C6: GND         <->  SSD1306: GND
+ * ESP32-C6: GPIO6       <->  SSD1306: SDA
+ * ESP32-C6: GPIO7       <->  SSD1306: SCK
  ************************************************************/
 
 #include <Wire.h>
