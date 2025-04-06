@@ -1,0 +1,77 @@
+{
+  "configurations": [
+    {
+      "name": "Arduino",
+      "includePath": [
+        "C:\\Users\\fiessjan\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\3.1.3\\cores\\esp32/**",
+        "C:\\Users\\fiessjan\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\3.1.3\\variants\\esp32c6/**",
+        "C:\\Users\\fiessjan\\Documents\\Arduino\\libraries/**",
+        "G:\\Meine Ablage\\FHGR\\Lehre\\IM\\IM4\\FS25\\Physical Computing\\im_physical_computing\\blinki/**",
+        "C:\\Users\\fiessjan\\AppData\\Local\\Arduino15\\packages\\esp32\\tools\\esp32-arduino-libs\\idf-release_v5.3-489d7a2b-v1\\esp32c6\\include/**"
+      ],
+      "forcedInclude": [
+        "C:\\Users\\fiessjan\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\3.1.3\\cores\\esp32\\Arduino.h"
+      ],
+      "compilerPath": "C:\\Users\\fiessjan\\AppData\\Local\\Arduino15\\packages\\esp32\\tools\\esp-rv32\\2405/bin/riscv32-esp-elf-g++",
+      "compilerArgs": [
+        "C:\\Users\\fiessjan\\AppData\\Local\\Arduino15\\packages\\esp32\\tools\\esp-rv32\\2405/bin/riscv32-esp-elf-g++",
+        "-MMD",
+        "-c",
+        "@C:\\Users\\fiessjan\\AppData\\Local\\Arduino15\\packages\\esp32\\tools\\esp32-arduino-libs\\idf-release_v5.3-489d7a2b-v1\\esp32c6/flags/cpp_flags",
+        "-w",
+        "-Os",
+        "-Werror=return-type",
+        "-DF_CPU=160000000L",
+        "-DARDUINO=10607",
+        "-DARDUINO_ESP32C6_DEV",
+        "-DARDUINO_ARCH_ESP32",
+        "-DARDUINO_BOARD=\"ESP32C6_DEV\"",
+        "-DARDUINO_VARIANT=\"esp32c6\"",
+        "-DARDUINO_PARTITION_default",
+        "-DARDUINO_HOST_OS=\"windows\"",
+        "-DARDUINO_FQBN=\"esp32:esp32:esp32c6:UploadSpeed=921600,CDCOnBoot=default,CPUFreq=160,FlashFreq=80,FlashMode=qio,FlashSize=4M,PartitionScheme=default,DebugLevel=none,EraseFlash=none,JTAGAdapter=default,ZigbeeMode=default\"",
+        "-DESP32=ESP32",
+        "-DCORE_DEBUG_LEVEL=0",
+        "-DARDUINO_USB_MODE=1",
+        "-DARDUINO_USB_CDC_ON_BOOT=0",
+        "@C:\\Users\\fiessjan\\AppData\\Local\\Arduino15\\packages\\esp32\\tools\\esp32-arduino-libs\\idf-release_v5.3-489d7a2b-v1\\esp32c6/flags/defines",
+        "-IG:\\Meine Ablage\\FHGR\\Lehre\\IM\\IM4\\FS25\\Physical Computing\\im_physical_computing\\blinki",
+        "-iprefix",
+        "C:\\Users\\fiessjan\\AppData\\Local\\Arduino15\\packages\\esp32\\tools\\esp32-arduino-libs\\idf-release_v5.3-489d7a2b-v1\\esp32c6/include/",
+        "@C:\\Users\\fiessjan\\AppData\\Local\\Arduino15\\packages\\esp32\\tools\\esp32-arduino-libs\\idf-release_v5.3-489d7a2b-v1\\esp32c6/flags/includes",
+        "-IC:\\Users\\fiessjan\\AppData\\Local\\Arduino15\\packages\\esp32\\tools\\esp32-arduino-libs\\idf-release_v5.3-489d7a2b-v1\\esp32c6/qio_qspi/include",
+        "-IC:\\Users\\fiessjan\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\3.1.3\\cores\\esp32",
+        "-IC:\\Users\\fiessjan\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\3.1.3\\variants\\esp32c6",
+        "@G:\\Meine Ablage\\FHGR\\Lehre\\IM\\IM4\\FS25\\Physical Computing\\im_physical_computing\\blinki\\build/build_opt.h",
+        "@G:\\Meine Ablage\\FHGR\\Lehre\\IM\\IM4\\FS25\\Physical Computing\\im_physical_computing\\blinki\\build/file_opts",
+        "G:\\Meine Ablage\\FHGR\\Lehre\\IM\\IM4\\FS25\\Physical Computing\\im_physical_computing\\blinki\\build\\sketch\\blinki.ino.cpp",
+        "-o",
+        "G:\\Meine Ablage\\FHGR\\Lehre\\IM\\IM4\\FS25\\Physical Computing\\im_physical_computing\\blinki\\build\\sketch\\blinki.ino.cpp.o"
+      ],
+      "defines": [
+        "F_CPU=160000000L",
+        "ARDUINO=10607",
+        "ARDUINO_ESP32C6_DEV",
+        "ARDUINO_ARCH_ESP32",
+        "ARDUINO_BOARD=\"ESP32C6_DEV\"",
+        "ARDUINO_VARIANT=\"esp32c6\"",
+        "ARDUINO_PARTITION_default",
+        "ARDUINO_HOST_OS=\"windows\"",
+        "ARDUINO_FQBN=\"esp32:esp32:esp32c6:UploadSpeed=921600,CDCOnBoot=default,CPUFreq=160,FlashFreq=80,FlashMode=qio,FlashSize=4M,PartitionScheme=default,DebugLevel=none,EraseFlash=none,JTAGAdapter=default,ZigbeeMode=default\"",
+        "ESP32=ESP32",
+        "CORE_DEBUG_LEVEL=0",
+        "ARDUINO_USB_MODE=1",
+        "ARDUINO_USB_CDC_ON_BOOT=0",
+        "ARDUINO_BOARD=\\\"ESP32C6_DEV\\\"\"",
+        "ARDUINO_VARIANT=\\\"esp32c6\\\"\"",
+        "ARDUINO_HOST_OS=\\\"windows\\\"\"",
+        "ARDUINO_FQBN=\\\"esp32:esp32:esp32c6:UploadSpeed=921600,CDCOnBoot=default,CPUFreq=160,FlashFreq=80,FlashMode=qio,FlashSize=4M,PartitionScheme=default,DebugLevel=none,EraseFlash=none,JTAGAdapter=default,ZigbeeMode=default\\\"\"",
+        "ARDUINO_CORE_BUILD",
+        "USBCON"
+      ],
+      "cStandard": "c17",
+      "cppStandard": "c++17"
+    }
+  ],
+  "version": 4
+}

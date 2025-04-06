@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart.js example</title>
+</head>
+<body>
+    <canvas id="myChart"></canvas>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+
+        // Chart.js verlangt bei type line 2 Arrays der gleichen Länge: data (y) and labels (x)
+        const DATA_COUNT = 10;
+        const datapoints = [43, 29, 33, 34, 30, 29, 35, NaN, 31, 56];
+
+        // Config-Teil
+        // Hier legst du die Art des Diagramms (Line Chart) und Optionen wie Achsentitel, Minimal- und Maximalwerte sowie die Interpolationsart fest.
+        const config = {
+            type: 'line',   // line, pie, bar, radar, doughnut, polarArea
+            data: {
+                labels: ["Alen", "Anja", "Beni", "Jan", "Lea", "Nick", "Nils", "Nina", "Samuel", "Wolfgang"],  // labels muss drin sein
+                datasets: [      // datasets muss drin sein
+                    {
+                        data: datapoints,
+                    }
+                ]
+            }
+        };
+        // Erstellen des Charts
+        const ctx = document.querySelector('#myChart').getContext('2d');
+        new Chart(ctx, config);
+
+    </script>
+</body>
+</html>
