@@ -1,11 +1,10 @@
 /******************************************************************************************************
- * 00_Button.ino
- * receive eg.  button / reed sensor / PIR sensor / touch sensor (TTB223B)/ light sensor (LM393) input 
- * and print value to serial port
+ * 07_Serielle_Kommunikation.ino
+ * receive button input and print value to serial port
  " Connect ...
  * Sensor: Vin  <->  ESP32-C6: 3.3V 
  * Sensor: GND  <->  ESP32-C6: GND  (nicht bei Button, Reedachalter)
- * Sensor: Data <->  ESP32-C6: GPIO7
+ * Sensor: Data <->  ESP32-C6: GPIO 7
  ******************************************************************************************************/
 
 const int buttonPin = 7;
