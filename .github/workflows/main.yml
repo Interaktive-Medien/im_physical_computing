@@ -13,7 +13,7 @@ jobs:
       name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@v4.3.4
       with:
-          server: rv7w2f.ftp.infomaniak.com
-          username: rv7w2f_fiessling
+          server: rv9w2f.ftp.infomaniak.com
+          username: rv9w2f_fiessling
           password: ${{ secrets.ftp_password }}
           server-dir: sites/fiessling.ch/im4/
