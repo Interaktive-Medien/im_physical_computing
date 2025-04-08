@@ -1,5 +1,5 @@
-# Kap. 14: Aktoren steuern
-## 09: Stepper (=Schrittmotor")
+# Kap. 10: Aktoren steuern
+## 10: Stepper (=Schrittmotor")
 
 ![Steckplan](Steckplan.png)
 

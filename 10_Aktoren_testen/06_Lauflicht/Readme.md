@@ -1,4 +1,4 @@
-# Kap. 14: Aktoren steuern
+# Kap. 10: Aktoren steuern
 ## 06: Lauflicht
 
 ![Steckplan](Steckplan.png)

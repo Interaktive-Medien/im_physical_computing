@@ -1,4 +1,5 @@
 /******************************************************************************************************
+ " Kap. 7: Serielle Kommunikation"
  * 07_Serielle_Kommunikation.ino
  * receive button input and print value to serial port
  " Connect ...

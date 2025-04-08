@@ -1,0 +1,45 @@
+<!------------------------------------------------------------------
+  Kapitel 11: WLAN und Kommunikation via Internet  >  HTML-Button to TouchDesigner
+  website.html
+  Steuere TouchDesigner von dierser Website aus.
+  Diese Datei muss an KEINEN Port angepasst werden.
+  kein Upload auf Webserver notwendig. Einfach TouchDesigner und diese HTML-Seite öffnen.
+  funktioniert nur im lokalen WLAN (oder z. B. per VPN oder port forwarding)
+  In TouchDesigner wird mit WebserverDAT ein webserver gestartet auf Port 9970
+  Bei Click auf den HTML-Button wird hier eine HTTP GET request an diese Adresse geschickt 
+  -> lokal ausführen
+  GitHub: https://github.com/Interaktive-Medien/im_physical_computing/tree/main/11_WLAN_und_Kommunikation_via_Internet/03_HTMLButton2TouchDesigner
+-------------------------------------------------------------------->
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="btn">Click</button>
+ 
+    <a href="http://localhost:9970"> Link</a>
+    <script>
+      document.querySelector("#btn").addEventListener("click", function () {
+        fetch("http://localhost:9970", { 
+          method: "GET", // HTTP-Methode
+          mode: "no-cors" 
+        })
+        fetch("http://localhost:9970")
+          .then((data) => {
+            // Handle the response data here
+            console.log("successful");
+          })
+          .catch((error) => {
+            console.error(error);
+            console.log("an error: Status code:", error.status);
+          });
+        console.log("Button clicked!");
+      });
+    </script>
+  </body>
+</html>

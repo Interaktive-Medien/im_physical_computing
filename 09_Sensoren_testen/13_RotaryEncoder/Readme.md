@@ -1,5 +1,5 @@
-# Kap. 13: Sensoren testen
-## Rotary Encoder
+# Kap. 09: Sensoren testen
+## 13: Rotary Encoder
 
 ![Steckplan](Steckplan.png)
 

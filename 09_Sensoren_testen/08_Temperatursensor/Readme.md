@@ -1,4 +1,4 @@
-# Kap. 13: Sensoren testen
+# Kap. 09: Sensoren testen
 ## 08: Temperatur- und Feuchtigkeitssensor
 
 ![Steckplan](Steckplan.png)

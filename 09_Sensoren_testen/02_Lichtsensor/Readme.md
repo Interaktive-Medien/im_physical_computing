@@ -1,4 +1,4 @@
-# Kap. 13: Sensoren testen
+# Kap. 09: Sensoren testen
 ## 02: Lichtsensor
 
 ![Steckplan](Steckplan.png)

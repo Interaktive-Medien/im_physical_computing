@@ -1,0 +1,61 @@
+<!--------------------------------------------------------------------------------------------------- 
+  Kapitel 11: WLAN und Kommunikation via Internet  >  Website-to-LED (2 files - version)
+  website.html
+  Schalte LED am ESP32-C6 von dieser Website.
+  Wichtig: ändere die IP-Adresse bei fetch("http://...") zu der deines ESP32-C6
+  kein Upload auf Webserver notwendig
+  funktioniert nur im lokalen WLAN (oder z. B. per VPN oder port forwarding)
+  send JSON-formatted string via HTTP POST request to <IP address of ESP3-C6>/postjson to control LED
+  GitHub: https://github.com/Interaktive-Medien/im_physical_computing/tree/main/11_WLAN_und_Kommunikation_via_Internet/02_website2led_2files
+------------------------------------------------------------------------------------------------------>
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="btn">Drive LED</button>
+
+    <script>
+      let ledval = 0
+      document.querySelector("#btn").addEventListener("click", function () {
+        ledval = (ledval + 1) % 2;
+        // ledval = Math.random();
+        // JSON-Daten, die gesendet werden
+        const jsonData = {
+          wert: ledval
+        };
+        jsonstring = JSON.stringify(jsonData)
+        console.log(jsonstring);
+
+        // POST-Request mit fetch
+        fetch("http://192.168.0.102/postjson", {
+          method: "POST", // HTTP-Methode
+          headers: {
+            "Content-Type": "application/json", // Setze den Content-Type auf JSON
+          },
+          body: jsonstring, // Daten in JSON-String umwandeln und senden
+          // mode: "no-cors"
+        })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json(); // falls die Antwort JSON ist
+        })
+        .then((data) => {
+          console.log("Response received:", data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+
+        console.log("Button clicked!");
+      });
+    </script>
+  </body>
+</html>
