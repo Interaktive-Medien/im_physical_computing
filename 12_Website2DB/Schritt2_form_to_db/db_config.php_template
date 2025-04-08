@@ -1,12 +1,12 @@
 <?php
 /*************************************************************
- * Kapitel 12: Website2DB > Form_to.db
+ * Kapitel 12: Website2DB > Schritt 2: Form -> DB
  * db_config.php
  * Datenbank-Verbindung
  * Ersetze $db_host, $db_name, $db_user, $db_pass durch deine eigenen Daten. 
  * Lade diese Datei NICHT auf GitHub
  * Beispiel: https://fiessling.ch/im4/12_website2db/Schritt2_form_to_db/db_config.php
- * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/tree/main/12_Website2DB/Schritt2_form_to_db
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/12_Website2DB/Schritt2_form_to_db/db_config.php_template
  *************************************************************/
 
 $db_host = "<your_id>.myd.infomaniak.com";  // Infomaniak z. B. "rv9w2f.myd.infomaniak.com", beim FHGR Edu-Server und xampp steht hier "localhost"

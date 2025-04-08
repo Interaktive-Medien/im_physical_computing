@@ -8,6 +8,7 @@
 *  Sensor: GND  <->  ESP32-C6: GND
 *  Sensor: SDA  <->  ESP32-C6: GPIO6
 *  Sensor: SCL  <->  ESP32-C6: GPIO7
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/09_Sensoren_testen/06_Distanzsensor_TOF/06_Distanzsensor_TOF.ino
 ***********************************************************************************************/
 
 #include <Wire.h>

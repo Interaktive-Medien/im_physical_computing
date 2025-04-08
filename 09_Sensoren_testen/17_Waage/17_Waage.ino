@@ -6,6 +6,7 @@
  *  HX711: SCK (serial clock)  <->   ESP32-C6: GPIO 7
  *  Driver: Vcc                <->   ESP32-C6: 3.3V
  *  Driver: GND                <->   ESP32-C6: GND
+ *  GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/09_Sensoren_testen/17_Waage/17_Waage.ino
  *******************************************************************************/
 
 

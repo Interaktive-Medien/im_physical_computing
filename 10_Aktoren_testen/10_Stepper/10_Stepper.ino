@@ -9,6 +9,7 @@
  *  Stepper Driver: IN3   <->  ESP32-C6: GPIO19
  *  Stepper Driver: IN4   <->  ESP32-C6: GPIO18
  *  see https://randomnerdtutorials.com/esp32-stepper-motor-28byj-48-uln2003/ 
+ *  GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/10_Aktoren_testen/10_Stepper/10_Stepper.ino
  *******************************************************************************/
 
 #include <Stepper.h>

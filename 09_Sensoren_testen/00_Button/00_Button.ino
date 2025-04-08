@@ -6,6 +6,7 @@
  * Sensor: Vin  <->  ESP32-C6: 3.3V 
  * Sensor: GND  <->  ESP32-C6: GND  (nicht bei Button, Reedachalter)
  * Sensor: Data <->  ESP32-C6: GPIO7
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/09_Sensoren_testen/00_Button/00_Button.ino
  ******************************************************************************************************/
 
 const int buttonPin = 7;

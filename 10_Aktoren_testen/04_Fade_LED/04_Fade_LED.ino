@@ -1,7 +1,10 @@
 /****************************************************
  *  04_Fade_LED.ino
- *  LED fadet hoch und runter
- *  Verbinde Anode (+) der LED mit GPIO 8 am ESP32-C6
+ *  LED fadet auf und ab
+ *  Verbinde:
+ *  LED: + (langes Bein)  <->  ESP32-C6: GPIO 8 (per Vorwiederstand)
+ *  LED: - (kurzes Bein)  <->  ESP32-C6: GND 
+ *  GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/10_Aktoren_testen/04_Fade_LED/04_Fade_LED.ino
  ****************************************************/
 
 int led = 8;

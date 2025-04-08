@@ -10,6 +10,7 @@
 * Reset am RFID-RC522  <->  Rst am ESP32-C6
 * 3.3V am RFID-RC522   <->  3.3V am ESP32-C6
 * GND am RFID-RC522    <->  GND am ESP32-C6
+* GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/09_Sensoren_testen/10_RFID-Reader/10_RFID-Reader.ino
 *****************************************************************************/
 
 

@@ -1,9 +1,9 @@
 /*****************************************************************************************************************
  *  Kap. 14: Microcontroller -> Dataviz
- *  website.js 
+ *  script.js 
  *  Daten als JSON-String vom Server holen (unload.php), sobald website.js dieses Script per HTTP aufruft (fetch())
- *  Beispiel: https://fiessling.ch/im4/14_MC2Dataviz/website.html
- *  GitHub: https://github.com/Interaktive-Medien/im_physical_computing/tree/main/14MC2Dataviz/index.html
+ *  Beispiel: https://fiessling.ch/im4/14_MC2Dataviz/script.js
+ *  GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/14_MC2Dataviz/script.js
 ******************************************************************************************************************/
 
 async function fetchData() {

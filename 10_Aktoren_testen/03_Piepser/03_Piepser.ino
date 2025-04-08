@@ -7,6 +7,7 @@
  * Piepser: - (linkes Bein)     <->  ESP32-C6: GND
  * Piepser: + (mittleres Bein)  <->  ESP32-C6: 5V (lauter) oder 3.3V
  * Piepser: S (rechtes Bein)    <->  ESP32-C6: GPIO 8
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/10_Aktoren_testen/03_Piepser/03_Piepser.ino
  *******************************************/
 
 const int piepserPin = 8;  

@@ -7,6 +7,7 @@
  * WS2812B-Ring: Data In  <->  ESP32-C6: GPIO2
  * WS2812B-Ring: +5V/Vcc  <->  externe tromversorgung: Plusleistung
  * WS2812B-Ring: GND      <->  externe tromversorgung: Minusleistung, ESP32-C6: GND
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/10_Aktoren_testen/06_Lauflicht/06_Lauflicht_anim/06_Lauflicht_anim.ino
  *****************************************************/
 
 

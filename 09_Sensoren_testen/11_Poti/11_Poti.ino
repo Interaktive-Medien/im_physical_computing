@@ -4,6 +4,7 @@
  * Sensor: rechts  <->  ESP32-C6: 3.3V 
  * Sensor: links   <->  ESP32-C6: GND
  * Sensor: mitte   <->  ESP32-C6: GPIO4
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/09_Sensoren_testen/11_Poti/11_Poti.ino
  ************************************************************************/
 
 const int potPin = 4;

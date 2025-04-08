@@ -11,6 +11,7 @@
  * ESP32-C6: GPIO7  <->  SSD1306: SCK
  * Schöne Anleitung: https://randomnerdtutorials.com/esp32-ssd1306-oled-display-arduino-ide/.
  * Schönes Tool: https://javl.github.io/image2cpp/
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/10_Aktoren_testen/07_OLED_Display/07_OLED_SSD1306_Bild/07_OLED_SSD1306_Bild.ino
  ************************************************************/
 
 

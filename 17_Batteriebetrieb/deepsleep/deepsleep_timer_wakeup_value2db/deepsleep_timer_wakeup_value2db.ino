@@ -1,4 +1,5 @@
 /*********************************************************************************
+ * Kap. 17: Batteriebetrieb > Deep Sleep > Timer Wakeup Value -> DB
  * deepsleep_timer_wakeup_value2db.ino
  * Wache alle 5s auf und speichere einen Sensorwert in einer Datenbank
  * (verbinde mit dem WLAN und sende den Wert an load.php)
@@ -7,6 +8,7 @@
  * Installiere Library "Arduino_JSON" by Arduino, um JSON Strings für load.php einfacher zu kreieren.
  * Beachte: Passe den Pfad zur load.php in const char* serverURL auf deinen eigenen an.
  * Gib SSID und Passwort deines WLANs an.
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/17_Batteriebetrieb/deepsleep/deepsleep_timer_wakeup_basic/deepsleep_timer_wakeup_basic.ino
  * *******************************************************************************/
 
 

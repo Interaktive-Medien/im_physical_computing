@@ -7,6 +7,7 @@
  * Sensor: GND  <->  ESP32-C6: GND
  * Sensor: Trig <->  ESP32-C6: GPIO12
  * Sensor: Echo <->  ESP32-C6: GPIO13
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/09_Sensoren_testen/07_Distanzsensor_Ultrasonic/07_Distanzsensor_Ultrasonic.ino
  ******************************************************************************/
 
 const int trigPin = 12;

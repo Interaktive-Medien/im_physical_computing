@@ -5,8 +5,11 @@
  * Anschluss:
  * PN532: SDA <-> ESP32-C6: GPIO 6
  * PN532: SCL <-> ESP32-C6: GPIO 7
+ * PN532: Vcc <-> ESP32-C6: 3.3V
+ * PN532: GND <-> ESP32-C6: GND
  * Put libraries PN532, PN532_I2C, NDEF into Documents>Arduino>libraries 
  * (download on https://github.com/elechouse/PN532)
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/09_Sensoren_testen/09_NFC_RFID-Reader/09_NFC_RFID-Reader.ino
 ********************************************************************/
 
 #include <Wire.h>

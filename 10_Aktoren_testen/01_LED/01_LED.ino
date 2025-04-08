@@ -1,8 +1,12 @@
-/*******************************************
+/*********************************************************************
  * 01_LED.ino
  * Empfange entweder eine 1 oder eine 0 am seriellen Port
- * und schalte die LED an GPIO8 entsorechend.
- *******************************************/
+ * und schalte die LED an GPIO8 entsprechend.
+ * Verbinde:
+ * LED: + (langes Bein)  <->  ESP32-C6: GPIO 8 (per Vorwiederstand)
+ * LED: - (kurzes Bein)  <->  ESP32-C6: GND 
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/10_Aktoren_testen/01_LED/01_LED.ino
+ *********************************************************************/
 
 const int ledPin = 8;  
 

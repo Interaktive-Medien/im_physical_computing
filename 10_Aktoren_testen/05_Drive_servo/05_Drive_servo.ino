@@ -6,6 +6,7 @@
  * Servo: Vin   <->  external + line
  * Servo: GND   <->  external - line
  * Servo: Data  <->  ESP32-C6: GPIO2
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/10_Aktoren_testen/05_Drive_servo/05_Drive_servo.ino
  ***************************************************************/
 
 #include <ESP32Servo.h>

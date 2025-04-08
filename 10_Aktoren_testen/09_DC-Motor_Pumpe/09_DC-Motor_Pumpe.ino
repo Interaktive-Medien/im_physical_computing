@@ -9,6 +9,7 @@
  *  Driver: Vcc           <->  esterne Stromversorgung (2.5V - 12V)
  *  Driver: GND           <->  GND an ESP32-C6 und der esternen Stromversorgung
  *  Info: Neben A-1A und A-1B hat der Stepper-Driver L9110 zudem die Anschlüsse B-1A und B-1B, die für einen zweiten Motor gedacht sind.
+ *  GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/10_Aktoren_testen/09_DC-Motor_Pumpe/09_DC-Motor_Pumpe.ino
  *******************************************************************************/
 
 const int motor_in1 = 11;

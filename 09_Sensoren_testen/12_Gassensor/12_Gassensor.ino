@@ -6,7 +6,8 @@
  * Sensor: GND  <->  ESP32-C6: GND
  * Für bessere Ergebnisse und mehr Langlebigkeit des Microcontrollers 
  * sollte das Datensignal des Gas-Sensors (max. 5V) mit einem Level Shifter
- * oder einem Spannungsteiler auf den Wertebereich 0...3.3V heruntergeregelt werden.   
+ * oder einem Spannungsteiler auf den Wertebereich 0...3.3V heruntergeregelt werden. 
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/09_Sensoren_testen/12_Gassensor/12_Gassensor.ino  
  ************************************************************************/
 
 

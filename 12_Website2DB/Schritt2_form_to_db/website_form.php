@@ -1,9 +1,10 @@
 <?php
 /***********************************************************************************
- * Kapitel 12: Website2DB) > Form_to.db
+ * Kapitel 12: Website2DB) > Schritt 2: Form -> DB
  * website_form.php
  * Wird dieses Formular abgeschickt, werden die Daten in eine Datenbanktabelle geschrieben (alles in dieser Datei)
- * https://fiessling.ch/im4/12_website2db/Schritt2_form_to_db/website_form.php
+ * Beispiel: https://fiessling.ch/im4/12_Website2DB/Schritt2_form_to_db/website_form.php
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/12_Website2DB/Schritt2_form_to_db/website_form.php
  * Client-seitiges Formular und PHP-Serverscript in Einem -> Formulardaten werden in DB geschrieben
  ***********************************************************************************/
 

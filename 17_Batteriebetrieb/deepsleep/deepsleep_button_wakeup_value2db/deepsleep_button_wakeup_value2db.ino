@@ -1,4 +1,5 @@
 /*********************************************************************************
+ * Kap. 17: Batteriebetrieb > Deep Sleep > Button Wakeup Value -> DB
  * deepsleep_button_wakeup_value2db.ino
  * Vermerke in der Datenbank, wann immer der Button gedrückt wird 
  * -> per HTTP POST Request an Server schicken (-> load.php). load.php schreibt die Werte dann in die Datenbank
@@ -9,6 +10,7 @@
  * Installiere Library "Arduino_JSON" by Arduino, um JSON Strings für load.php einfacher zu kreieren.
  * Beachte: Passe den Pfad zur load.php in const char* serverURL auf deinen eigenen an.
  * Gib SSID und Passwort deines WLANs an.
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/17_Batteriebetrieb/deepsleep/deepsleep_button_wakeup_value2db/deepsleep_button_wakeup_value2db.ino
  * *******************************************************************************/
 
 //////////////////////////////////////////////// Deep Sleep

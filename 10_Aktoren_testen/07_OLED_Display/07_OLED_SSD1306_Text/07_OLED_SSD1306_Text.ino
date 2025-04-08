@@ -9,6 +9,7 @@
  * ESP32-C6: GND         <->  SSD1306: GND
  * ESP32-C6: GPIO6       <->  SSD1306: SDA
  * ESP32-C6: GPIO7       <->  SSD1306: SCK
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/10_Aktoren_testen/07_OLED_Display/07_OLED_SSD1306_Text/07_OLED_SSD1306_Text.ino
  ************************************************************/
 
 #include <Wire.h>

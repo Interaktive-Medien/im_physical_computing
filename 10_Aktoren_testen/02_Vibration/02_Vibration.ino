@@ -1,7 +1,11 @@
 /*******************************************
  * 02_Vibration.ino (Code gleich wie 01_LED.ino)
  * Empfange entweder eine 1 oder eine 0 am seriellen Port
- * und schalte die LED an GPIO8 entsorechend.
+ * und schalte die LED an GPIO8 entsprechend.
+ * Verbinde:
+ * Vibrationsmotor: + (langes Bein)  <->  ESP32-C6: GPIO 8 (per Vorwiederstand)
+ * Vibrationsmotor: - (kurzes Bein)  <->  ESP32-C6: GND 
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/10_Aktoren_testen/02_Vibration/02_Vibration.ino
  *******************************************/
 
 const int ledPin = 8;  

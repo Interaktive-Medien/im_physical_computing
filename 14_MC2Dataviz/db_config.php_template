@@ -6,7 +6,7 @@
  * Ersetze $db_host, $db_name, $db_user, $db_pass durch deine eigenen Daten. 
  * Lade diese Datei NICHT auf GitHub
  * Beispiel: https://fiessling.ch/im4/14_MC2Dataviz/db_config.php
- * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/tree/main/14_MC2Dataviz
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/14_MC2Dataviz/db_config.php_template
  ***********************************************************************/
 
 $db_host = "<your_id>.myd.infomaniak.com";  // Infomaniak z. B. "rv9w2f.myd.infomaniak.com", beim FHGR Edu-Server und xampp steht hier "localhost"

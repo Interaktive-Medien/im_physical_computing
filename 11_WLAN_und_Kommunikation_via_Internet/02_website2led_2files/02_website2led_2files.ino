@@ -1,5 +1,5 @@
 /***************************************************************************
- * Kapitel 11: WLAN und Kommunikation via Internet  >  Website-to-LED (2 files - version)
+ * Kap. 11: WLAN und Kommunikation via Internet  >  Website-to-LED (2 files - version)
  * 02_website2led_2files.ino
  * Steuere LED an diesem MC von einer Website aus.
  * Der ESP32-C6 fungiert hier nicht als Server.
@@ -7,7 +7,7 @@
  * Er empfängt HTTP Nachrichten (POST-Methode) und schaltet LED entsprechend
  * JSON-formatted string is sent to <IP address of ESP3-C6>/postjson.
  * Install library "Arduino_JSON" by Arduino
- * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/tree/main/11_WLAN_und_Kommunikation_via_Internet/02_website2led_2files
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/11_WLAN_und_Kommunikation_via_Internet/02_website2led_2files/02_website2led_2files.ino
  ***************************************************************************/
 
 #include <WiFi.h>

@@ -1,10 +1,12 @@
 /*********************************************************************************
+ * Kap. 17: Batteriebetrieb > Deep Sleep > Timer Wakeup Basic
  * deepsleep_timer_wakeup_basic.ino
  * Deep sleep mit Timer - wacht alle 5s auf
  * Es muss nichts an den ESP32 angeschlossen werden
  * source: https://randomnerdtutorials.com/esp32-deep-sleep-arduino-ide-wake-up-sources/
  * code adapted from File > Examples > ESP32 Deep Sleep > TimerWakeUp
  * Author: Pranav Cherukupalli <cherukupallip@gmail.com>
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/17_Batteriebetrieb/deepsleep/deepsleep_timer_wakeup_basic/deepsleep_timer_wakeup_basic.ino
  * *******************************************************************************/
 
 //////////////////////////////////////////////// Deep Sleep

@@ -1,11 +1,12 @@
 /******************************************************************************************************
+ * Kap. 11: WLAN und Kommunikation via Internet  >  Website-to-LED (simple)
  * 01_website2led_simple.ino
  * ESP32-C6 fungiert als Webserver, mit dem man sich z. B. per Browser verbinden kann.
  * Dort kann per UI-Button die LED am ESP32-C6 ein- und ausgeschaltet werden.
  * Gib im Browser am Laptop die IP-Adresse deines ESP32-C6 ein, z. B.: http://192.168.0.118/
  * Die individuelle IP Adresse wird bei erfolgreicher Verbindung an die serielle Schnittstelle gedruckt.
- * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/tree/main/11_WLAN_und_Kommunikation_via_Internet/01_website2led_simple
- ******************************************************************************************************/
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/11_WLAN_und_Kommunikation_via_Internet/01_website2led_simple/01_website2led_simple.ino
+  ******************************************************************************************************/
 
 #include <WiFi.h>
 

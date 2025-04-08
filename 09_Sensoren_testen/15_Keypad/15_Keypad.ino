@@ -6,6 +6,7 @@
  *  Zunächst die 4 Reihen, dann die 3 Spalten
  *  Verbinde die 7 Pins des Keypads von links nach rechts mit 
  *  folgenden Pins des ESP32-C6: 8, 1, 0, 7, 6, 5, 4
+ *  GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/09_Sensoren_testen/15_Keypad/15_Keypad.ino
  *********************************************************/
 
 

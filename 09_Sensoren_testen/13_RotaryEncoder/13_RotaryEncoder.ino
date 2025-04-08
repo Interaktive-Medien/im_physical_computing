@@ -8,6 +8,7 @@
  * Sensor: 1. von links (A)    <->  ESP32-C6: GPIO 2
  * Sensor: 2. von links (GND)  <->  ESP32-C6: GND
  * Sensor: 3. von links (B)    <->  ESP32-C6: GPIO 3
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/09_Sensoren_testen/13_RotaryEncoder/13_RotaryEncoder.ino
  ***********************************************************************/
 
 // Define rotary encoder pins

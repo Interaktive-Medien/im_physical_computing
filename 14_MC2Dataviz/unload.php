@@ -5,8 +5,8 @@
  * unload.php
  * Wenn website.js diese Datei mit fetch() aufruft, fragt dieses Script Daten aus der Datenbank ab
  * und gibt sie als JSON-String zurück
- * Beispiel: https://fiessling.ch/im4/14MC2Dataviz/load.php 
- * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/tree/main/14MC2Dataviz
+ * Beispiel: https://fiessling.ch/im4/14_MC2Dataviz/unload.php
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/14_MC2Dataviz/unload.php
  ***********************************************************************************************************/
 
 

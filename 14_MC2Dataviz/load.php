@@ -3,8 +3,8 @@
  * Kap. 14: Microcontroller -> Dataviz
  * load.php
  * Daten als JSON-String vom vom MC serverseitig empfangen und in die Datenbank einfügen
- * Beispiel: https://fiessling.ch/im4/14MC2Dataviz/load.php 
- * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/tree/main/14MC2Dataviz/load.php
+ * Beispiel: https://fiessling.ch/im4/14_MC2Dataviz/load.php
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/14_MC2Dataviz/load.php
  *************************************************************/
 
 require_once("db_config.php");

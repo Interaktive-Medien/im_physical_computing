@@ -8,6 +8,7 @@
  *  GPS-Modul: Vcc <-> ESP32-C6: 3V3
  *  GPS-Modul: GND <-> ESP32-C6: GND
  *  sollte das GPS Modul noch weitere Pins haben, einfach ignorieren
+ *  GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/09_Sensoren_testen/14_GPS/14_GPS.ino
  ***************************************************/
 
 #include <TinyGPS++.h>

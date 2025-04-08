@@ -4,6 +4,7 @@
  * Sensor: +      <->  ESP32-C6: 3.3V 
  * Sensor: -      <->  ESP32-C6: GND
  * Sensor: AOUT   <->  ESP32-C6: GPIO4
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/09_Sensoren_testen/19_Bodenfeuchtigkeitssensor/19_Bodenfeuchtigkeitssensor.ino
  ************************************************************************/
 
 const int sensorPin = 4;

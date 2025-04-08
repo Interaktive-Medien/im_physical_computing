@@ -8,6 +8,7 @@
  * ESP32-C6: 5V     <->  I2C LCD1602: VCC
  * ESP32-C6: GPIO6  <->  I2C LCD1602: SDA
  * ESP32-C6: GPIO7  <->  I2C LCD1602: SCL
+ * GitUb: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/10_Aktoren_testen/08_LCD_display/08_LCD_display.ino
  *****************************************************/
 
 
