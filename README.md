@@ -1,6 +1,7 @@
 # IM 4 Physical Computing
 
 Dieses Repository begleitet den Kurs Interaktive Medien 4 (Schwerpunkt Physical Computing) im Studiengang Multimedia Production an der FH Graubünden.
+![Präsentation](https://docs.google.com/presentation/d/1bMKBpBUwZAxlKJm8mf3_WIEgtCDJ0X7gMcnHfRJWGAM/preview)
 
 ## Kurs-Trailer
 
@@ -19,7 +20,7 @@ Beim Hardware Prototyping gehen UX und Technik nahtlos ineinander über.
 Elektronik-Kenntnisse werden nicht vorausgesetzt.
 
 
-![Overview](gitimg/Anim_haptisch_digital.gif)
+![Overview](01_Intro_physische+digitale_Welt/Anim_haptisch_digital.gif)
 
 
 ## Ablauf
