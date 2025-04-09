@@ -5,8 +5,12 @@ Dieses Repository begleitet den Kurs Interaktive Medien 4 (Schwerpunkt Physical 
 
 ## Kurs-Trailer
 
-[YouTube-Video ansehen](https://youtu.be/h6-Z-r78Ez0)
+![YouTube-Video ansehen](https://youtu.be/h6-Z-r78Ez0)
 
+## Kurs-Materialien
+
+![Slides](https://docs.google.com/presentation/d/1bMKBpBUwZAxlKJm8mf3_WIEgtCDJ0X7gMcnHfRJWGAM/preview)
+![Video-Kurs_Playlist](https://www.youtube.com/playlist?list=PLS1hZNcGg7eGFIm6nnktxsdJ1-RdCZI3t)
 
 ## Beschreibung
 
