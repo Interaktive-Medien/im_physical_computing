@@ -1,6 +1,6 @@
 # Kap. 3: Ubiquitous Computing
 
-![Videokurs: 03_Ubiquitous Computing](https://youtu.be/7TYC4MgcITw?si=cuiszEkJfOx2OUnE)
+[Videokurs: 03_Ubiquitous Computing](https://youtu.be/7TYC4MgcITw?si=cuiszEkJfOx2OUnE)
 
 In diesem Kapitel werden Beispiele für Physical Computing aus verschiedenen Bereichen des Lebens gezeigt.
 Beispiele:
