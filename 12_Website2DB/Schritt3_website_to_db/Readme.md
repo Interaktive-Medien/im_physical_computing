@@ -4,12 +4,12 @@
 Wir trennen den Client-seitigen und den serverseitigen Teil voneinander. Der Client sendet nun eine HTTP-Nachricht an den Server - wie in einem Chat:
 Der Client und der Server sprechen miteinander.
 
-![2_to_1](2_to_1.png)
+![2_to_1](2_to_1.jpg)
 
 Wir splitten `website_form.php` in einen Client-seitigen Teil (`sender.html`) und einen serverseitigen Teil (`load.php`). 
 `sender.html` wird (vergleichbar mit einem Chat) Nachrichten an `load.php` senden . Genauso wird es später auch mit dem Microcontroller passieren: Der Microcontroller, der ebenfalls ein Client ist, ersetzt dann die Website.
 
-![File_relations](File_relations.png)
+![File_relations](File_relations.jpg)
 
 Dazu brauchen wir 2 Dateien, die im Live Coding selbst getippt werden:
 

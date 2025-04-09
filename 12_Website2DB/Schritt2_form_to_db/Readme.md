@@ -5,7 +5,7 @@ Wir erstellen zunächst ein Formular.
 Die Inhalte werden in eine Datenbanktabelle geschrieben, sobald es abgeschickt wird.
 Dies ist innerhalb einer einzigen PHP-Datei möglich, die server-seitige und client-seitige Teile (HTML) enthält.
 
-![File_relations](File_relations.png)
+![File_relations](File_relations.jpg)
 
 1. Lade von folgende Dateien herunter: 
    * `website_form.php`
