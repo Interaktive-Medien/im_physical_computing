@@ -1,9 +1,4 @@
-﻿.DS_Store
-__pycache__/
-CrashAutoSave*.toe
-*.dmp
-# *.txt
-# Backup
-# *config.*
-*sftp.json
+﻿*sftp.json
 *db_config.php
+*.mp4
+*.mov
