@@ -3,10 +3,11 @@
  * 02_website2led_2files.ino
  * Steuere LED an diesem MC von einer Website aus.
  * Der ESP32-C6 fungiert hier nicht als Server.
- * funktioniert nur im lokalen WLAN (oder z. B. per VPN oder port forwarding)
- * Er empfängt HTTP Nachrichten (POST-Methode) und schaltet LED entsprechend
- * JSON-formatted string is sent to <IP address of ESP3-C6>/postjson.
- * Install library "Arduino_JSON" by Arduino
+ * funktioniert nur im lokalen WLAN (oder z. B. per VPN oder Port Forwarding).
+ * Passe ssid und pass an dein eigenes WLAN an.
+ * Das Gegenstück dieses Peogramms (die Website) sendet einen JSON-formatierten Text an <MC's IP-Adresse>/postjson, wenn der HTML-Button dort gedrückt wird.
+ * MC empfängt die HTTP Nachrichten (POST-Methode) und schaltet LED entsprechend.
+ * Installiere Library "Arduino_JSON" by Arduino
  * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/11_WLAN_und_Kommunikation_via_Internet/02_website2led_2files/02_website2led_2files.ino
  ***************************************************************************/
 
@@ -16,8 +17,8 @@
 
 int led = BUILTIN_LED;
 
-const char* ssid = "tinkergarden";
-const char* password = "strenggeheim";
+const char* ssid     = "<your_ssid>";                          // WLAN
+const char* password = "<your_password>";                      // WLAN
 
 WebServer server(80);
 
@@ -39,34 +40,19 @@ void setup() {
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
 
-  // Route für OPTIONS-Anfragen (Preflight)
-  server.on("/postjson", HTTP_OPTIONS, []() {
-    server.sendHeader("Access-Control-Allow-Origin", "*");
-    server.sendHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-    server.sendHeader("Access-Control-Allow-Headers", "Content-Type");
-    server.send(204); // No content, da dies nur eine Preflight-Anfrage ist
-  });
-
-  // Route für POST-Anfragen
-  server.on("/postjson", HTTP_POST, handlePostRequest);
-
   // Start des HTTP-Servers
   server.begin();
+  // Route für POST-Anfragen
+  server.on("/postjson", HTTP_POST, handlePostRequest);
   Serial.println("HTTP server started.");
 }
 
 void loop() {
-  // Verarbeite eingehende HTTP-Anfragen
   server.handleClient();
 }
 
 // Funktion zum Verarbeiten von POST-Anfragen
 void handlePostRequest() {
-  // CORS-Header hinzufügen
-  server.sendHeader("Access-Control-Allow-Origin", "*");
-  server.sendHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
-  server.sendHeader("Access-Control-Allow-Headers", "Content-Type");
-
   if (server.hasArg("plain") == false) {  // Überprüfen, ob der Body vorhanden ist
     server.send(400, "text/plain", "400: Invalid Request - No Body");
     return;
@@ -77,12 +63,6 @@ void handlePostRequest() {
 
   // JSON-Daten parsen mit Arduino_JSON
   JSONVar dataobject = JSON.parse(jsonstring);
-
-  // Prüfen, ob das Parsen erfolgreich war
-  if (JSON.typeof(dataobject) == "undefined") {
-    server.send(400, "application/json", "{\"error\":\"Invalid JSON format\"}");
-    return;
-  }
 
   int wert = dataobject["wert"];
   Serial.println(wert);

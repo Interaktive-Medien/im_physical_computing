@@ -1,5 +1,11 @@
 /******************************************************************************************
  * Kap. 15: Intro Projekt-Doku
+ * receive eg. reed sensor input 
+ * and print value to serial port
+ " Connect ...
+ * Sensor: Vin  <->  ESP32-C6: 3.3V 
+ * Sensor: GND  <->  ESP32-C6: GND  (nicht bei Button, Reedachalter)
+ * Sensor: Data <->  ESP32-C6: GPIO7
  ******************************************************************************************/
 
 

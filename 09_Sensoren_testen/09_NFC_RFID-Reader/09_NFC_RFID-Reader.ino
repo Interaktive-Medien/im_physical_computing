@@ -7,75 +7,65 @@
  * PN532: SCL <-> ESP32-C6: GPIO 7
  * PN532: Vcc <-> ESP32-C6: 3.3V
  * PN532: GND <-> ESP32-C6: GND
- * Put libraries PN532, PN532_I2C, NDEF into Documents>Arduino>libraries 
- * (download on https://github.com/elechouse/PN532)
+ * Installiere Library "Adafruit_PN532" von Adafruit
  * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/09_Sensoren_testen/09_NFC_RFID-Reader/09_NFC_RFID-Reader.ino
 ********************************************************************/
 
 #include <Wire.h>
-#include <PN532_I2C.h>
-#include <PN532.h>
-#include <NfcAdapter.h>
+#include <Adafruit_PN532.h>
 
-PN532_I2C pn532i2c(Wire);
-PN532 nfc(pn532i2c);
+// I2C Pins definieren
+#define SDA_PIN 6
+#define SCL_PIN 7
 
-volatile bool connected = false;
-String prevDetected;
-long prevDetectedTimestamp = 0;
+// IRQ und RESET Pins definieren – werden vom PN532-Modul NICHT verwendet bei I2C, aber Bibliothek erwartet sie
+#define PN532_IRQ   (2)
+#define PN532_RESET (3)
 
-void setup(void){
+// Konstruktor mit IRQ, RESET und Wire
+Adafruit_PN532 nfc(PN532_IRQ, PN532_RESET, &Wire);
+
+void setup(void) {
   Serial.begin(115200);
-  Serial.println("*** Testing Module PN532 NFC RFID ***");
-  Wire.begin(6, 7);  // SDA = Pin 6, SCL = Pin 7 für ESP32-C6
-}
+  while (!Serial) delay(10);
 
-void loop(void){
-  boolean success;
-  uint8_t uid[] = { 0, 0, 0, 0, 0, 0, 0 };     // Buffer to store the UID
-  uint8_t uidLength;                           // UID size (4 or 7 bytes depending on card type)
+  Serial.println("PN532 NFC Reader Test (ESP32-C6, I2C)");
 
-  while (!connected) {
-    connected = connect();
-  }
-  // Wait for an ISO14443A type cards (Mifare, etc.).  When one is found
-  // 'uid' will be populated with the UID, and uidLength will indicate
-  // if the uid is 4 bytes (Mifare Classic) or 7 bytes (Mifare Ultralight)
-  success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, &uid[0], &uidLength);
+  // Wire starten mit den benutzerdefinierten I2C Pins
+  Wire.begin(SDA_PIN, SCL_PIN);
 
-  if (success){
-    String uidString = "";
-    for (uint8_t i = 0; i < uidLength; i++){
-      uidString += String(uid[i], HEX);
-    }
-    if (!prevDetected.equals(uidString) || (millis() - prevDetectedTimestamp) > 2000) {
-      Serial.println(uidString);
-      prevDetected = uidString;
-      prevDetectedTimestamp = millis();
-    }
-  }
-}
-
-bool connect() {
+  // PN532 starten
   nfc.begin();
+
   uint32_t versiondata = nfc.getFirmwareVersion();
-  if (! versiondata)
-  {
-    Serial.println("PN532 card not found!");
-    return false;
+  if (!versiondata) {
+    Serial.println("Kein PN532 gefunden – Verbindung prüfen.");
+    while (1); // bleibt hängen, wenn nichts gefunden wird
   }
 
-  Serial.print("Found chip PN5"); Serial.println((versiondata >> 24) & 0xFF, HEX);
-  Serial.print("Firmware version: "); Serial.print((versiondata >> 16) & 0xFF, DEC);
-  Serial.print('.'); Serial.println((versiondata >> 8) & 0xFF, DEC);
+  // Chip-Daten anzeigen
+  Serial.print("Found chip PN5"); Serial.println((versiondata>>24) & 0xFF, HEX);
+  Serial.print("Firmware Version: "); Serial.print((versiondata>>16) & 0xFF, DEC);
+  Serial.print('.'); Serial.println((versiondata>>8) & 0xFF, DEC);
 
-  // Set the max number of retry attempts to read from a card
-  // This prevents us from waiting forever for a card, which is
-  // the default behaviour of the PN532.
-  nfc.setPassiveActivationRetries(0xFF);
+  // Konfiguriere das Modul für RFID-Lesen
   nfc.SAMConfig();
+  Serial.println("Warte auf ein RFID/NFC Tag...");
+}
 
-  Serial.println("Waiting for card (ISO14443A Mifare)...");
-  Serial.println("");
-  return true;
+void loop(void) {
+  uint8_t success;
+  uint8_t uid[7];
+  uint8_t uidLength;
+
+  success = nfc.readPassiveTargetID(PN532_MIFARE_ISO14443A, uid, &uidLength);
+  
+  if (success) {
+    Serial.print("Tag erkannt, UID: ");
+    for (uint8_t i = 0; i < uidLength; i++) {
+      Serial.print(uid[i], HEX); Serial.print(" ");
+    }
+    Serial.println();
+    delay(1000);
+  }
 }
