@@ -18,7 +18,7 @@
 int led = BUILTIN_LED;
 
 const char* ssid     = "<your_ssid>";                          // WLAN
-const char* password = "<your_password>";                      // WLAN
+const char* password     = "<your_password>";                      // WLAN
 
 WebServer server(80);
 
