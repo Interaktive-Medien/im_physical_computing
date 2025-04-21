@@ -16,24 +16,17 @@
 #include <HTTPClient.h>
 #include <Arduino_JSON.h> 
 
-int sensorPin = 7;
-int ledPin = BUILTIN_LED;
+unsigned long lastTime = 0;
+unsigned long timerDelay = 15000;                              // alle 15s wird ein neuer Wert verschickt
 
-int sensorState = 0;
-int prev_sensorState = 0;
+const char* ssid     = "<your_ssid>";                          // WLAN
+const char* pass     = "<your_password>";                      // WLAN
 
-const char* ssid     = "Difix";                          // WLAN
-const char* pass     = "Difix88288828";                      // WLAN
-
-const char* serverURL = "https://fiessling.ch/physco/load.php";  // Server-Adresse: hier kann http oder https stehen, aber nicht ohne
+const char* serverURL = "https://<your_website.ch>/load.php";  // Server-Adresse: hier kann http oder https stehen, aber nicht ohne
                                                                // Beispiel: https://fiessling.ch/im4/18_mc2db/load.php
 void setup() {
   Serial.begin(115200);
   
-  pinMode(sensorPin, INPUT_PULLDOWN);
-  pinMode(ledPin, OUTPUT);
-  digitalWrite(ledPin, 0);
-
 
   ////////////////////////////////////////////////////////////// Verbindung mit Wi-Fi herstellen
 
@@ -47,25 +40,19 @@ void setup() {
 }
 
 void loop() {
-  sensorState = digitalRead(sensorPin);
-  if(sensorState == prev_sensorState){
-    return;
-  }
-  prev_sensorState = sensorState;
-
-  if(sensorState == 1){  // Kühlschrank zu
-    digitalWrite(ledPin, 0);
-  }
-
-  else{      // Kühlschrank offen
-    digitalWrite(ledPin, 1);
+  
+  if ((millis() - lastTime) > timerDelay) {            // alle 15 Sekunden...
+    lastTime = millis();
 
 
+    ////////////////////////////////////////////////////////////// sensor auslesen
 
+    float wert = (float)random(0, 1000) / 10;    // ersetzen durch sensor !! Zunächst zufällige Zahl 0 - 100
+    Serial.println(wert);
 
-
+    
     ////////////////////////////////////////////////////////////// JSON zusammenbauen
-    int wert = undefined;
+
     JSONVar dataObject;
     dataObject["wert"] = wert;
     // dataObject["wert2"] = wert2;
@@ -96,8 +83,4 @@ void loop() {
       Serial.println("WiFi Disconnected");
     }
   }
-  
-    
-    
-
 }
