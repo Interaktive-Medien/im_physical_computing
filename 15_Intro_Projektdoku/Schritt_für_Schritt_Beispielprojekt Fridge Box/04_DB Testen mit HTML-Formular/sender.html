@@ -1,0 +1,67 @@
+<!----------------------------------------------------------------------------------------------------------- 
+    Kapitel 12: Website2DB > Schritt 3: Website -> DB
+    sender.html
+    Diese HTML Seite zeigt ein Formular. Wird es abgeschickt, wreden die Werte als JSON string formattiert
+    und per HTTP POST Request an load.php übermittelt.
+    Beachte: Bei const response = await fetch("...") unbedingt deinen eigenen Pfad zur load.php eingeben
+    Später werden die HTTP Nachrichten nicht mehr von einer Website geschickt, sondern von einem Microcontroller
+    Beispiel: https://fiessling.ch/im4/12_Website2DB/Schritt3_website_to_db/sender.html 
+    GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/12_Website2DB/Schritt3_website_to_db/sender.html
+-------------------------------------------------------------------------------------------------------------->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Example Sender</title>
+    <script>
+        async function submitForm(event) {
+            event.preventDefault(); // Verhindert das normale Absenden des Formulars
+
+            // Sammle die Formulardaten und wandle sie in JSON um
+            const formData = new FormData(event.target);
+            const dataObject = {
+                wert: formData.get("wert")
+            };
+            const jsonstring = JSON.stringify(dataObject);
+            console.log(jsonstring);
+
+            const messageElement = document.querySelector("#message"); // Element für die Nachricht
+
+            try {
+                // URL auf HTTP anpassen, falls kein SSL verwendet wird
+                const response = await fetch("load.php", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json' // Setze den Content-Type auf JSON
+                    },
+                    body: jsonstring // Sende die Daten als JSON-String
+                });
+
+                if (response.ok) {
+                    messageElement.textContent = "Message successfully delivered!";
+                    messageElement.style.color = "green";
+                } else {
+                    // Logge den gesamten Fehler, um mehr Details zu bekommen
+                    const errorMessage = await response.text();
+                    messageElement.textContent = `Error: ${response.statusText} - ${errorMessage}`;
+                    messageElement.style.color = "red";
+                }
+            } catch (error) {
+                messageElement.textContent = "An error occurred: " + error.message;
+                messageElement.style.color = "red";
+                console.error("Fetch error:", error); // Logge den Fehler in der Konsole
+            }
+        }
+    </script>
+</head>
+<body>
+    <form method="POST" onsubmit="submitForm(event)">  
+        <label for="wert">Wert:</label>
+        <input type="text" id="wert" name="wert" required><br><br>    
+        
+        <input type="submit" name="submit" value="Submit">
+    </form>
+    <br>
+    <p id="message"></p>
+</body>
+</html>

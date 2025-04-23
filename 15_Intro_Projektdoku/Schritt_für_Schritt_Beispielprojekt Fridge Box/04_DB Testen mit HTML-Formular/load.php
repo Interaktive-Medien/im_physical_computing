@@ -1,14 +1,14 @@
 <?php
  /*************************************************************
- * Kapitel 15: Demo-Projekt Fridge Box
- * Schritt 8 ("Landing Page")
- * load.php: 
+ * Kapitel 12: Website2DB > Schritt 3: Website -> DB
+ * load.php
  * Daten als JSON-String vom Formular sender.html (später vom MC) serverseitig empfangen und Daten in die Datenbank einfügen
  * Datenbank-Verbindung
  * Ersetze $db_host, $db_name, $db_user, $db_pass durch deine eigenen Daten. 
  * Lade diese Datei NICHT auf GitHub
- * GitHub: 
- **************************************************************/
+ * Beispiel: https://fiessling.ch/im4/12_Website2DB/Schritt3_website_to_db/load.php 
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/12_Website2DB/Schritt3_website_to_db/load.php
+ *************************************************************/
 
 
 require_once("db_config.php");
@@ -19,7 +19,7 @@ echo "This script receives HTTP POST messages and pushes their content into the 
 
 try{
     $pdo = new PDO($dsn, $db_user, $db_pass, $options); 
-    echo "DB Verbindung ist erfolgreich";
+    echo "</br> DB Verbindung ist erfolgreich";
 }
 catch(PDOException $e){
     error_log("DB Error: " . $e->getMessage());
