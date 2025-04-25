@@ -1,22 +1,19 @@
 <?php
 
  /*************************************************************
- * Kapitel 15: Demo-Projekt Fridge Box
- * Schritt 8 ("Landing Page")
- * unload.php: 
- * Daten aus der Datenbank per SQL abfragen, sortieren
- * und ein entsprechendes Array als JSON-String per echo bereitstellen, 
- * das der client (script.js) mit fetch() abholen kann.
- * Datenbank-Verbindung:
- * Ersetze $db_host, $db_name, $db_user, $db_pass durch deine eigenen Daten. 
- * GitHub: 
+ * Kap. 14 MC -> Dataviz 
+ * unload.php
  **************************************************************/
 
+header('Content-Type: application/json');
 
-require_once('db_config.php');
+// Datenbankverbindung einbinden
+require_once("db_config.php");
+
+
+
 
 ###################################### connect to db
-
 try{
     $pdo = new PDO($dsn, $db_user, $db_pass, $options); 
     // echo "DB Verbindung ist erfolgreich";
@@ -26,20 +23,26 @@ catch(PDOException $e){
     echo json_encode(["status" => "error", "message" => "DB connection failed"]);
 }
 
-###################################### Datenbankabfrage: Anzahl Öffnungen pro Tag
 
-function count_opens($pdo){
-    // SQL-Statement: Anzahl Einträge für die letzten 7 Tage (inkl. heute)
-    $sql = 
-        "SELECT DATE(zeit) AS datum,COUNT(*) AS anzahl
+
+try {
+    $result = array_fill(0, 7, 0);      // Initialisiere Array mit 7 Nullen
+
+    // SQL: Zählt die Anzahl der Einträge je Tag innerhalb der letzten 7 Tage   
+    $sql = "SELECT 
+            DATE(zeit) AS datum,
+            COUNT(*) AS anzahl
         FROM sensordata
-        WHERE zeit >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
-        GROUP BY DATE(zeit)";
- 
-    $stmt = $pdo->prepare($sql);
+        WHERE zeit >= CURDATE() - INTERVAL 6 DAY
+        GROUP BY datum";
+
+    $stmt = $pdo->prepare($sql);    
     $stmt->execute();
-    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC); // [['datum' => '2025-04-23', 'anzahl' => 12], ...]
-    $result = array_fill(0, 7, 0);   // Array anlegen: array_fill(start_index, count, value):
+    $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // echo "<br>" . json_encode($rows) . "<br>"; // Debugging: Zeige die Rohdaten an, z. B. [{"datum":"2025-04-18","anzahl":22},{"datum":"2025-04-21","anzahl":140},{"datum":"2025-04-24","anzahl":1}]
+
+    // Anzahl der Einträge pro Tag werden in ein Array geschrieben, Reihenfolge absteigend, 
+    // an Tagen ohne Eintrag erscheint jeweils eine 0. Beispiel: [1,0,0,140,0,0,22]
 
     foreach ($rows as $row) {
         $tageZurueck = (new DateTime())->diff(new DateTime($row['datum']))->days;
@@ -47,21 +50,13 @@ function count_opens($pdo){
             $result[$tageZurueck] = (int)$row['anzahl'];
         }
     }
-    return $result; // [0,0,140,0,20,0,0] // Beispiel-Array
-}
+    // echo "<br>" . json_encode($result) . "<br>";  //[1,0,0,140,0,0,22]
 
+    // JSON ausgeben, zB. {"count_opens":[1,0,0,140,0,0,22]}
+    echo json_encode(["count_opens" => $result]);
 
-###################################### Datenbankabfrage: Objekt zusammenbauen, in JSON konvertieren und per echo verfügbar machen.
-
-try {
-    $dataObject = new stdClass();
-    $dataObject->count_opens = count_opens($pdo);
-
-    // JSON zurückgeben
-    header('Content-Type: application/json');
-    echo json_encode($dataObject);  // {"count_opens":[0,0,140,0,0,22,0]}
-
-} catch (Exception $e) {
+} catch (PDOException $e) {
+    // Im Fehlerfall eine leere Antwort mit Fehlerlog
     http_response_code(500);
-    echo json_encode(['error' => $e->getMessage()]);
+    echo json_encode(["error" => "Database error", "details" => $e->getMessage()]);
 }
