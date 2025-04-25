@@ -1,6 +1,6 @@
 # Kap. 13: Microcontroller ➜ Datenbank
 
-[Videokurs: 13_Moicrocontroller_to_DB](https://youtu.be/ZvpUM3ZEtJk)
+[Videokurs: 13_Microcontroller_to_DB](https://youtu.be/ZvpUM3ZEtJk)
 
 Hier wird die Website `sender.html` (Formular) durch einen Microcontroller ersetzt.
 Dieser sendet ebenfalls HTTP-Nachrichten. In diesem Beispiel sind sie identisch. Das bedeutet: Das serverseitige Empfänger-Script `load.php` muss daher nicht angepasst werden.

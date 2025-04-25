@@ -1,5 +1,8 @@
 # Kap. 14: Microcontroller ➔ Dataviz
 
+[Videokurs: 14_Dataviz](https://youtu.be/ZvpUM3ZEtJk)
+
+
 Nachdem die Sensordaten vom Microcontroller erfolgreich in eine Datenbanktabelle geschrieben wurden, geht es nun hier um Datenvisualisierung. Das ist grundsätzlich Wiederholung von früheren Semestern.
 Wird `index.html` im Browser aufgerufen, wird `script.js` vom Server (`unload.php`) Daten anfragen, die unload.php in der Datenbank sucht und an `script.js` weiterreicht.
 
