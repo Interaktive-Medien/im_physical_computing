@@ -1,6 +1,6 @@
 /******************************************************************************************************
  * Fridge Box
- * Schritt 7: Animation auf LED-Ring nach Öffnung des Kühlschranks bzw. nach Toleranzzeit
+ * Schritt 9: Integration OLED-Display
 
  ***************  Schritt 2: Reed-Schalter:
  * Reed-Sensor: eine Seite     <->  3.3V  
@@ -20,16 +20,38 @@
  * WS2812B-Ring: +5V/Vcc  <->  5V
  * WS2812B-Ring: GND      <->  GND
  * - Installiere Library "Adafruit Neopixel" by Adafruit
+
+ ***************  Schritt 9: Integration OLED-Display
+ * SSD1306: VDD  <->  3.3V
+ * SSD1306: GND  <->  GND
+ * SSD1306: SDA  <->  ESP32-C6: GPIO6
+ * SSD1306: SCK  <->  ESP32-C6: GPIO7
+ * - Installiere Library "Adafruit SSD1306" by Adafruit
  
  ******************************************************************************************************/
 
-
+/***************************
+* WLAN und HTTP
+***************************/
 
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <Arduino_JSON.h> 
+
+/***************************
+* LED-Ring
+***************************/
+
 #include <Adafruit_NeoPixel.h>
 #include <math.h> // für Gamma-Korrektur bei Lichtanim -> pow()
+
+/***************************
+* OLED-Display
+***************************/
+
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 
 
 int ledPin = BUILTIN_LED;                         
@@ -48,9 +70,9 @@ unsigned long start_open_timestamp = 0;
 * WLAN und Server
 ***************************/
 
-const char* ssid     = "tinkergarden";                           // WLAN
-const char* pass     = "strenggeheim";                           // WLAN
-const char* serverURL = "https://fiessling.ch/physco/load.php";  // Server-Adresse: hier kann http oder https stehen, aber nicht ohne
+const char* ssid      = "tinkergarden";                           // WLAN
+const char* pass      = "strenggeheim";                           // WLAN
+const char* serverURL = "https://fiessling.ch/physco/load.php";   // Server-Adresse: hier kann http oder https stehen, aber nicht ohne
   
 /***************************
 * Piepser
@@ -88,6 +110,14 @@ const long ledring_pulse_interval = 70;     // Pulsier Schrittzeit
 int ledring_modus = 0;                      // 0 = aus, 1 = Pulsieren, 2 = rotes Lauflicht
 
 
+/***************************
+* OLED-Display
+***************************/
+
+#define I2C_SDA 6
+#define I2C_SCL 7   
+#define I2C_ADDRESS   0x3C                   // initialisiere mit Standard I2C addr 0x3C
+Adafruit_SSD1306 display(128, 64, &Wire, -1);
 
 
                                                             
@@ -122,6 +152,20 @@ void setup() {
 
   ledring.begin();
   ledring.setBrightness(100);            // Grundhelligkeit (0 - 255)
+
+  /***************************
+  * OLED-Display
+  ***************************/
+
+  Wire.begin(I2C_SDA, I2C_SCL);              // I2C mit eigenen Pins initialisieren
+  display.begin(SSD1306_SWITCHCAPVCC, I2C_ADDRESS);
+  display.clearDisplay();
+  display.setTextColor(WHITE);
+  display.setTextSize(1);
+  display.setCursor(20, 20);
+  display.println("");
+  display.display();
+
 }
 
 void loop() {
@@ -158,14 +202,24 @@ void loop() {
   }
   prev_sensor_state = sensor_state;
 
-  if(sensor_state == 1){  // Kühlschrank schliesst
+  if(sensor_state == 1){               // Kühlschrank schliesst
     Serial.println("Kühlschrank schliesst");
     digitalWrite(ledPin, 0);
-    ledring_modus = 0;     // LED-Ring aus
-  } else{                   // Kühlschrank öffnet
+    digitalWrite(piepserPin, 0);
+    ledring_modus = 0;                 // LED-Ring aus
+    display_aus();
+    
+  } else{                              // Kühlschrank öffnet
     Serial.println("Kühlschrank öffnet");
     digitalWrite(ledPin, 1);
+    display_show_info();
+
+    /***************************
+    * Piepser
+    ***************************/
+  
     beep(false);                       // geht erst nach Toleranzzeit los
+    digitalWrite(piepserPin, 0);       // muss noch explizit ausgeschalten werden, sonst endet das Piepsen im Dauerton
     is_currently_noising = false;      // Piepser ausschalten!
     start_open_timestamp = millis();
 
@@ -366,3 +420,14 @@ void ledring_pulsiere_blau() {
   }
 }
 
+
+
+void display_show_info(){
+  display.println("Close the fridge");
+  display.display();
+}
+
+void display_aus(){
+  display.clearDisplay();
+  display.display();
+}
