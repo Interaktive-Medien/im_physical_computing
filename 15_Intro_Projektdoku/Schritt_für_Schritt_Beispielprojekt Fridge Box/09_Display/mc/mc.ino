@@ -163,7 +163,7 @@ void setup() {
   display.setTextColor(WHITE);
   display.setTextSize(1);
   display.setCursor(20, 20);
-  display.println("");
+  display.println("Starte Fridge Box");
   display.display();
 
 }
@@ -217,11 +217,11 @@ void loop() {
     /***************************
     * Piepser
     ***************************/
-  
-    beep(false);                       // geht erst nach Toleranzzeit los
+    
     digitalWrite(piepserPin, 0);       // muss noch explizit ausgeschalten werden, sonst endet das Piepsen im Dauerton
     is_currently_noising = false;      // Piepser ausschalten!
     start_open_timestamp = millis();
+    beep(false);                       // geht erst nach Toleranzzeit los
 
     /***************************
     * JSON zusammenbauen
@@ -243,17 +243,6 @@ void loop() {
 
     ledring_modus = 1;     // LED-Ring Pulse
   }
-
-
-  /* Position 2 */
-
-  // if (ledring_modus == 0) {
-  //   ledring_aus();  // LED-Ring ausschalten
-  // } else if (ledring_modus == 1) {
-  //   ledring_pulsiere_blau();
-  // } else if (ledring_modus == 2) {
-  //   ledring_rotiere_rotes_lauflicht();
-  // }
 
 
 }
