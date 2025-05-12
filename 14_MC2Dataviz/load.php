@@ -6,8 +6,7 @@
  * Daten als JSON-String vom Formular sender.html (später vom MC) serverseitig empfangen und Daten in die Datenbank einfügen
  * Datenbank-Verbindung
  * Ersetze $db_host, $db_name, $db_user, $db_pass durch deine eigenen Daten. 
- * Lade diese Datei NICHT auf GitHub
- * GitHub: 
+ * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/14_MC2Dataviz/load.php
  **************************************************************/
 
 

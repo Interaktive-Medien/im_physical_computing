@@ -5,7 +5,6 @@
  * Daten als JSON-String vom vom MC serverseitig empfangen und in die Datenbank einfügen
  * Datenbank-Verbindung
  * Ersetze $db_host, $db_name, $db_user, $db_pass durch deine eigenen Daten. 
- * Lade diese Datei NICHT auf GitHub
  * Beispiel: https://fiessling.ch/im4/13_MC2DB/load.php 
  * GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/13_MC2DB/load.php
  *************************************************************/
