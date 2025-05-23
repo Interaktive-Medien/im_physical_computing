@@ -22,15 +22,15 @@
 #define XSHUT_1 10
 #define XSHUT_2 11
 
-#define LOX1_ADDRESS 0x30
-#define LOX2_ADDRESS 0x31
+#define TOF1_ADDRESS 0x30
+#define TOF2_ADDRESS 0x31
 
 // Getrennte Thresholds
-#define THRESHOLD1 25  // Sensor 1
+#define THRESHOLD1 40  // Sensor 1
 #define THRESHOLD2 40  // Sensor 2
 
-Adafruit_VL6180X lox1 = Adafruit_VL6180X();
-Adafruit_VL6180X lox2 = Adafruit_VL6180X();
+Adafruit_VL6180X tof1 = Adafruit_VL6180X();
+Adafruit_VL6180X tof2 = Adafruit_VL6180X();
 
 bool objectNearby = false;
 bool lastInRange = false;
@@ -43,7 +43,7 @@ void setup() {
   pinMode(XSHUT_1, OUTPUT);
   pinMode(XSHUT_2, OUTPUT);
 
-  // Beide Sensoren deaktivieren
+    // Beide Sensoren deaktivieren
   digitalWrite(XSHUT_1, LOW);
   digitalWrite(XSHUT_2, LOW);
   delay(10);
@@ -51,45 +51,55 @@ void setup() {
   // Sensor 1 einschalten
   digitalWrite(XSHUT_1, HIGH);
   delay(10);
-  if (!lox1.begin(&Wire)) {
+  if (!tof1.begin(&Wire)) {
     Serial.println(F("Sensor 1 konnte nicht gestartet werden"));
     while (1);
   }
-  lox1.setAddress(LOX1_ADDRESS);
+  // Adresse direkt ändern, solange Sensor 2 noch ausgeschaltet ist
+  tof1.setAddress(TOF1_ADDRESS);
+  delay(10);  // Kurze Pause, um Adressänderung zu stabilisieren
 
   // Sensor 2 einschalten
   digitalWrite(XSHUT_2, HIGH);
   delay(10);
-  if (!lox2.begin(&Wire)) {
+  if (!tof2.begin(&Wire)) {
     Serial.println(F("Sensor 2 konnte nicht gestartet werden"));
     while (1);
   }
-  lox2.setAddress(LOX2_ADDRESS);
+  tof2.setAddress(TOF2_ADDRESS);
+  delay(10);
+
 
   Serial.println("Beide Sensoren initialisiert.");
 }
 
 void loop() {
-  uint8_t range1 = lox1.readRange();
-  uint8_t status1 = lox1.readRangeStatus();
+  uint8_t range1 = tof1.readRange();
+  uint8_t status1 = tof1.readRangeStatus();
 
-  uint8_t range2 = lox2.readRange();
-  uint8_t status2 = lox2.readRangeStatus();
+  uint8_t range2 = tof2.readRange();
+  uint8_t status2 = tof2.readRangeStatus();
 
-  bool inRange1 = (status1 == VL6180X_ERROR_NONE && (range1 <= THRESHOLD1 || range1 == 0));
-  bool inRange2 = (status2 == VL6180X_ERROR_NONE && (range2 <= THRESHOLD2 || range2 == 0));
+  bool inRange1 = (status1 == VL6180X_ERROR_NONE && (range1 <= THRESHOLD1 && range1 > 0));
+  bool inRange2 = (status2 == VL6180X_ERROR_NONE && (range2 <= THRESHOLD2 && range2 > 0));
+
+  Serial.print("Sensor 1: ");
+  Serial.println(range1);
+  Serial.print("Sensor 2: ");
+  Serial.println(range2);
 
   bool currentInRange = inRange1 || inRange2;
 
   if (currentInRange != lastInRange) {
     delay(50);
-    range1 = lox1.readRange();
-    status1 = lox1.readRangeStatus();
-    range2 = lox2.readRange();
-    status2 = lox2.readRangeStatus();
+    range1 = tof1.readRange();
+    status1 = tof1.readRangeStatus();
+    range2 = tof2.readRange();
+    status2 = tof2.readRangeStatus();
 
-    inRange1 = (status1 == VL6180X_ERROR_NONE && (range1 <= THRESHOLD1 || range1 == 0));
-    inRange2 = (status2 == VL6180X_ERROR_NONE && (range2 <= THRESHOLD2 || range2 == 0));
+    bool inRange1 = (status1 == VL6180X_ERROR_NONE && (range1 <= THRESHOLD1 && range1 > 0));
+    bool inRange2 = (status2 == VL6180X_ERROR_NONE && (range2 <= THRESHOLD2 && range2 > 0));
+
     currentInRange = inRange1 || inRange2;
 
     if (currentInRange != objectNearby) {
@@ -99,13 +109,13 @@ void loop() {
       } else {
         Serial.println("0: Kein Objekt in der Nähe");
       }
-      Serial.print("Sensor 1: ");
-      Serial.println(range1);
-      Serial.print("Sensor 2: ");
-      Serial.println(range2);
+      // Serial.print("Sensor 1: ");
+      // Serial.println(range1);
+      // Serial.print("Sensor 2: ");
+      // Serial.println(range2);
     }
   }
 
   lastInRange = currentInRange;
-  delay(100);
+  delay(1000);
 }

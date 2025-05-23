@@ -12,7 +12,7 @@
 #include <WiFi.h>
 
 const char* ssid     = "<your_ssid>";                          // WLAN
-const char* pass     = "<your_password>";                      // WLAN
+const char* password     = "<your_password>";                      // WLAN
 
 // Set web server port number to 80
 WiFiServer server(80);

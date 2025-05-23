@@ -29,7 +29,16 @@ const char* ssid      = "LinusFetzMusikGast";                          // WLAN
 const char* pass      = "linusfetzgast";                      // WLAN
 const char* serverURL = "https://fiessling.ch/physco/load.php";  // Server-Adresse: hier kann http oder https stehen, aber nicht ohne
                                             // Beispiel: https://fiessling.ch/im4/18_mc2db/load.php
-    
+
+//////////////////////////////////////////////// Temperatur
+
+#include "DHT.h"
+#define DHTPIN 7    
+#define DHTTYPE DHT11           
+DHT dht(DHTPIN, DHTTYPE);
+
+
+
 void setup(){
   Serial.begin(115200);
   delay(1000); //Take some time to open up the Serial Monitor
@@ -44,8 +53,10 @@ void setup(){
 
   //////////////////////////////////////////////// sensor auslesen
 
-  float wert = (float)random(0, 1000) / 10;  // 0 - 100
-  Serial.println(wert);  
+  dht.begin();
+  float wert = dht.readTemperature();    // °C
+  Serial.print("wert: ");
+  Serial.println(wert);
 
 
   ////////////////////////////////////////////////////////////// JSON zusammenbauen
