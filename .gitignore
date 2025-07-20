@@ -2,4 +2,5 @@
 *db_config.php
 *.mp4
 *.mov
-*.DS_Store
+.DS_Store
+*/.DS_Store
