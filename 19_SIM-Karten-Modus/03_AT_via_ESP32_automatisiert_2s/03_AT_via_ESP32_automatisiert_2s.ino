@@ -1,4 +1,5 @@
 /****************************************************
+ * 03_AT_via_ESP32_automatisiert_2s.ino
  * ESP32‑C6  ‑‑>  SIM7020e (NB‑IoT)  
  * Automatisches Senden einer MQTT‑Sequenz
  *
