@@ -63,6 +63,8 @@ void setup() {
 
   sim.println("AT+CMQTSYNC=1");   // SIM7020e in den MQTT‑Synchron‑Modus schalten: "OK" für CMQPUB/CMQCON/etc. erscheint erst, wenn der Broker das jeweilige Paket quittiert hat
   Serial.println(F("\nESP32-C6 SIM7020e MQTT Sequencer (sync-mode) ready."));
+
+  send_AT_command("AT+CMQDISCON=0");             // erstmal disconnecten
 }
 
 
@@ -102,7 +104,7 @@ void loop() {
    * So kann sich der Automat nicht aufhängen. */
 
   if (stillWaitingFor_AT_response_completed && now - lastCommandTimestamp >= OK_TIMEOUT) {
-    Serial.println("!! TIMEOUT – kein Ende der Antwort des SIM7020 (OK oder ERROR) angekommen");
+    Serial.println("!! TIMEOUT – kein Ende der Antwort des SIM7020 (OK oder ERROR) angekommen \n");
     stillWaitingFor_AT_response_completed = false;              // Zwangs-Weiter im Ablauf
     cmdIndex++;
     if (cmdIndex == NUM_COMMANDS) {
