@@ -40,8 +40,7 @@ const char *const AT_COMMANDS[] = {
 };
 constexpr uint8_t  NUM_COMMANDS     = sizeof(AT_COMMANDS) / sizeof(AT_COMMANDS[0]);
 constexpr uint32_t TIME_BETWEEN_SEQUENCES = 20000;   // 20s zwischen zwei Sequenzen
-constexpr uint32_t OK_TIMEOUT   = 30000;             // 30s auf End‑Antwort warten   // <<< NEU
-constexpr uint8_t  MAX_CONSECUTIVE_TIMEOUTS = 3;     // nach 3 Timeouts Hard‑Reset  // <<< NEU
+constexpr uint32_t OK_TIMEOUT   = 30000;             // 30s auf End‑Antwort warten
 
 /************** Ablauf‑Status ************************/
 uint8_t   cmdIndex        = 0;                                 // Welcher AT‑Befehl im Array AT_COMMANDSist als Nächstes dran?
@@ -50,8 +49,8 @@ uint32_t  lastCommandTimestamp    = 0;                         // Timestamp, wan
 uint32_t  lastCommandSequenceStartTimestamp  = 0;              // Zeit, wann die aktuelle Befehls-Sequenz begann
 String    currentlyReceivedLine;                               // Puffer für die gerade empfangene Zeile    // <<< Schreibfehler (was before currntly)
 
-/* <<< NEU: zählt, wie viele Timeouts in Serie auftraten */
-uint8_t   consecutiveTimeouts = 0;
+/* zählt, wie viele Software Resets in Serie auftraten */
+uint8_t   numSoftResets = 0;
 
 /************** Hilfsfunktionen ***********************/
 /**
@@ -78,7 +77,7 @@ void sim7020SoftReset() {
   sim.println("AT+CRESET");
   delay(5000);                      // SIM7020 rebootet
   flushSimBuffer();
-  consecutiveTimeouts = 0;
+  numSoftResets++;
 }
 
 /* Hard‑Reset via PWR‑Pin (aktiv HIGH, ≧100 ms) */
@@ -95,7 +94,6 @@ void sim7020HardReset() {
   digitalWrite(PIN_PWRKEY, LOW);    // Modul startet neu
   delay(8000);                      // Boot‑Zeit abwarten
   flushSimBuffer();
-  consecutiveTimeouts = 0;
 }
 
 /***************** SETUP ******************************/
@@ -160,13 +158,12 @@ void loop() {
       lastCommandSequenceStartTimestamp = now;
     }
 
-    /* Timeout‑Zähler erhöhen & ggf. Reset auslösen */          // <<< NEU
-    consecutiveTimeouts++;
-    if (consecutiveTimeouts == 1) {                             // 1. Fehler  -> Soft‑Reset
-      sim7020SoftReset();
-    }
-    if (consecutiveTimeouts >= MAX_CONSECUTIVE_TIMEOUTS) {      // 3. Fehler -> Hard‑Reset  
-      sim7020HardReset();                                       // wenn SIM7020 hängt → Hard‑Reset
+    /* Timeout‑Zähler erhöhen & ggf. Reset auslösen */   
+    sim7020SoftReset();
+    
+    if (numSoftResets >= 3) {      // 3. Fehler -> Hard‑Reset  
+      sim7020HardReset(); 
+      numSoftResets = 0;                                      // wenn SIM7020 hängt → Hard‑Reset
     }
   }
 
@@ -197,7 +194,7 @@ void send_AT_command(const char *cmd) {
   sim.println(cmd);
   Serial.print(F(">> "));
   Serial.println(cmd);
-  consecutiveTimeouts = 0;          // erfolgreicher Versand setzt Timeout‑Zähler zurück   // <<< NEU
+  numSoftResets = 0;          // erfolgreicher Versand setzt SoftReset‑Zähler zurück   // <<< NEU
 }
 
 
