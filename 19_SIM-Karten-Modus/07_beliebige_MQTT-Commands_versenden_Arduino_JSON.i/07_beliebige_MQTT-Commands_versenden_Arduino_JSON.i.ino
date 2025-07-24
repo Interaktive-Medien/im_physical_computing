@@ -105,7 +105,7 @@ inline bool is_AT_response_completed(const String &s) {
 void flushSimBuffer() { 
   while (sim.available())                  // solange noch Bytes im RX‑FIFO liegen …
     sim.read();                            // … jedes einzelne Byte verwerfen (jedes einzelne Byte wird ausgelesen, aber es passiert nichts weiter damit)
-  Serial.println("flush: verspätete Antworten des SIM7020 verwerfen");
+  // Serial.println("flush: verspätete Antworten des SIM7020 verwerfen");
 }
 
 /* ---------- nach Timeout gibt es einen Soft Reset des SIM7020 ---------- */
@@ -143,9 +143,9 @@ void setup() {
 
   pinMode(PIN_PWRKEY, OUTPUT);
   digitalWrite(PIN_PWRKEY, LOW);
-
-  delay(500);
-
+  delay(500);      
+  sim.println("ATE0");                                         // Echo des SIM7020 ausschalten
+  delay(100);
   sim.println("AT+CMQTSYNC=1");                                // SIM7020e in den MQTT-Synchron-Modus schalten
   Serial.println(F("\nESP32-C6 SIM7020e MQTT Sequencer (sync-mode) ready."));
 
@@ -164,8 +164,8 @@ void loop() {
   while (Serial.available()) sim.write(Serial.read());         // PC  ➜ SIM7020
   while (sim.available()) {
     char c = sim.read();
-    Serial.write(c);                                           // SIM7020 ➜ PC
 
+    if (c != '\r') Serial.write(c);                            // SIM7020 ➜ PC
     /* Zeilenweise Antwort sammeln, solange wir noch auf das Ende‑Statement (OK/ERROR) des gerade gesendeten Befehls warten. */
     if (stillWaitingFor_AT_response_completed) {              
       if (c == '\n') {                                         // Zeilenende ➜ auswerten
@@ -246,29 +246,25 @@ void send_AT_command(const String &cmd) {
 ---------------------------------------------
 >> AT+CMQNEW="broker.emqx.io","1883",12000,100
 AT+CMQNEW="broker.emqx.io","1883",12000,100
-AT+CMQNEW="broker.emqx.io","1883",12000,100
 
 +CMQNEW: 0
 
 OK
 >> AT+CMQCON=0,3,"myclient",600,1,0
-AT+CMQCON=0,3,"myclient",600,1,0
-AT+CMQCON=0,3,"myclient",600,1,0
+AT+CMQC���~���{W���щ,600,1,0
 
 OK
 >> AT+CREVHEX=0
 AT+CREVHEX=0
-AT+CREVHEX=0
 
 OK
 >> AT+CMQPUB=0,"jan/test",1,0,0,15,"{\"msg\":\"wolfi\"}"
-AT+CMQPUB=0,"jan/test",1,0,0,15,"{\"msg\":\"wolfi\"}"
-AT+CMQPUB=0,"jan/test",1,0,0,15,"{\"msg\":\"wolfi\"}"
+o���?�>��뉕�щ,1,0,0,15,"{\"msg\":\"wolfi\"}"
 
 OK
 >> AT+CMQDISCON=0
 AT+CMQDISCON=0
-AT+CMQDISCON=0
 
 OK
+
 */
