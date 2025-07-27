@@ -1,3 +1,17 @@
+/**********************************************************************************************
+*  ICM20948.ino
+*  ICM20948 9-Degrees-of-Freedom
+*  basiert auf example code: ICM20948_06_angles_and_orientation.ino
+*  Messe Neigung, Beschleunigung usw. (Beschleunigungssensor + Gyroskop + Magnetometer)
+*  Installiere ICM20948_WE Library von Wolfgang Ewald.
+*  4 Anschlüsse an ESP32-C6 (Kommunikation per I2C -> dafür braucht es die vorinstallierte Wire-Library):
+*  Sensor: Vin  <->  ESP32-C6: 3.3V 
+*  Sensor: GND  <->  ESP32-C6: GND
+*  Sensor: SDA  <->  ESP32-C6: GPIO6
+*  Sensor: SCL  <->  ESP32-C6: GPIO7
+***********************************************************************************************/
+
+
 #include <Wire.h>
 #include <ICM20948_WE.h>
 #define ICM20948_ADDR 0x68
@@ -122,5 +136,5 @@ void loop() {
   // Serial.print("Orientation of the module: ");
   //Serial.println(myIMU.getOrientationAsString());
 
-  delay(1000);
+  delay(300);
 }
