@@ -1,1 +1,0 @@
-#define EAP_PASSWORD "strenggeheim" 
