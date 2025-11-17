@@ -9,6 +9,6 @@
 
 // Werte werden eingebunden in connect_hochschule.h
 
+const char *ssid = "MMP_MediaApp";
 #define EAP_IDENTITY "fiessjan@fhgr.ch"    
-const char *ssid = "eduroam";
 const char *EAP_PASSWORD = "mypassword";
