@@ -8,8 +8,8 @@
 
 
 #include <WiFi.h>
-#include "connectWiFi_hochschule.h"         // bei Verbindung mit Hochschulnetzwerk (zB. eduroam) aktivieren
-// #include "connectWiFi_zuhause.h"         // bei Verbindung mit Heimnetzwerk aktivieren
+// #include "connectWiFi_hochschule.h"         // bei Verbindung mit Hochschulnetzwerk (zB. eduroam) aktivieren
+#include "connectWiFi_zuhause.h"         // bei Verbindung mit Heimnetzwerk aktivieren
 
 int led = LED_BUILTIN;
 

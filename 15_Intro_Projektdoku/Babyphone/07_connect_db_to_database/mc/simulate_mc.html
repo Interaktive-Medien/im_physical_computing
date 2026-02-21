@@ -1,0 +1,60 @@
+<!-- erstelle mir ein HTML Taster (toggle). Immer wenn sich der button state ändert (1 oder 0), wird entsprechend ein HTTP-Qequest (POST) gestellt an ../db/load.php.
+load.php erwartet einen JSON string mit einem Wert namens "wert". Dieser ist je nach Toggle state der Buttons entweder1 oder 0.
+Bau mir bitte ein entsprecehndes HTML mit integriertem JavaScript (mit fetch(...)-Funktion für den HTTP-Request an load.php)). 
+Damit ich in JavaScript direkt in der Console sehen kann, ob der HTTP-Request geklappt hat, möchte ich die Antwort des Requests in einer variable "response" speichern. Nimm folgendes Muster:
+const response = await fetch("api/login.php", { method: "POST", ....
+und
+const result = await response.json();
+console.log(result);
+Bitte beachte, dass es sich hier um eine asynchrone Verarbeitung handelt.
+CSS bitte komplett weglassen.   -->
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Toggle Heulsession</title>
+  </head>
+  <body>
+    <h1>Toggle Heulsession</h1>
+    <button id="toggleBtn">STARTE HEULSESSION</button>
+
+    <script>
+      const toggleBtn = document.getElementById("toggleBtn");
+      let is_heulsession = 0; // Toggle Button: 0 = AUS, 1 = AN
+      let heulsession_id = null; // Variable zum Speichern der Session-ID
+
+      toggleBtn.addEventListener("click", async () => {
+        is_heulsession = is_heulsession === 0 ? 1 : 0;
+        toggleBtn.textContent =
+          is_heulsession === 1 ? "BEENDE HEULSESSION" : "STARTE HEULSESSION";
+
+        try {
+          console.log(
+            "is_heulsession:",
+            is_heulsession,
+            "session_id:",
+            heulsession_id,
+          );
+          const response = await fetch("../db/load.php", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              is_heulsession: is_heulsession,
+              heulsession_id: heulsession_id, // Senden der Session-ID im Request-Body
+            }),
+          });
+
+          const result = await response.json();
+          console.log(result);
+          heulsession_id = result.heulsession_id; // Speichern der Session-ID aus der Antwort
+        } catch (error) {
+          console.error("Fehler:", error);
+        }
+      });
+    </script>
+  </body>
+</html>
