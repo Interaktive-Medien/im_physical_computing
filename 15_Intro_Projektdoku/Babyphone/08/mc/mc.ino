@@ -2,8 +2,8 @@
  * mc.ino
  * - measure audio volume (dB) with INMP441 microphone
  * - after x seconds audio level over threshold:
- *   * play an audio track 
- *   * create an entry into database table with timestamp + another timestamp as soon as noise is over
+ * * play an audio track + stop it as soon as noise is over
+ * * create an entry into database table with timestamp + another timestamp as soon as noise is over
  *
  * microphone INMP441: Connect ...
  * INMP441: VDD  <->  ESP32-C6: 3.3V 
@@ -49,9 +49,12 @@ int prev_is_heulsession = 0;
 unsigned long audiotrigger_startTime = 0;
 bool audio_played = false;
 
+///// smooting audio: if the audio level of x% from the rexent x seconds were above the threshold audio level, then is_heulsession is 1
 
-
-
+#define BUFFER_SIZE_SMOOTH 25                    // check for audio volume every 100ms -> 25 Werte for 2.5s
+int heul_history[BUFFER_SIZE_SMOOTH];
+int history_index = 0;
+unsigned long last_history_update = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -60,6 +63,10 @@ void setup() {
   initAudioPlayer();             // function is in audioplayer.h
   connectWiFi();                 // connectWiFi() is in connectWiFi_hochschule.h AND connectWiFi_zuhause.h. Activate on top
 
+  // Initialize history array with 0
+  for(int i = 0; i < BUFFER_SIZE_SMOOTH; i++) {
+    heul_history[i] = 0;
+  }
 
   ////////////////////////////////////////////////////////////// LED
   pinMode(ledPin, OUTPUT);
@@ -74,16 +81,32 @@ void loop(){
 
     ////////////////////////////////////////////////////////////// audiotrigger
     float audiovolume = get_audiovolume();
-    // Serial.println("Min:20,Max:80,Audio_Volume:");
-    // Serial.println(audiovolume); 
     
+    // NEW: temporary variable to store instantaneous noise detection
+    int current_noise_detected = 0;
     if(audiovolume > AUDIOVOLUME_THRESHOLD){
-        is_heulsession = 1;
-    }
-    else{
-        is_heulsession = 0;
+        current_noise_detected = 1;
     }
 
+    // 70% LOGIC: is_heulsession = 1 if the audio volume > the threshold during 70% of the last x seconds --> bridging breaks
+    if (millis() - last_history_update >= 100) { // update every 100ms
+        last_history_update = millis();
+        heul_history[history_index] = current_noise_detected; // store instantaneous value
+        history_index = (history_index + 1) % BUFFER_SIZE_SMOOTH;
+
+        int count_ones = 0;
+        for (int i = 0; i < BUFFER_SIZE_SMOOTH; i++) {
+            if (heul_history[i] == 1) count_ones++;
+        }
+
+        // noise during 70% of the time (18 of 25 values):
+        // Only update is_heulsession here to prevent flickering
+        if (count_ones >= (BUFFER_SIZE_SMOOTH * 0.7)) {
+            is_heulsession = 1;
+        } else {
+            is_heulsession = 0;
+        }
+    }
 
     ////////////////////////////////////////////////////////////// 3 options of signal interpretation:
     ///// case 1: audio trigger just detected
@@ -91,6 +114,7 @@ void loop(){
         audiotrigger_startTime = millis();                // remember start time
         audio_played = false;                             
         digitalWrite(ledPin, 1);                          // turn LED on for feedback
+        Serial.println("Heulsession detected (stabilized)");
     }
 
     ///// case 2: audio trigger has been detected already before and is still active -> play audio if mic detects loud noise long enough without interrupt
@@ -106,18 +130,17 @@ void loop(){
     ///// case 3: audio trigger is not being detected anymore.
     if (is_heulsession == 0 && prev_is_heulsession == 1) {
         digitalWrite(ledPin, 0);                            // turn LED off
+        Serial.println("Heulsession ended");
         save_into_db(is_heulsession);  
     }
 
     prev_is_heulsession = is_heulsession;
 
-    
     ////////////////////////////////////////////////////////////// WLAN
     if (WiFi.status() != WL_CONNECTED) {
         Serial.println("WiFi-Verbindung verloren, reconnect...");
         connectWiFi();
     }
-    
 }
 
 void save_into_db(int is_heulsession){
@@ -128,8 +151,6 @@ void save_into_db(int is_heulsession){
     dataObject["is_heulsession"] = is_heulsession;
     dataObject["heulsession_id"] = heulsession_id;
     String jsonString = JSON.stringify(dataObject);
-    // String jsonString = "{\"is_heulsession\":1, \"heulsession_id\":77}";      // you could also construct the JSON string like this
-
 
     // WLAN
     if (WiFi.status() == WL_CONNECTED) {
@@ -150,10 +171,8 @@ void save_into_db(int is_heulsession){
             JSONVar myObject = JSON.parse(response);
             if (JSON.typeof(myObject) != "undefined") {
                 if (myObject.hasOwnProperty("heulsession_id")) {
-                    Serial.print("received from Object: ");
-                    Serial.println(myObject["heulsession_id"]);
                     heulsession_id = getJsonInt(myObject["heulsession_id"]);
-                    Serial.print("heulsession_id: ");
+                    Serial.print("New heulsession_id stored: ");
                     Serial.println(heulsession_id);
                 }
             } else {
