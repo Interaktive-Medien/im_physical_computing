@@ -16,6 +16,7 @@ HardwareSerial myMP3(1);
 
 // command definitions (Open-Smart)
 #define PLAY_W_INDEX   0x41
+#define STOP           0x0E
 #define SET_VOLUME     0x31
 #define SEL_DEV        0x35
 #define DEV_TF         0x01
@@ -65,4 +66,8 @@ void initAudioPlayer(){
 
 void playTrack(int i){
   controlAudioPlayer(PLAY_W_INDEX, i);
+}
+
+void stopTrack() {
+  controlAudioPlayer(STOP, 0); // Datenteil ist bei Stop 0
 }

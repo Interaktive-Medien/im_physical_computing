@@ -28,6 +28,7 @@
  ******************************************************************************************************/
 
 int ledPin = BUILTIN_LED;
+#include "helper_functions.h"
 
 ////////////////////////////////////////////////////////////// WLAN + Server
 #include <WiFi.h>
@@ -35,7 +36,7 @@ int ledPin = BUILTIN_LED;
 // #include "connectWiFi_hochschule.h"                 // activate this line when aonnecting with edu network (eg. eduroam)
 #include "connectWiFi_zuhause.h"                       // activate this line when connecting with home network
 const char* serverURL = "https://heulradar.hausmaenner.ch/db/load.php";
-#include <Arduino_JSON.h> 
+// #include <Arduino_JSON.h> 
 int heulsession_id = 0;                                // entry id from database table will be stored here
 
 
@@ -121,7 +122,9 @@ void loop(){
     if (is_heulsession == 1 && !audio_played) {
         if (millis() - audiotrigger_startTime >= TIME_UNTIL_PLAY) { 
             Serial.println("fire");
-            playTrack(1);
+            int next_track_nr = getRandomAllowedTrack();
+            Serial.println(next_track_nr);
+            playTrack(next_track_nr);                                 // find this function in audioplayer.h
             audio_played = true;  
             save_into_db(is_heulsession);           
         }
@@ -129,8 +132,9 @@ void loop(){
 
     ///// case 3: audio trigger is not being detected anymore.
     if (is_heulsession == 0 && prev_is_heulsession == 1) {
-        digitalWrite(ledPin, 0);                            // turn LED off
+        digitalWrite(ledPin, 0);                           // turn LED off
         Serial.println("Heulsession ended");
+        stopTrack();                                      // find this function in audioplayer.h
         save_into_db(is_heulsession);  
     }
 
@@ -171,7 +175,7 @@ void save_into_db(int is_heulsession){
             JSONVar myObject = JSON.parse(response);
             if (JSON.typeof(myObject) != "undefined") {
                 if (myObject.hasOwnProperty("heulsession_id")) {
-                    heulsession_id = getJsonInt(myObject["heulsession_id"]);
+                    heulsession_id = cast_int(myObject["heulsession_id"]);     // function cast_int() is in helper_functions.h: (eg. "19" -> 19)
                     Serial.print("New heulsession_id stored: ");
                     Serial.println(heulsession_id);
                 }
@@ -185,15 +189,3 @@ void save_into_db(int is_heulsession){
     }
 }
 
-// if the value is a string (eg. "19"), we need to convert it into an int
-int getJsonInt(JSONVar idValue) {
-    if (JSON.typeof(idValue) == "string") {
-        String temp = (const char*)idValue;
-        return temp.toInt();
-    } 
-    // parsing not necessary if the value is already an int
-    else if (JSON.typeof(idValue) == "number") {
-        return (int)idValue;
-    }
-    return 0;                                  // Fallback if neither string nor int
-}
