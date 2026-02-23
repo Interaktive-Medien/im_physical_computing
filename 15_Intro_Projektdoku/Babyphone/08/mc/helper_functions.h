@@ -1,15 +1,20 @@
 #include <HTTPClient.h>
 #include <Arduino_JSON.h> 
 
-
-
 ///// smooting audio: if the audio level of x% from the rexent x seconds were above the threshold audio level, then is_heulsession is 1
-
 #define BUFFER_SIZE_SMOOTH 25                    // check for audio volume every 100ms -> 25 Werte for 2.5s
 int heul_history[BUFFER_SIZE_SMOOTH];
 int history_index = 0;
 unsigned long last_history_update = 0;
 int is_heulsession = 0;   
+
+
+
+void init_audio_history_array(){
+    for(int i = 0; i < BUFFER_SIZE_SMOOTH; i++) {
+        heul_history[i] = 0;
+    }
+}
 
 
 // 70% LOGIC: is_heulsession = 1 if the audio volume > the threshold during 70% of the last x seconds --> bridging breaks
@@ -50,8 +55,43 @@ int cast_int(JSONVar idValue) {
 }
 
 
-// called on setup() function, once at start: select the songs that should be played
+int heulsession_id = 0;                                // entry id from database table will be stored here
 
+void upload_heulsession(String jsonString){
+////////////////////////////////////////////////////////////// start HTTP connecion and perform a POST query
+    HTTPClient http;
+    http.begin("https://heulradar.hausmaenner.ch/db/load.php");
+    http.addHeader("Content-Type", "application/json");
+    int httpResponseCode = http.POST(jsonString);
+
+    ////////////////////////////////////////////////////////////// process HTTP response
+    if (httpResponseCode > 0) {
+        String response = http.getString();
+        Serial.printf("HTTP Response code: %d\n", httpResponseCode);
+        Serial.println("Response: " + response);
+
+        // parse JSON response
+        JSONVar myObject = JSON.parse(response);
+        if (JSON.typeof(myObject) != "undefined") {
+            if (myObject.hasOwnProperty("heulsession_id")) {
+                heulsession_id = cast_int(myObject["heulsession_id"]);     // function cast_int() is in helper_functions.h: (eg. "19" -> 19)
+                Serial.print("New heulsession_id stored: ");
+                Serial.println(heulsession_id);
+            }
+        } else {
+            Serial.println("Parsing failed!");
+        }
+    } else {
+        Serial.printf("Error on sending POST: %d\n", httpResponseCode);
+    }
+    http.end();
+}
+
+
+
+
+
+// called on setup() function, once at start: select the songs that should be played (GET Request)
 int selected_tracks_ids[15];
 int selected_tracks_titles[15];
 int num_selected_tracks = 0;

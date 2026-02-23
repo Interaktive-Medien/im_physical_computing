@@ -2,7 +2,8 @@
  * mc.ino
  * - measure audio volume (dB) with INMP441 microphone
  * - after x seconds audio level over threshold:
- * * play an audio track + stop it as soon as noise is over
+ * * play a random audio track + stop it as soon as noise is over
+ * * you can select the audio tracks of your choice in the db. The selection will be played randomnloy
  * * create an entry into database table with timestamp + another timestamp as soon as noise is over
  *
  * microphone INMP441: Connect ...
@@ -32,25 +33,18 @@ int ledPin = BUILTIN_LED;
 
 ////////////////////////////////////////////////////////////// WLAN + Server
 #include <WiFi.h>
-// #include <HTTPClient.h>
 // #include "connectWiFi_hochschule.h"                 // activate this line when aonnecting with edu network (eg. eduroam)
 #include "connectWiFi_zuhause.h"                       // activate this line when connecting with home network
-// const char* serverURL_pushSensorData = "https://heulradar.hausmaenner.ch/db/load.php";
-// const char* serverURL_getSelectedTrack = "https://heulradar.hausmaenner.ch/db/get_selected_tracks.php";
-// #include <Arduino_JSON.h> 
-int heulsession_id = 0;                                // entry id from database table will be stored here
-
 
 ////////////////////////////////////////////////////////////// audio trigger
 #include "get_audiovolume.h"
 #include "audioplayer.h"
 #define AUDIOVOLUME_THRESHOLD 60
-#define TIME_UNTIL_PLAY 2500
+#define TIME_UNTIL_PLAY 2500        // this is the minimum time it should be noisy bevore audio will be triggered
       
 int prev_is_heulsession = 0;
 unsigned long audiotrigger_startTime = 0;
 bool audio_played = false;
-
 
 
 void setup() {
@@ -59,57 +53,22 @@ void setup() {
   setup_audiovolume_tester();
   initAudioPlayer();             // function is in audioplayer.h
   connectWiFi();                 // connectWiFi() is in connectWiFi_hochschule.h AND connectWiFi_zuhause.h. Activate on top
-
-  // Initialize history array with 0: if the audio volume > the threshold during 70% of the last x seconds --> bridging breaks. 
-  for(int i = 0; i < BUFFER_SIZE_SMOOTH; i++) {
-    heul_history[i] = 0;
-  }
-
-  ////////////////////////////////////////////////////////////// LED
+  init_audio_history_array();    // Initialize audio history array (buffer) with 0: if the audio volume > the threshold during 70% of the last x seconds --> bridging breaks. 
   pinMode(ledPin, OUTPUT);
   digitalWrite(ledPin, 0);
-
-  ////////////////////////////////////////////////////////////// WLAN
-  Serial.println("Start connection...");
+  Serial.println("Start WLAN connection...");
   connectWiFi();                 // connectWiFi() is in connectWiFi_hochschule.h AND connectWiFi_zuhause.h. Activate on top
-
-  /// fetch selected tracks from database
-    updateSelectedTracks();        // function is in helper_functions.h
+  
+  if (WiFi.status() == WL_CONNECTED) {
+    updateSelectedTracks();      // fetch selected tracks from database. // function is in helper_functions.h
+  }
 }
 
+
 void loop(){
-
-    ////////////////////////////////////////////////////////////// audiotrigger
-    float audiovolume = get_audiovolume();
-    
-    // NEW: temporary variable to store instantaneous noise detection
+    float audiovolume = get_audiovolume();                       // audiotrigger
     int current_noise_detected = audiovolume > AUDIOVOLUME_THRESHOLD? 1:0;
-    // if(audiovolume > AUDIOVOLUME_THRESHOLD){
-    //     current_noise_detected = 1;
-    // }
-
-    // 70% LOGIC: is_heulsession = 1 if the audio volume > the threshold during 70% of the last x seconds --> bridging breaks
-    is_heulsession = isMostlyLoud(current_noise_detected);       // function in helper_functions()
-
-    // // 70% LOGIC: is_heulsession = 1 if the audio volume > the threshold during 70% of the last x seconds --> bridging breaks
-    // if (millis() - last_history_update >= 100) { // update every 100ms
-    //     last_history_update = millis();
-    //     heul_history[history_index] = current_noise_detected; // store instantaneous value
-    //     history_index = (history_index + 1) % BUFFER_SIZE_SMOOTH;
-
-    //     int count_ones = 0;
-    //     for (int i = 0; i < BUFFER_SIZE_SMOOTH; i++) {
-    //         if (heul_history[i] == 1) count_ones++;
-    //     }
-
-    //     // noise during 70% of the time (18 of 25 values):
-    //     // Only update is_heulsession here to prevent flickering
-    //     if (count_ones >= (BUFFER_SIZE_SMOOTH * 0.7)) {
-    //         is_heulsession = 1;
-    //     } else {
-    //         is_heulsession = 0;
-    //     }
-    // }
+    is_heulsession = isMostlyLoud(current_noise_detected);       // function in helper_functions() // 70% LOGIC: is_heulsession = 1 if the audio volume > the threshold during 70% of the last x seconds --> bridging breaks
 
     ////////////////////////////////////////////////////////////// 3 options of signal interpretation:
     ///// case 1: audio trigger just detected
@@ -123,10 +82,10 @@ void loop(){
     ///// case 2: audio trigger has been detected already before and is still active -> play audio if mic detects loud noise long enough without interrupt
     if (is_heulsession == 1 && !audio_played) {
         if (millis() - audiotrigger_startTime >= TIME_UNTIL_PLAY) { 
-            Serial.println("fire");
+            Serial.println("save audio detection in database");
             int next_track_nr = getRandomTrackId();
             Serial.println(next_track_nr);
-            playTrack(next_track_nr);                                 // find this function in audioplayer.h
+            playTrack(next_track_nr);                     // find this function in audioplayer.h
             audio_played = true;  
             save_into_db(is_heulsession);           
         }
@@ -136,13 +95,12 @@ void loop(){
     if (is_heulsession == 0 && prev_is_heulsession == 1) {
         digitalWrite(ledPin, 0);                           // turn LED off
         Serial.println("Heulsession ended");
-        stopTrack();                                      // find this function in audioplayer.h
+        stopTrack();                                       // find this function in audioplayer.h
         save_into_db(is_heulsession);  
     }
 
     prev_is_heulsession = is_heulsession;
 
-    ////////////////////////////////////////////////////////////// WLAN
     if (WiFi.status() != WL_CONNECTED) {
         Serial.println("WiFi-Verbindung verloren, reconnect...");
         connectWiFi();
@@ -150,44 +108,12 @@ void loop(){
 }
 
 void save_into_db(int is_heulsession){
-
-    ////////////////////////////////////////////////////////////// construct JSON 
-
-    JSONVar dataObject;
+    JSONVar dataObject;                                      // construct JSON
     dataObject["is_heulsession"] = is_heulsession;
     dataObject["heulsession_id"] = heulsession_id;
     String jsonString = JSON.stringify(dataObject);
 
-    // WLAN
     if (WiFi.status() == WL_CONNECTED) {
-
-        ////////////////////////////////////////////////////////////// start HTTP connecion and perform a POST query
-        HTTPClient http;
-        http.begin("https://heulradar.hausmaenner.ch/db/load.php");
-        http.addHeader("Content-Type", "application/json");
-        int httpResponseCode = http.POST(jsonString);
-
-        ////////////////////////////////////////////////////////////// process HTTP response
-        if (httpResponseCode > 0) {
-            String response = http.getString();
-            Serial.printf("HTTP Response code: %d\n", httpResponseCode);
-            Serial.println("Response: " + response);
-
-            // parse JSON response
-            JSONVar myObject = JSON.parse(response);
-            if (JSON.typeof(myObject) != "undefined") {
-                if (myObject.hasOwnProperty("heulsession_id")) {
-                    heulsession_id = cast_int(myObject["heulsession_id"]);     // function cast_int() is in helper_functions.h: (eg. "19" -> 19)
-                    Serial.print("New heulsession_id stored: ");
-                    Serial.println(heulsession_id);
-                }
-            } else {
-                Serial.println("Parsing failed!");
-            }
-        } else {
-            Serial.printf("Error on sending POST: %d\n", httpResponseCode);
-        }
-        http.end();
+        upload_heulsession(jsonString);                      // upload session start and stop timestamp into DB
     }
 }
-
