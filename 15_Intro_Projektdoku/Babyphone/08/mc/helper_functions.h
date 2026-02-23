@@ -55,7 +55,7 @@ int cast_int(JSONVar idValue) {
 }
 
 
-int heulsession_id = 0;                                // entry id from database table will be stored here
+int heulsession_id = 0;                                // HTTP POST request: entry id from database table will be stored here
 
 void upload_heulsession(String jsonString){
 ////////////////////////////////////////////////////////////// start HTTP connecion and perform a POST query
@@ -67,8 +67,8 @@ void upload_heulsession(String jsonString){
     ////////////////////////////////////////////////////////////// process HTTP response
     if (httpResponseCode > 0) {
         String response = http.getString();
-        Serial.printf("HTTP Response code: %d\n", httpResponseCode);
-        Serial.println("Response: " + response);
+        // Serial.printf("HTTP Response code: %d\n", httpResponseCode);
+        // Serial.println("Response: " + response);
 
         // parse JSON response
         JSONVar myObject = JSON.parse(response);
@@ -81,6 +81,7 @@ void upload_heulsession(String jsonString){
         } else {
             Serial.println("Parsing failed!");
         }
+        Serial.println("uploaded timestamp for session start or end");
     } else {
         Serial.printf("Error on sending POST: %d\n", httpResponseCode);
     }

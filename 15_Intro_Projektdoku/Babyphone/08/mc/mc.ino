@@ -76,7 +76,7 @@ void loop(){
         audiotrigger_startTime = millis();                // remember start time
         audio_played = false;                             
         digitalWrite(ledPin, 1);                          // turn LED on for feedback
-        Serial.println("Heulsession detected (stabilized)");
+        Serial.println("Heulsession detected");
     }
 
     ///// case 2: audio trigger has been detected already before and is still active -> play audio if mic detects loud noise long enough without interrupt
