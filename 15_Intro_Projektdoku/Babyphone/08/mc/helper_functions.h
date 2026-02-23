@@ -94,7 +94,7 @@ void upload_heulsession(String jsonString){
 
 // called on setup() function, once at start: select the songs that should be played (GET Request)
 int selected_tracks_ids[15];
-int selected_tracks_titles[15];
+String selected_tracks_titles[15];
 int num_selected_tracks = 0;
 int randomTrackIndex;
 
@@ -120,7 +120,7 @@ void updateSelectedTracks(){
                 
                 Serial.print("Track ");
                 Serial.print((int)myObject[i]["id"]);
-                Serial.println((int)myObject[i]["title"]);
+                Serial.println(myObject[i]["title"]);
             }
         }
     } else {
@@ -139,7 +139,10 @@ int getRandomTrackId() {
     return selected_tracks_ids[randomTrackIndex];
 }
 
-int getRandomTrackName() {
-    return selected_tracks_titles[randomTrackIndex];
+String getRandomTrackName() {
+    String randomTrackName = selected_tracks_titles[randomTrackIndex]; 
+    Serial.print("randomTrackName: ");
+    Serial.println(randomTrackName);
+    return randomTrackName;
 }
 

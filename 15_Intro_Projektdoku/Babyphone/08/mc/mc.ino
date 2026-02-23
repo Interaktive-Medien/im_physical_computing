@@ -84,8 +84,12 @@ void loop(){
         if (millis() - audiotrigger_startTime >= TIME_UNTIL_PLAY) { 
             Serial.println("save audio detection in database");
             int next_track_nr = getRandomTrackId();
+
             Serial.println(next_track_nr);
             playTrack(next_track_nr);                     // find this function in audioplayer.h
+
+            String next_track_title = getRandomTrackName();
+            Serial.printf("Next track title: %s\n", next_track_title);
             audio_played = true;  
             save_into_db(is_heulsession);           
         }
