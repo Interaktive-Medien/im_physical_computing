@@ -2,9 +2,9 @@
 
 /***********************************************************************
  * config.php
- * Datenbank-Verbindung
- * Ersetze $db_host, $db_name, $db_user, $db_pass durch deine eigenen Daten. 
- * Lade diese Datei NICHT auf GitHub
+ * Database connection
+ * Replce $host, $name, $user, $pass by your own database credentials. 
+ * Do not upload this file on GitHub GitHub
  ***********************************************************************/
 
 

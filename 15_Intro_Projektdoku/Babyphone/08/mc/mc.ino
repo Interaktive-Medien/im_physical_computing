@@ -32,10 +32,11 @@ int ledPin = BUILTIN_LED;
 
 ////////////////////////////////////////////////////////////// WLAN + Server
 #include <WiFi.h>
-#include <HTTPClient.h>
+// #include <HTTPClient.h>
 // #include "connectWiFi_hochschule.h"                 // activate this line when aonnecting with edu network (eg. eduroam)
 #include "connectWiFi_zuhause.h"                       // activate this line when connecting with home network
-const char* serverURL = "https://heulradar.hausmaenner.ch/db/load.php";
+// const char* serverURL_pushSensorData = "https://heulradar.hausmaenner.ch/db/load.php";
+// const char* serverURL_getSelectedTrack = "https://heulradar.hausmaenner.ch/db/get_selected_tracks.php";
 // #include <Arduino_JSON.h> 
 int heulsession_id = 0;                                // entry id from database table will be stored here
 
@@ -45,17 +46,12 @@ int heulsession_id = 0;                                // entry id from database
 #include "audioplayer.h"
 #define AUDIOVOLUME_THRESHOLD 60
 #define TIME_UNTIL_PLAY 2500
-int is_heulsession = 0;         
+      
 int prev_is_heulsession = 0;
 unsigned long audiotrigger_startTime = 0;
 bool audio_played = false;
 
-///// smooting audio: if the audio level of x% from the rexent x seconds were above the threshold audio level, then is_heulsession is 1
 
-#define BUFFER_SIZE_SMOOTH 25                    // check for audio volume every 100ms -> 25 Werte for 2.5s
-int heul_history[BUFFER_SIZE_SMOOTH];
-int history_index = 0;
-unsigned long last_history_update = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -64,7 +60,7 @@ void setup() {
   initAudioPlayer();             // function is in audioplayer.h
   connectWiFi();                 // connectWiFi() is in connectWiFi_hochschule.h AND connectWiFi_zuhause.h. Activate on top
 
-  // Initialize history array with 0
+  // Initialize history array with 0: if the audio volume > the threshold during 70% of the last x seconds --> bridging breaks. 
   for(int i = 0; i < BUFFER_SIZE_SMOOTH; i++) {
     heul_history[i] = 0;
   }
@@ -76,6 +72,9 @@ void setup() {
   ////////////////////////////////////////////////////////////// WLAN
   Serial.println("Start connection...");
   connectWiFi();                 // connectWiFi() is in connectWiFi_hochschule.h AND connectWiFi_zuhause.h. Activate on top
+
+  /// fetch selected tracks from database
+    updateSelectedTracks();        // function is in helper_functions.h
 }
 
 void loop(){
@@ -84,30 +83,33 @@ void loop(){
     float audiovolume = get_audiovolume();
     
     // NEW: temporary variable to store instantaneous noise detection
-    int current_noise_detected = 0;
-    if(audiovolume > AUDIOVOLUME_THRESHOLD){
-        current_noise_detected = 1;
-    }
+    int current_noise_detected = audiovolume > AUDIOVOLUME_THRESHOLD? 1:0;
+    // if(audiovolume > AUDIOVOLUME_THRESHOLD){
+    //     current_noise_detected = 1;
+    // }
 
     // 70% LOGIC: is_heulsession = 1 if the audio volume > the threshold during 70% of the last x seconds --> bridging breaks
-    if (millis() - last_history_update >= 100) { // update every 100ms
-        last_history_update = millis();
-        heul_history[history_index] = current_noise_detected; // store instantaneous value
-        history_index = (history_index + 1) % BUFFER_SIZE_SMOOTH;
+    is_heulsession = isMostlyLoud(current_noise_detected);       // function in helper_functions()
 
-        int count_ones = 0;
-        for (int i = 0; i < BUFFER_SIZE_SMOOTH; i++) {
-            if (heul_history[i] == 1) count_ones++;
-        }
+    // // 70% LOGIC: is_heulsession = 1 if the audio volume > the threshold during 70% of the last x seconds --> bridging breaks
+    // if (millis() - last_history_update >= 100) { // update every 100ms
+    //     last_history_update = millis();
+    //     heul_history[history_index] = current_noise_detected; // store instantaneous value
+    //     history_index = (history_index + 1) % BUFFER_SIZE_SMOOTH;
 
-        // noise during 70% of the time (18 of 25 values):
-        // Only update is_heulsession here to prevent flickering
-        if (count_ones >= (BUFFER_SIZE_SMOOTH * 0.7)) {
-            is_heulsession = 1;
-        } else {
-            is_heulsession = 0;
-        }
-    }
+    //     int count_ones = 0;
+    //     for (int i = 0; i < BUFFER_SIZE_SMOOTH; i++) {
+    //         if (heul_history[i] == 1) count_ones++;
+    //     }
+
+    //     // noise during 70% of the time (18 of 25 values):
+    //     // Only update is_heulsession here to prevent flickering
+    //     if (count_ones >= (BUFFER_SIZE_SMOOTH * 0.7)) {
+    //         is_heulsession = 1;
+    //     } else {
+    //         is_heulsession = 0;
+    //     }
+    // }
 
     ////////////////////////////////////////////////////////////// 3 options of signal interpretation:
     ///// case 1: audio trigger just detected
@@ -122,7 +124,7 @@ void loop(){
     if (is_heulsession == 1 && !audio_played) {
         if (millis() - audiotrigger_startTime >= TIME_UNTIL_PLAY) { 
             Serial.println("fire");
-            int next_track_nr = getRandomAllowedTrack();
+            int next_track_nr = getRandomTrackId();
             Serial.println(next_track_nr);
             playTrack(next_track_nr);                                 // find this function in audioplayer.h
             audio_played = true;  
@@ -161,7 +163,7 @@ void save_into_db(int is_heulsession){
 
         ////////////////////////////////////////////////////////////// start HTTP connecion and perform a POST query
         HTTPClient http;
-        http.begin(serverURL);
+        http.begin("https://heulradar.hausmaenner.ch/db/load.php");
         http.addHeader("Content-Type", "application/json");
         int httpResponseCode = http.POST(jsonString);
 
