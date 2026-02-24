@@ -72,16 +72,29 @@ void upload_heulsession(String jsonString){
 
         // parse JSON response
         JSONVar myObject = JSON.parse(response);
+        // int is_track_playing = 0;
         if (JSON.typeof(myObject) != "undefined") {
             if (myObject.hasOwnProperty("heulsession_id")) {
-                heulsession_id = cast_int(myObject["heulsession_id"]);     // function cast_int() is in helper_functions.h: (eg. "19" -> 19)
-                Serial.print("New heulsession_id stored: ");
-                Serial.println(heulsession_id);
+                int received_heulsession_id = cast_int(myObject["heulsession_id"]);     // function cast_int() is in helper_functions.h: (eg. "19" -> 19)
+                // received_heulsession_id != heulsession_id?Serial.printf("heulsession started: %d\n", received_heulsession_id):Serial.println("heulsession ended: %d\n", received_heulsession_id);
+                if(received_heulsession_id != heulsession_id){
+                    heulsession_id = received_heulsession_id;
+                    Serial.printf("new heulsession started: %d\n", received_heulsession_id);
+                    // is_track_playing = 1;
+                    // Serial.printf("is_track_playing: %d\n", is_track_playing);
+                }
+                else{
+                    // Serial.printf("is_track_playing: %d\n", is_track_playing);
+                    // if(is_track_playing == 0){
+                    Serial.printf("heulsession ended: %d\n", received_heulsession_id);
+                    // is_track_playing = 0;
+                    Serial.println("------------------------------------");
+                    // }
+                }
             }
         } else {
             Serial.println("Parsing failed!");
         }
-        Serial.println("uploaded timestamp for session start or end");
     } else {
         Serial.printf("Error on sending POST: %d\n", httpResponseCode);
     }
@@ -105,8 +118,8 @@ void updateSelectedTracks(){
     int httpResponseCode = http.GET();                // Send the GET request
     if (httpResponseCode > 0) {
         String payload = http.getString();            // Get the response payload as a string
-        Serial.println("Payload received:");
-        Serial.println(payload);
+        // Serial.println("Payload received:");
+        // Serial.println(payload);                   // print whole JSON string (track infos)
 
         JSONVar myObject = JSON.parse(payload);
 
@@ -115,12 +128,12 @@ void updateSelectedTracks(){
         } else {
             for (int i = 0; i < 15 && i < myObject.length(); i++) {       // Access the "selected" field of each object
                 selected_tracks_ids[i] = (int)myObject[i]["id"];
-                selected_tracks_titles[i] = (int)myObject[i]["title"];
+                selected_tracks_titles[i] = (String)myObject[i]["title"];
                 num_selected_tracks++;
                 
-                Serial.print("Track ");
-                Serial.print((int)myObject[i]["id"]);
-                Serial.println(myObject[i]["title"]);
+                // Serial.print("Track ");
+                // Serial.print((int)myObject[i]["id"]);
+                // Serial.println(myObject[i]["title"]);
             }
         }
     } else {

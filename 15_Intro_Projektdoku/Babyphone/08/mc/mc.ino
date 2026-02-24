@@ -62,6 +62,7 @@ void setup() {
   if (WiFi.status() == WL_CONNECTED) {
     updateSelectedTracks();      // fetch selected tracks from database. // function is in helper_functions.h
   }
+  Serial.println("------------------------------------");
 }
 
 
@@ -76,7 +77,7 @@ void loop(){
         audiotrigger_startTime = millis();                // remember start time
         audio_played = false;                             
         digitalWrite(ledPin, 1);                          // turn LED on for feedback
-        Serial.println("Heulsession detected");
+        // Serial.println("Heulsession detected");
     }
 
     ///// case 2: audio trigger has been detected already before and is still active -> play audio if mic detects loud noise long enough without interrupt
@@ -84,12 +85,11 @@ void loop(){
         if (millis() - audiotrigger_startTime >= TIME_UNTIL_PLAY) { 
             Serial.println("save audio detection in database");
             int next_track_nr = getRandomTrackId();
-
-            Serial.println(next_track_nr);
+            // Serial.println(next_track_nr);
             playTrack(next_track_nr);                     // find this function in audioplayer.h
 
             String next_track_title = getRandomTrackName();
-            Serial.printf("Next track title: %s\n", next_track_title);
+            // Serial.printf("Next track title: %s\n", next_track_title);
             audio_played = true;  
             save_into_db(is_heulsession);           
         }
@@ -98,7 +98,7 @@ void loop(){
     ///// case 3: audio trigger is not being detected anymore.
     if (is_heulsession == 0 && prev_is_heulsession == 1) {
         digitalWrite(ledPin, 0);                           // turn LED off
-        Serial.println("Heulsession ended");
+        // Serial.println("Heulsession ended");
         stopTrack();                                       // find this function in audioplayer.h
         save_into_db(is_heulsession);  
     }
