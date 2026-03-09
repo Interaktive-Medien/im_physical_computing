@@ -9,9 +9,9 @@
 
 
 $host = "zimalofo.mysql.db.internal";  // "rv9w2f.myd.infomaniak.com";
-$db   = "zimalofo_heulradar";  // "rv9w2f_webapp";  // Change to your DB name
-$user = "zimalofo_papi"; // "rv9w2f_jan";   // Change to your DB user
-$pass = "Heulradar!!!!!";       // Change to your DB pass if needed
+$db   = "zimalofo_heulradar";          // "rv9w2f_webapp";  // Change to your DB name
+$user = "zimalofo_daddy";              // "rv9w2f_jan";   // Change to your DB user
+$pass = "Chantal_heul_leiser";         // Change to your DB pass if needed
 
 try {
     $dsn = "mysql:host=$host;dbname=$db;charset=utf8mb4";

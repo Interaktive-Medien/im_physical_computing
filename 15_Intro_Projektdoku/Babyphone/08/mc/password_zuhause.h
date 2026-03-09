@@ -9,5 +9,5 @@
 
 // Werte werden eingebunden in connect_zuhause.h
 
-const char *ssid = "linusfetzmusik";
-const char *pass = "ESSeybur";
+const char *ssid = "tinkergarden";
+const char *pass = "strenggeheim";

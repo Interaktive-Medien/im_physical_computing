@@ -1,5 +1,5 @@
 *sftp.json
-*db_config.php
+*config.php
 *.mp4
 *.mov
 .DS_Store
