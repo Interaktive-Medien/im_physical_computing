@@ -11,8 +11,9 @@
 
 #include <WiFi.h>
 
-const char* ssid     = "<your_ssid>";                          // WLAN
-const char* password     = "<your_password>";                      // WLAN
+const char* ssid     = "tinkergarden";     // WLAN SSID
+const char* pass     = "strenggeheim";     // WLAN Passwort
+bool isWlanConnected = 0;
 
 // Set web server port number to 80
 WiFiServer server(80);
@@ -28,22 +29,32 @@ const long timeoutTime = 2000;
 
 void setup() {
   Serial.begin(115200);
+  delay(3000);
   pinMode(led, OUTPUT);
-  digitalWrite(led, 0);
-
-  // Connect to Wi-Fi network with SSID and password
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.printf("\nWiFi connected: SSID: %s, IP Address: %s\n", ssid, WiFi.localIP().toString().c_str());
-  server.begin();
+  rgbLedWrite(led, 0, 255, 0);  // GRB rot
+  Serial.println("Starte Verbindung...");
+  connectWiFi();
 }
 
 void loop(){
+
+  if (WiFi.status() != WL_CONNECTED)
+  {
+      Serial.println("WiFi-Verbindung verloren, reconnect...");
+      connectWiFi();
+      rgbLedWrite(led, 0, 255, 0);  // GRB rot
+      isWlanConnected = 0;
+  }
+  else
+  {
+      if(isWlanConnected == 0){
+          rgbLedWrite(led, 255, 0, 0); // GRB grün
+          isWlanConnected = 1;
+      }
+  }
+
+
+
   WiFiClient client = server.available();   // Listen for incoming clients
 
   if (client) {                             // If a new client connects,
@@ -123,4 +134,27 @@ void loop(){
     Serial.println("Client disconnected.");
     Serial.println("");
   }
+}
+
+void connectWiFi()
+{
+    Serial.printf("\nVerbinde mit WLAN %s", ssid); // ssid ist const char*, kein String(ssid) nötig
+    WiFi.begin(ssid, pass);
+
+    int attempts = 0;
+    while (WiFi.status() != WL_CONNECTED && attempts < 40)
+    { // Max 20 Versuche (10 Sekunden)
+        delay(500);
+        Serial.print(".");
+        attempts++;
+    }
+    if (WiFi.status() == WL_CONNECTED)
+    {
+        Serial.printf("\nWiFi verbunden: SSID: %s, IP-Adresse: %s\n", ssid, WiFi.localIP().toString().c_str());
+        server.begin();
+    }
+    else
+    {
+        Serial.println("\n❌ WiFi Verbindung fehlgeschlagen!");
+    }
 }
