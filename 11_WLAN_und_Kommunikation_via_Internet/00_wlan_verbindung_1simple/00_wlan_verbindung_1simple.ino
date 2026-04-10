@@ -23,20 +23,11 @@ void setup()
 
 void loop()
 {
-    if (WiFi.status() != WL_CONNECTED)
-    {
-        Serial.println("WiFi-Verbindung verloren, reconnect...");
-        connectWiFi();
-        rgbLedWrite(led, 0, 255, 0);  // GRB rot
-        isWlanConnected = 0;
-    }
-    else
-    {
-        if(isWlanConnected == 0){
-            rgbLedWrite(led, 255, 0, 0); // GRB grün
-            isWlanConnected = 1;
-        }
-    }
+  if (!is_wlan_connected()) {
+    return; 
+  }
+
+  // put your code here
 }
 
 void connectWiFi()
@@ -59,4 +50,19 @@ void connectWiFi()
     {
         Serial.println("\n❌ WiFi Verbindung fehlgeschlagen!");
     }
+}
+
+
+bool is_wlan_connected(){
+  if (WiFi.status() != WL_CONNECTED) {
+    if (isWlanConnected == 1) { // War vorher verbunden?
+      Serial.println("WiFi-Verbindung verloren, reconnect...");
+      rgbLedWrite(led, 0, 255, 0);  // Status: Rot
+      isWlanConnected = 0;
+    }
+    connectWiFi(); 
+    return false; // Loop wird abgebrochen
+  }
+
+  return true; // WiFi ist da, Loop darf weiterlaufen
 }
