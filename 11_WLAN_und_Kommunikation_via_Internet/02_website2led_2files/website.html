@@ -15,7 +15,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Switch LED</title>
   </head>
   <body>
     <button id="btn">Drive LED</button>
@@ -24,8 +24,8 @@
       let ledval = 0
       document.querySelector("#btn").addEventListener("click", function () {
         ledval = (ledval + 1) % 2;
-        // ledval = Math.random();
-        // JSON-Daten, die gesendet werden
+
+        // Objekt, das als JSON-STring an den ESP32 gesendet wird
         const jsonData = {
           wert: ledval
         };
@@ -33,13 +33,12 @@
         console.log(jsonstring);
 
         // POST-Request mit fetch
-        fetch("http://<MC's IP-Adresse>/postjson", {
-          method: "POST", // HTTP-Methode
+        fetch("http://192.168.0.65/postjson", {  // "http://<MC's IP-Adresse>/postjson"
+          method: "POST",                        // HTTP-Methode
           headers: {
-            "Content-Type": "application/json", // Setze den Content-Type auf JSON
+            "Content-Type": "application/json",  // Setze den Content-Type auf JSON
           },
-          body: jsonstring, // Daten in JSON-String umwandeln und senden
-          mode: "no-cors"
+          body: jsonstring                       // Daten in JSON-String umwandeln und senden
         })
         .then((response) => {
           if (!response.ok) {

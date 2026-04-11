@@ -16,7 +16,7 @@ void setup()
     Serial.begin(115200);
     delay(3000);
     pinMode(led, OUTPUT);
-    rgbLedWrite(led, 0, 255, 0);  // GRB rot
+    rgbLedWrite(led, 0, 255, 0);  // GRB: rot
     Serial.println("Starte Verbindung...");
     connectWiFi();
 }
@@ -42,22 +42,20 @@ void connectWiFi()
         Serial.print(".");
         attempts++;
     }
-    if (WiFi.status() == WL_CONNECTED)
-    {
+    if (WiFi.status() == WL_CONNECTED){
         Serial.printf("\nWiFi verbunden: SSID: %s, IP-Adresse: %s\n", ssid, WiFi.localIP().toString().c_str());
+        rgbLedWrite(led, 255, 0, 0);  // GRB: grün
     }
-    else
-    {
+    else{
         Serial.println("\n❌ WiFi Verbindung fehlgeschlagen!");
     }
 }
-
 
 bool is_wlan_connected(){
   if (WiFi.status() != WL_CONNECTED) {
     if (isWlanConnected == 1) { // War vorher verbunden?
       Serial.println("WiFi-Verbindung verloren, reconnect...");
-      rgbLedWrite(led, 0, 255, 0);  // Status: Rot
+      rgbLedWrite(led, 0, 255, 0);  // GRB: Rot
       isWlanConnected = 0;
     }
     connectWiFi(); 
