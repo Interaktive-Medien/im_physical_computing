@@ -1,0 +1,14 @@
+{
+    "name": "IM4 IoT",
+    "host": "sl2223.web.hostpoint.ch",
+    "protocol": "ftp",
+    "port": 21,
+    "username": "im4usr@dorfkneipe.ch",
+    "password": "IM4_Physco_26",
+    "remotePath": "/",
+    "uploadOnSave": true,
+    "ignore": [
+        ".vscode",
+        ".git"
+    ]
+}
