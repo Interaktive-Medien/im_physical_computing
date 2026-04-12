@@ -5,16 +5,15 @@
 
 #include <WiFi.h>
 
-const char *ssid = "tinkergarden";  // your ssid
-const char *pass = "strenggeheim";  // your PW
+const char *ssid = "tinkergarden";  // your WLAN ssid
+const char *pass = "strenggeheim";  // your WLAN PW
 bool isWlanConnected = 0;
-
 int led = LED_BUILTIN;
 
 void setup()
 {
     Serial.begin(115200);
-    delay(3000);
+    delay(1000);
     pinMode(led, OUTPUT);
     rgbLedWrite(led, 0, 255, 0);  // GRB: rot
     Serial.println("Starte Verbindung...");
@@ -23,15 +22,12 @@ void setup()
 
 void loop()
 {
-  if (!is_wlan_connected()) {
-    return; 
-  }
+  if (!is_wlan_connected())return; 
 
   // put your code here
 }
 
-void connectWiFi()
-{
+void connectWiFi(){
     Serial.printf("\nVerbinde mit WLAN %s", ssid); // ssid ist const char*, kein String(ssid) nötig
     WiFi.begin(ssid, pass);
 
@@ -61,6 +57,5 @@ bool is_wlan_connected(){
     connectWiFi(); 
     return false; // Loop wird abgebrochen
   }
-
   return true; // WiFi ist da, Loop darf weiterlaufen
 }

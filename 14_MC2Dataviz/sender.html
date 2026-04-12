@@ -1,0 +1,24 @@
+<!---------------------------------------------------------
+    Kapitel 12: Website2DB > Schritt 2: Website -> DB
+    sender.html
+    Diese HTML Seite zeigt ein Formular. Wird es abgeschickt werden die Werte mit JavaScript extrahiert, als JSON string formattiert und per HTTP POST Request an load.php geschickt.
+    Später werden die HTTP Nachrichten nicht mehr von einer Website geschickt, sondern von einem ESP
+----------------------------------------------------------->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Example Sender</title>
+  </head>
+  <body>
+    <form id="dataForm">
+      <label for="wert">Wert:</label>
+      <input type="text" id="wert" name="wert" required />
+      <input type="submit" name="submit" value="Submit" />
+    </form>
+    <div id="message"></div>
+    <script src="js/sender.js"></script>
+  </body>
+</html>
