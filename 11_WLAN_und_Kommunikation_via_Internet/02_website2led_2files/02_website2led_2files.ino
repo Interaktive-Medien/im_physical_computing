@@ -103,7 +103,7 @@ void connectWiFi(){
 
 bool is_wlan_connected(){
   if (WiFi.status() != WL_CONNECTED) {
-    if (isWlanConnected == 1) {.         // War vorher verbunden?
+    if (isWlanConnected == 1) {          // War vorher verbunden?
       Serial.println("WiFi-Verbindung verloren, reconnect...");
       rgbLedWrite(led, 0, 255, 0);       // GRB: Rot
       isWlanConnected = 0;
