@@ -6,41 +6,72 @@
  *  HX711: SCK (serial clock)  <->   ESP32-C6: GPIO 7
  *  Driver: Vcc                <->   ESP32-C6: 3.3V
  *  Driver: GND                <->   ESP32-C6: GND
- *  GitHub: https://github.com/Interaktive-Medien/im_physical_computing/blob/main/09_Sensoren_testen/17_Waage/17_Waage.ino
+ *  Vorgehensweise:
+ *  Das gemessene Gewicht erscheint in einem Wertebereich, die für uns nicht gut lesbar ist.
+ *  Es muss in eine für uns lesbare Range multipliziert werden. 
+ *  Dazu braucht es den Kalibrationsfaktor (calFactor). Um diesen zu ermitteln, brauchen wir zur Berechnung 2 Messwerte:
+ *  0 und ein bekanntes Referenzgewicht, z.B. eine Schoggi mit 100g Gewicht
+ *  1. Referenzpunkt: Bei Start nichts auflegen. Tare
+ *  2. Referenzpunkt: Nach Aufforderung (im serial monitor) eine 100g Tafel Schoggi auflegen. 
+ *  Nun können andere Gewichte gewogen werden.
+ *  Wenn der calFactor bekannt ist, kann der calFactor) hardgecoded in den Code geschrieben werden. Der Block entfällt:  if (!calibrated) {..}
+ *  see https://prilchen.de/eine-waage-mit-arduino-erstellen/
  *******************************************************************************/
 
 
+
+#include <Wire.h>
 #include "HX711.h"
 
-// Pinbelegung anpassen, falls nötig
-#define HX711_DT  6  // Datenpin
-#define HX711_SCK 7   // Clockpin
-
+// HX711 Pins
+const int HX_DT = 6;   // DOUT
+const int HX_SCK = 7;  // SCK
 HX711 scale;
 
-// Faktor zum Umrechnen der Rohwerte in Gramm
-float calibration_factor = -7050.0;  // Muss für deinen Sensor kalibriert werden!
+// Kalibrierfaktor (wird im Schritt 2 berechnet)
+float calFactor = 1.0f;
 
 void setup() {
   Serial.begin(115200);
-  Serial.println("HX711 Kalibrierung starten...");
+  delay(1000);
 
-  scale.begin(HX711_DT, HX711_SCK);
-  scale.set_scale(calibration_factor);  // Kalibrierungsfaktor setzen
-  scale.tare();  // Gewicht auf der Waage als "0" setzen
+  // HX711
+  scale.begin(HX_DT, HX_SCK);
+  scale.set_gain(128);   // Kanal A, Gain 128
+  delay(200);
 
-  Serial.println("Wägezelle bereit. Bitte nichts auflegen.");
-  delay(2000);
+  // Schritt 1: Nullpunkt setzen (Tare)
+  scale.tare(15);        // 15 Samples mitteln
+
+  // Hinweis
+  Serial.println("Tare gesetzt");
+  Serial.println("Lege bekanntes gewicht auf");
+  delay(5000);
 }
 
 void loop() {
-  if (scale.is_ready()) {
-    float gewicht = scale.get_units(5);  // Mittelwert aus 5 Messungen
-    Serial.print("Gewicht: ");
-    Serial.print(gewicht, 1);  // 1 Nachkommastelle
-    Serial.println(" g");
-  } else {
-    Serial.println("Wägezelle nicht bereit");
+  // Schritt 2: Kalibrierung mit Referenzgewicht
+  // Beispiel: 100 g Referenzgewicht
+  static bool calibrated = false;
+  const float refWeight = 100.0; // Beispiel 100 Gramm Schokolade
+
+  if (!calibrated) {
+    long raw = scale.get_value(15);   // Rohwert ohne Skalierung
+    calFactor = raw / refWeight;      // Faktor berechnen
+    scale.set_scale(calFactor);       // setzen
+    calibrated = true;
+
+    Serial.println("Kalibrierung OK");
+    char buf[32];
+    Serial.println("calFactor");
+    Serial.println(calFactor);
+    delay(2000);
   }
-  delay(1000);
+
+  // Danach: normale Gewichtsanzeige
+  float grams = scale.get_units(10); // gemittelt
+  char buf[24];
+  Serial.println(grams);
+
+  delay(500);
 }
