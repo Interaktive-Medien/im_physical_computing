@@ -1,6 +1,7 @@
 /******************************************************************************************************
  * mc.ino
  * control Open-Smart audio player with ESP32-C6
+ * Alle paar Sekunden einen neuen Track auf der SD Karte abspielen
  * Connect ...
  * audio player: Vin  <->  ESP32-C6: 5V 
  * audio player: GND  <->  ESP32-C6: GND  (per npn transistor)
@@ -8,8 +9,6 @@
  * audio player: TX   <->  ESP32-C6: GPIO7
  * basis transistor  <->   ESP32-C6: GPIO5
  ******************************************************************************************************/
-
-
 
 #include "audioplayer.h"
 
