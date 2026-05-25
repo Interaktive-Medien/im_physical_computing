@@ -1,6 +1,6 @@
 <?php
 /*****************************************************
- * load.php
+ * saveNewUser.php
  * Empfängt neuen Fingerprint-Hex und legt User an.
  ******************************************************/
 require_once("../system/config.php");
