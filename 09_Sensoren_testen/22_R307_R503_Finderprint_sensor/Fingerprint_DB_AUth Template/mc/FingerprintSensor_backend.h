@@ -2,237 +2,178 @@
 
 #include <Adafruit_Fingerprint.h>
 
-// Hardware-Serial 1 für den ESP32-C6 initialisieren
 HardwareSerial mySerial(1); 
 
-#define FINGERPRINT_RX 6  // An Sensor TX 
-#define FINGERPRINT_TX 7  // An Sensor RX 
+#define FINGERPRINT_RX 6  
+#define FINGERPRINT_TX 7  
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&mySerial);
 
-uint8_t id = 1;             // ID 1 dient als temporärer Slot im Sensor, da die echte ID von der DB vergeben wird
-String fingerprintHex = ""; // Hier wird die gesamte Kette gespeichert
+uint8_t id = 1;             
+String fingerprintHex = ""; 
 
 void initFingerprintSensor(){
-  Serial.println("huhu");
-
-  Serial.println("\n\nAdafruit Fingerprint sensor enrollment");
-  mySerial.begin(57600, SERIAL_8N1, FINGERPRINT_RX, FINGERPRINT_TX);      // Initialisiert Serial1 mit Baudrate, Signal-Konfiguration und den zugewiesenen Pins (6 und 7)
-  finger.begin(57600);   // Danach die Library auf dieser Schnittstelle starten
+  Serial.println("\n\nAdafruit Fingerprint sensor initialization");
+  mySerial.begin(57600, SERIAL_8N1, FINGERPRINT_RX, FINGERPRINT_TX);      
+  finger.begin(57600);   
 
   if (finger.verifyPassword()) {
     Serial.println("Found fingerprint sensor!");
   } else {
     Serial.println("Did not find fingerprint sensor :(");
-    while (1) {
-      delay(1);
-    }
+    while (1) { delay(1); }
   }
-
-  // Serial.println(F("Reading sensor parameters"));
-  // finger.getParameters();
-  // Serial.print(F("Status: 0x"));
-  // Serial.println(finger.status_reg, HEX);
-  // Serial.print(F("Sys ID: 0x"));
-  // Serial.println(finger.system_id, HEX);
-  // Serial.print(F("Capacity: "));
-  // Serial.println(finger.capacity);
-  // Serial.print(F("Security level: "));
-  // Serial.println(finger.security_level);
-  // Serial.print(F("Device address: "));
-  // Serial.println(finger.device_addr, HEX);
-  // Serial.print(F("Packet len: "));
-  // Serial.println(finger.packet_len);
-  // Serial.print(F("Baud rate: "));
-  // Serial.println(finger.baud_rate);
 }
 
-uint8_t readTypedNumber(void) {
-  uint8_t num = 0;
-  while (num == 0) {
-    while (!Serial.available())
-      ;
-    num = Serial.parseInt();
+// Eigene Implementierung für den Hardware-Vergleich von Slot 1 und Slot 2
+uint16_t matchTemplateCustom() {
+  while(mySerial.available() > 0) {
+    mySerial.read();
   }
-  return num; // z.B. 3
+
+  // Protokoll fuer R503 Match-Befehl (0x03)
+  uint8_t cmdPacket[] = {0xEF, 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0x01, 0x00, 0x03, 0x03, 0x00, 0x07};
+  mySerial.write(cmdPacket, sizeof(cmdPacket));
+  
+  uint32_t timeout = millis();
+  while (mySerial.available() < 12) {
+    if (millis() - timeout > 500) {
+      return 0; 
+    }
+    delay(1);
+  }
+  
+  uint8_t reply[12];
+  for (int i = 0; i < 12; i++) {
+    reply[i] = mySerial.read();
+  }
+  
+  if (reply[9] == 0x00) {
+    uint16_t score = (reply[10] << 8) | reply[11];
+    return score;
+  }
+  
+  return 0; 
 }
 
-uint8_t getFingerprintEnroll() {
-  int p = -1;
-  
-  // WICHTIG: Nicht blockierend prüfen, ob im Moment ein Finger aufliegt
-  p = finger.getImage();
-  if (p == FINGERPRINT_NOFINGER) {
-    return false; // Kein Finger da, sofort zurückmelden für die Zeitschleife
-  }
-  
-  // Falls ein anderer Fehler oder Erfolg vorliegt, werten wir ihn hier aus
+// Hilfsfunktion: Streamt die Sensor-Daten des aktuellen Scans in den ESP-String
+bool downloadTemplate() {
+  uint8_t p = finger.getModel(); 
   if (p == FINGERPRINT_OK) {
-    Serial.println("Image taken");
-  } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
-    Serial.println("Communication error");
-    return false;
-  } else if (p == FINGERPRINT_IMAGEFAIL) {
-    Serial.println("Imaging error");
-    return false;
-  } else {
-    Serial.println("Unknown error");
-    return false;
-  }
+    int byteCount = 0;
+    bool datenVorhanden = true;
 
-  // Erster Scan erfolgreich!
-
-  p = finger.image2Tz(1);
-  switch (p) {
-  case FINGERPRINT_OK:
-    Serial.println("Image converted");
-    break;
-  case FINGERPRINT_IMAGEMESS:
-    Serial.println("Image too messy");
-    return false;
-  case FINGERPRINT_PACKETRECIEVEERR:
-    Serial.println("Communication error");
-    return false;
-  case FINGERPRINT_FEATUREFAIL:
-  case FINGERPRINT_INVALIDIMAGE:
-    Serial.println("Could not find fingerprint features");
-    return false;
-  default:
-    Serial.println("Unknown error");
-    return false;
-  }
-
-  Serial.println("Remove finger");
-  delay(2000);
-  p = 0;
-  while (p != FINGERPRINT_NOFINGER) {
-    p = finger.getImage();
-  }
-  Serial.print("ID ");
-  Serial.println(id);
-  p = -1;
-  // In der Überprüfungs-/Sendephase soll die LED orange leuchten
-  rgbLedWrite(led, 100, 255, 0); // GRB: Orange
-  Serial.println("Place same finger again");
-  while (p != FINGERPRINT_OK) {
-    p = finger.getImage();
-    switch (p) {
-    case FINGERPRINT_OK:
-      Serial.println("Image taken");
-      break;
-    case FINGERPRINT_NOFINGER:
-      Serial.print(".");
-      break;
-    case FINGERPRINT_PACKETRECIEVEERR:
-      Serial.println("Communication error");
-      break;
-    case FINGERPRINT_IMAGEFAIL:
-      Serial.println("Imaging error");
-      break;
-    default:
-      Serial.println("Unknown error");
-      break;
-    }
-    delay(50);
-  }
-
-  // Zweiter Scan erfolgreich!
-
-  p = finger.image2Tz(2);
-  switch (p) {
-  case FINGERPRINT_OK:
-    Serial.println("Image converted");
-    break;
-  case FINGERPRINT_IMAGEMESS:
-    Serial.println("Image too messy");
-    return false;
-  case FINGERPRINT_PACKETRECIEVEERR:
-    Serial.println("Communication error");
-    return false;
-  case FINGERPRINT_FEATUREFAIL:
-  case FINGERPRINT_INVALIDIMAGE:
-    Serial.println("Could not find fingerprint features");
-    return false;
-  default:
-    Serial.println("Unknown error");
-    return false;
-  }
-
-  // Beide Scans abgleichen und Modell erstellen
-  Serial.print("Creating model for #");
-  Serial.println(id);
-
-  p = finger.createModel();
-  if (p == FINGERPRINT_OK) {
-    Serial.println("Prints matched!");
-  } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
-    Serial.println("Communication error");
-    return false;
-  } else if (p == FINGERPRINT_ENROLLMISMATCH) {
-    Serial.println("Fingerprints did not match");
-    return false;
-  } else {
-    Serial.println("Unknown error");
-    return false;
-  }
-
-  // Modell im Flash des Sensors speichern
-  Serial.print("ID ");
-  Serial.println(id);
-  p = finger.storeModel(id);
-  if (p == FINGERPRINT_OK) {
-    Serial.println("Stored!");
-    
-    Serial.println("Lade das soeben erstellte Template aus dem Sensor-Zwischenspeicher...");
-    
-    p = finger.getModel(); 
-    if (p == FINGERPRINT_OK) {
-      Serial.println("Sensor sendet Datenpaket. Verarbeite Daten...");
-      
-      int byteCount = 0;
-      bool datenVorhanden = true;
-
-      while (datenVorhanden) {
-        uint32_t timeout = millis();
-        while (mySerial.available() == 0) {
-          if (millis() - timeout > 50) {
-            datenVorhanden = false;
-            break;
-          }
-          delay(1);
+    while (datenVorhanden) {
+      uint32_t timeout = millis();
+      while (mySerial.available() == 0) {
+        if (millis() - timeout > 50) {
+          datenVorhanden = false;
+          break;
         }
+        delay(1);
+      }
 
-        if (datenVorhanden) {
-          uint8_t c = mySerial.read();
-          if (c < 0x10) {
-            fingerprintHex += "0";
+      if (datenVorhanden) {
+        uint8_t c = mySerial.read();
+        if (c < 0x10) fingerprintHex += "0";
+        fingerprintHex += String(c, HEX);
+        byteCount++;
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
+// KORREKTUR: Sendet den Ankündigungsbefehl, bevor die DB-Bytes gestreamt werden
+bool uploadTemplateToSlot2(String hexString) {
+  if (hexString.length() < 20) return false;
+
+  // 1. Dem Sensor sagen, dass wir ein Template in Slot 2 (CharBuffer 2) hochladen moechten
+  // Befehl 0x09 (DownLoadModel) an Buffer 0x02
+  // Paket: Start(EF01) + Addr(FFFFFFFF) + Typ(01) + Len(0004) + Befehl(09) + Buffer(02) + Checksum(0010)
+  uint8_t downloadCmd[] = {0xEF, 0x01, 0xFF, 0xFF, 0xFF, 0xFF, 0x01, 0x00, 0x04, 0x09, 0x02, 0x00, 0x10};
+  
+  // Befehl senden
+  mySerial.write(downloadCmd, sizeof(downloadCmd));
+  
+  // Kurz auf die Bestaetigung des Sensors warten (Acknowledge)
+  uint32_t timeout = millis();
+  while (mySerial.available() < 12) {
+    if (millis() - timeout > 100) return false;
+    delay(1);
+  }
+  
+  // Antwort lesen und pruefen, ob der Sensor bereit ist (Byte 9 == 0x00)
+  uint8_t reply[12];
+  for (int i = 0; i < 12; i++) {
+    reply[i] = mySerial.read();
+  }
+  if (reply[9] != 0x00) return false; // Sensor meldet Fehler oder ist nicht bereit
+
+  // 2. Jetzt, wo der Sensor im Empfangsmodus ist, wandeln wir den DB-Hex-String in Bytes um
+  int len = hexString.length() / 2;
+  uint8_t bytes[len];
+
+  for (int i = 0; i < len; i++) {
+    String byteString = hexString.substring(i * 2, (i * 2) + 2);
+    bytes[i] = (uint8_t) strtol(byteString.c_str(), NULL, 16);
+  }
+
+  // 3. Das komplette Paket aus der Datenbank direkt hinterherstreamen
+  mySerial.write(bytes, len);
+  delay(40); // Dem Sensor etwas Zeit geben, das große Datenpaket im RAM zu verarbeiten
+  
+  return true;
+}
+
+// Liest den Finger ein (Egal ob für Registrierung oder Login) und legt Merkmale in Slot 1 ab
+bool getFingerprintScan() {
+  uint8_t p = finger.getImage();
+  if (p != FINGERPRINT_OK) return false;
+
+  p = finger.image2Tz(1); // Merkmale in Slot 1 sichern
+  if (p != FINGERPRINT_OK) return false;
+
+  return downloadTemplate();
+}
+
+// Kern-Funktion: Holt alle Vorlagen von unload.php und vergleicht sie hardwareseitig
+int checkFingerAgainstDatabase() {
+  if (WiFi.status() != WL_CONNECTED) return -1;
+
+  HTTPClient http;
+  http.begin(unloadURL); 
+  int httpResponseCode = http.GET();
+
+  if (httpResponseCode > 0) {
+    String response = http.getString();
+    JSONVar myObject = JSON.parse(response);
+
+    if (JSON.typeof(myObject) != "undefined" && myObject.hasOwnProperty("users")) {
+      JSONVar usersList = myObject["users"];
+
+      for (int i = 0; i < usersList.length(); i++) {
+        int dbId = (int)usersList[i]["id"];
+        String dbHex = (String)usersList[i]["fingerprintHex"];
+        Serial.print("testing entry ");
+        Serial.println(i);
+
+        if (uploadTemplateToSlot2(dbHex)) {
+          uint16_t confidence = matchTemplateCustom();
+          
+          // Debug-Ausgabe für dich im Unterricht, um den Score live zu sehen:
+          Serial.printf(" -> Match Score mit DB-ID %d: %d\n", dbId, confidence);
+          
+          if (confidence >= 100) { 
+            http.end();
+            return dbId; 
           }
-          fingerprintHex += String(c, HEX);
-          byteCount++;
+        } else {
+          Serial.println(" -> Fehler beim Upload des Templates in den Sensor.");
         }
       }
-      
-      Serial.print("Uebertragene Bytes gesamt: ");
-      Serial.println(byteCount);
-      
-    } else {
-      Serial.print("Fehler beim Holen des Templates: ");
-      Serial.println(p);
-      return false;
     }
-
-  } else if (p == FINGERPRINT_PACKETRECIEVEERR) {
-    Serial.println("Communication error");
-    return false;
-  } else if (p == FINGERPRINT_BADLOCATION) {
-    Serial.println("Could not store in that location");
-    return false;
-  } else if (p == FINGERPRINT_FLASHERR) {
-    Serial.println("Error writing to flash");
-    return false;
-  } else {
-    Serial.println("Unknown error");
-    return false;
   }
-
-  return true;
+  http.end();
+  return -1; 
 }
