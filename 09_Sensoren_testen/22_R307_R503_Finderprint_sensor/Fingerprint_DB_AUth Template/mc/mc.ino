@@ -32,7 +32,7 @@ void setup() {
   delay(1000);
   
   pinMode(led, OUTPUT);
-  rgbLedWrite(led, 0, 255, 0);        // GRB: Rot beim Start
+  rgbLedWrite(led, 0, 50, 0);        // GRB: Rot beim Start
   pinMode(buttonPin, INPUT_PULLDOWN); 
   
   Serial.println("Starte Verbindung...");
@@ -114,6 +114,7 @@ void loop() {
 
       if (matchedUserId != -1) {
         Serial.printf("[»»»] MATCH GEFUNDEN! Ergreife Login fuer User-ID: %d\n", matchedUserId);
+        rgbLedWrite(led, 255, 0, 0); // GRB: LED leuchtet GRÜN
         JSONVar loginObject;                               // Sende die ermittelte User-ID an den Server, damit dieser die History befüllt
         loginObject["user_id"] = matchedUserId;
         String jsonString = JSON.stringify(loginObject);
@@ -129,8 +130,11 @@ void loop() {
           }
           http.end();
         }
+        delay(1000); // 1 Sekunde lang das grüne Licht halten
       } else {
         Serial.println("[»»»] VERIFIZIERUNG FEHLGESCHLAGEN: Unbekannter Finger!");
+        rgbLedWrite(led, 0, 255, 0); // GRB: LED leuchtet ROT
+        delay(1000); // 1 Sekunde lang das rote Licht halten
       }
       
       fingerprintHex = ""; 

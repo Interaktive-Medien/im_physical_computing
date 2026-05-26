@@ -10,9 +10,9 @@ bool isWlanConnected = 0;
 // Setzt die LED basierend auf dem aktuellen WLAN-Status (Grün bei OK, Rot bei Fehler)
 void resetStatusLed() {
   if (WiFi.status() == WL_CONNECTED) {
-    rgbLedWrite(led, 255, 0, 0);               // GRB: Grün
+    rgbLedWrite(led, 50, 0, 0);               // GRB: Grün
   } else {
-    rgbLedWrite(led, 0, 255, 0);               // GRB: Rot
+    rgbLedWrite(led, 0, 50, 0);               // GRB: Rot
   }
 }
 
