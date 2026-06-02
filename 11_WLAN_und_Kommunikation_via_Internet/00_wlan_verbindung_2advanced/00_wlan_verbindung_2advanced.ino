@@ -12,6 +12,7 @@
 #include "connectWiFi_zuhause.h"         // bei Verbindung mit Heimnetzwerk aktivieren
 
 int led = LED_BUILTIN;
+bool isWlanConnected = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -23,12 +24,19 @@ void setup() {
 }
 
 void loop() {
+  if (!is_wlan_connected()) return; 
+  // go on here
+}
+
+bool is_wlan_connected(){
   if (WiFi.status() != WL_CONNECTED) {
-    Serial.println("WiFi-Verbindung verloren, reconnect...");
-    connectWiFi();
-    digitalWrite(led, 0);
+    if (isWlanConnected == 1) {          // War vorher verbunden?
+      Serial.println("WiFi-Verbindung verloren, reconnect...");
+      rgbLedWrite(led, 0, 255, 0);       // GRB: Rot
+      isWlanConnected = 0;
+    }
+    connectWiFi(); 
+    return false; // Loop wird abgebrochen
   }
-  else{
-    digitalWrite(led, 1);
-  }
+  return true; // WiFi ist da, Loop darf weiterlaufen
 }
