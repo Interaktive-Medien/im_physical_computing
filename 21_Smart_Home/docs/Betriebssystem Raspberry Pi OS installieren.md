@@ -85,6 +85,8 @@ Sobald man zum Installationsagenten zurück geleitet wird, wird der Verbindungst
 
 ### 13. Verbinde mit GUI
 
+[https://connect.raspberrypi.com/sign-in](https://connect.raspberrypi.com/sign-in)
+
 ![Verbinde mit GUI 1](img/installation_15.jpg)
 
 ![Verbinde mit GUI 2](img/installation_16.jpg)
@@ -137,3 +139,12 @@ ssh pi@192.168.0.67
 - Passwort eingeben
 
 Dann kannst du von remote mit dem Rpi arbeiten.
+
+### 15. Rpi aktualisieren
+
+Gib in die Konsole ein und führe aus per Enter-Taste:
+
+```
+sudo apt-get update -y
+sudo apt-get upgrade -y
+```
