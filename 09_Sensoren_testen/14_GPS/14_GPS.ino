@@ -19,6 +19,11 @@ TinyGPSPlus gps;
 
 // HardwareSerial für GPS-Daten
 HardwareSerial SerialGPS(1); // UART1 für das GPS-Modul
+float latitude = 0;
+float longitude = 0;
+float altitude = 0;
+String timeString = ""; 
+int satellites = 0;
 
 void setup() {
   Serial.begin(115200);        // Serielle Kommunikation mit PC
@@ -37,20 +42,31 @@ void loop() {
 
 // Funktion, um GPS-Daten auf der Konsole auszugeben
 void displayGPSData() {
-  if (gps.location.isUpdated()) {
-    Serial.printf("Breitengrad: %.6f", gps.location.lat() );
-    Serial.printf("Längengrad: %.6f", gps.location.lng() );
+  if (gps.location.isUpdated() && gps.location.isValid()) {
+    latitude = gps.location.lat();
+    longitude = gps.location.lng();
   }
-  if (gps.date.isUpdated()) {
-    Serial.printf("Datum: %02d/%02d/%04d", gps.date.day(), gps.date.month(), gps.date.year() );
-  }
-  if (gps.time.isUpdated()) {
-    Serial.printf("Uhrzeit (UTC): %02d:%02d:%02d", gps.time.hour(), gps.time.minute(), gps.time.second() );
-  }
+
   if (gps.altitude.isUpdated()) {
-    Serial.printf("Höhe: %.2f m", gps.altitude.meters() );
+    altitude = gps.altitude.meters();
   }
   if (gps.satellites.isUpdated()) {
-    Serial.printf("Satelliten: %d", gps.satellites.value() );
+    satellites = gps.satellites.value();
   }
+
+  if (gps.date.isUpdated() && gps.time.isUpdated()) {
+    // KORREKTUR: MariaDB DATETIME Format (YYYY-MM-DD HH:MM:SS)
+    char timeBuf[32];
+    snprintf(timeBuf, sizeof(timeBuf), "%04d-%02d-%02d %02d:%02d:%02d", 
+             gps.date.year(), gps.date.month(), gps.date.day(), 
+             gps.time.hour(), gps.time.minute(), gps.time.second());
+    timeString = String(timeBuf); 
+  }
+
+  Serial.printf("Breitengrad: %.6f\n", latitude );
+  Serial.printf("Längengrad: %.6f\n", longitude );
+  Serial.printf("Höhe: %.2f m\n", altitude );
+  Serial.printf("Satelliten: %d\n", satellites );
+  Serial.printf("Zeit/Datum: %s\n", timeString.c_str() ); 
+  Serial.println("----------------------------");
 }
