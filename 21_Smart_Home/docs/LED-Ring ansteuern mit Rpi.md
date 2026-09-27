@@ -6,7 +6,7 @@
 
 Für einen langlebigen Gebrauch wird ein Vorwiderstand und eine externe Stromversorgung am LED-Ring dringend empfohlen. Der Einfachheit halber wird hier darauf verzichtet.
 
-![Steckplan Rpi5](img/rpi4_ledring.png)
+![Steckplan Rpi5](img/rpi5_ledring.png)
 
 ### 1.2. Software-Konfiguration
 
@@ -43,7 +43,8 @@ cd ~/led-ring
 sudo raspi-config
 ```
 
-- Wähle `3 Interfacing Options`. -> `P4 SPI` -> `Yes`.
+- möglicherweise wird hier das Passwort abgefragt. Standardmäsiglautet dies: `raspberry`
+- Wähle `3 Interfacing Options`. -> `P4 SPI` -> `Yes` -> `Finish`.
 - Starte den Raspberry Pi neu:
 
 ```
@@ -52,7 +53,7 @@ sudo reboot
 
 #### 1.2.3. Python-Library installieren
 
-Bei Debian “Trixie” lassen sich keine Python Libraries mehr direkt installieren. Eine virtuelle Umgebung ist erforderlich.
+Ab Debian “Trixie” lassen sich keine Python Libraries mehr direkt installieren. Eine virtuelle Umgebung ist erforderlich.
 
 - Stelle sicher, dass du im Projektverzeichnis bist::
 
@@ -101,8 +102,8 @@ sudo nano led-ring.py
 from rpi5_ws2812.ws2812 import Color, WS2812SpiDriver
 import time
 
-# Initialize the WS2812 strip with 100 leds and SPI channel 0, CE0
-strip = WS2812SpiDriver(spi_bus=0, spi_device=0, led_count=100).get_strip()
+# Initialize the WS2812 led ring with 12 leds and SPI channel 0, CE0
+strip = WS2812SpiDriver(spi_bus=0, spi_device=0, led_count=12).get_strip()
 while True:
   strip.set_all_pixels(Color(255, 0, 0))
   strip.show()
