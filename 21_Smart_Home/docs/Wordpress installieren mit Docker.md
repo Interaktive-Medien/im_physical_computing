@@ -9,11 +9,17 @@ Diese Anleitung führt Schritt für Schritt durch die manuelle Installation von 
 Das offizielle Skript über eine temporäre Datei laden und ausführen. Dieser Schritt kann einige Minuten in Anspruch nehmen. Kopiere den gesamten Block und führe ihn im Terminal aus:
 
 ```bash
+# 1. Skript ohne Klammern herunterladen
 TMP_DOCKER_SCRIPT=$(mktemp)
-curl -fsSL [https://get.docker.com](https://get.docker.com) -o "$TMP_DOCKER_SCRIPT"
+curl -fsSL https://get.docker.com -o "$TMP_DOCKER_SCRIPT"
+
+# 2. Skript ausführen (installiert Docker und das Compose-Plugin automatisch)
 sudo sh "$TMP_DOCKER_SCRIPT"
+
+# 3. Temporäre Datei löschen
 sudo rm -f "$TMP_DOCKER_SCRIPT"
-sudo apt-get install -y docker-compose-plugin
+
+# 4. Docker-Dienst aktivieren und starten
 sudo systemctl enable docker
 sudo systemctl start docker
 ```
