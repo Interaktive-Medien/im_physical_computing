@@ -1,10 +1,13 @@
 # LED Ring ansteuern
 
+Der Raspberry Pi hat zahlreiche GPIO pins (general purpose input output), die verwendet werden können, um Elektronik zu verbinden.
+![GPIO-Pins](img/Rpi_GPIO.png))
+
 ## 1. Am Raspberry Pi 5
 
 ### 1.1. Schaltung stecken
 
-Für einen langlebigen Gebrauch wird ein Vorwiderstand und eine externe Stromversorgung am LED-Ring dringend empfohlen. Der Einfachheit halber wird hier darauf verzichtet.
+Für einen langlebigen Gebrauch wird qm Dateneingang des LED-Rings ein Vorwiderstand und eine externe Stromversorgung am LED-Ring dringend empfohlen. Der Einfachheit halber wird hier darauf verzichtet.
 
 ![Steckplan Rpi5](img/rpi5_ledring.png)
 
