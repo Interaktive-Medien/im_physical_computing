@@ -474,7 +474,7 @@ Trigger, console.log, Funktionen, Bedingungen,
 
 ## 02: HTTP-Basics
 
-Daten-APIs abfragen
+HTTP GET Request und POST Request
 
 <details>
 <summary>Node-RED Flow anzeigen (JSON)</summary>
@@ -494,10 +494,7 @@ Daten-APIs abfragen
     "type": "group",
     "z": "7d5555f0f0b59880",
     "name": "GET Request -> json bzw html Antwort",
-    "style": {
-      "fill": "#6f2fa0",
-      "label": true
-    },
+    "style": { "fill": "#6f2fa0", "label": true },
     "nodes": [
       "http_in",
       "func_hello",
@@ -520,10 +517,7 @@ Daten-APIs abfragen
     "type": "group",
     "z": "7d5555f0f0b59880",
     "name": "GET und POST Request",
-    "style": {
-      "fill": "#6f2fa0",
-      "label": true
-    },
+    "style": { "fill": "#6f2fa0", "label": true },
     "nodes": [
       "debug_msg",
       "http_response",
@@ -546,13 +540,13 @@ Daten-APIs abfragen
     "type": "http in",
     "z": "7d5555f0f0b59880",
     "g": "a65b274c935ee24d",
-    "name": "GET /hello",
+    "name": "GET /hellooo",
     "url": "/hello",
     "method": "get",
     "upload": false,
     "skipBodyParsing": false,
     "swaggerDoc": "",
-    "x": 540,
+    "x": 550,
     "y": 220,
     "wires": [["func_hello"]]
   },
@@ -590,9 +584,9 @@ Daten-APIs abfragen
     "type": "comment",
     "z": "7d5555f0f0b59880",
     "g": "a65b274c935ee24d",
-    "name": "http://192.168.0.163:1880/hello?name=Jan",
+    "name": "http://[your_hostname]:1880/hello?name=Jan",
     "info": "",
-    "x": 640,
+    "x": 650,
     "y": 180,
     "wires": []
   },
@@ -687,7 +681,7 @@ Daten-APIs abfragen
     "type": "comment",
     "z": "7d5555f0f0b59880",
     "g": "faea61bfa321385c",
-    "name": "http://192.168.0.163:1880/form",
+    "name": "http://[your_hostname]:1880/form",
     "info": "",
     "x": 610,
     "y": 560,
@@ -773,7 +767,7 @@ Daten-APIs abfragen
     "type": "comment",
     "z": "7d5555f0f0b59880",
     "g": "a65b274c935ee24d",
-    "name": "http://192.168.0.163:1880/html",
+    "name": "http://[your_hostname]:1880/html",
     "info": "",
     "x": 610,
     "y": 320,
@@ -795,9 +789,9 @@ Daten-APIs abfragen
     "type": "comment",
     "z": "7d5555f0f0b59880",
     "g": "faea61bfa321385c",
-    "name": "http://192.168.0.163:1880/submitted",
+    "name": "http://[your_hostname]:1880/submitted",
     "info": "",
-    "x": 620,
+    "x": 630,
     "y": 740,
     "wires": []
   }
