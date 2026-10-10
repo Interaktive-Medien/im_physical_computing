@@ -10,8 +10,6 @@ In den folgenden ausklappbaren Bereichen befindet sich die Node-Red-Flows im JSO
 
 In das grosse Textfeld in der Mitte wird der jeweilige kopierte JSON-formatierte Text aus den Beispielen unten eingefügt und importiert.
 
-![node-red_flow_importieren](img/node-red_flow_importieren2.jpg)
-
 ## 01: Basics
 
 Trigger, console.log, Funktionen, Bedingungen,
@@ -476,6 +474,8 @@ Trigger, console.log, Funktionen, Bedingungen,
 
 HTTP GET Request und POST Request
 
+![nodered02_http](img/nodered02_http.jpg)
+
 <details>
 <summary>Node-RED Flow anzeigen (JSON)</summary>
 
@@ -800,9 +800,31 @@ HTTP GET Request und POST Request
 
 </details>
 
+#### HTTP-Beispiel mit Node-Red und TouchDesigner
+
+[TD HTTP](node-red_touchdesigner_http/node-red_touchdesigner_http)
+![TD HTTP](node-red_touchdesigner_http/node-red_touchdesigner_http.gif)
+
 ## 03: Interaktion mit Maria DB
 
 Datenbankoperationen(SQL) von Node-Red aus (ohne PHP!)
+To do:
+
+![Node-Red DB](img/nodered03_db.jpg)
+
+- Datenbank muss angelegt werden. Am einfchsten per UI (Adminer): `http://[dein_hostname]:8080`(bei mir `http://jan:8080`)
+  **Server**: `mariadb`
+  **Benutzer**: `root`
+  **Passwort**: `strenggeheim`
+  Bei erfolgreicher Anmeldung: Erstelle die Datenbank namens `nodered`
+
+- In Node-Red: `mysql`-Node (hier "MariaDB local"): Doppelklick auf die Node, dan Stift-Button klicken,dann eingeben:  
+  **Host**: `[dein_hostname]`(bei mir `jan`),
+  **User**: `root`,
+  **Passwort**: `strenggeheim`,
+  **Database**: `nodered`
+
+![nodered03_db_settings](img/nodered03_db_settings.jpg)
 
 <details>
 <summary>Node-RED Flow anzeigen (JSON)</summary>
@@ -837,15 +859,7 @@ Datenbankoperationen(SQL) von Node-Red aus (ohne PHP!)
     "type": "inject",
     "z": "test-db-flow",
     "name": "",
-    "props": [
-      {
-        "p": "payload"
-      },
-      {
-        "p": "topic",
-        "vt": "str"
-      }
-    ],
+    "props": [{ "p": "payload" }, { "p": "topic", "vt": "str" }],
     "repeat": "",
     "crontab": "",
     "once": false,
@@ -878,15 +892,7 @@ Datenbankoperationen(SQL) von Node-Red aus (ohne PHP!)
     "type": "inject",
     "z": "test-db-flow",
     "name": "insert",
-    "props": [
-      {
-        "p": "payload"
-      },
-      {
-        "p": "topic",
-        "vt": "str"
-      }
-    ],
+    "props": [{ "p": "payload" }, { "p": "topic", "vt": "str" }],
     "repeat": "",
     "crontab": "",
     "once": false,
@@ -919,15 +925,7 @@ Datenbankoperationen(SQL) von Node-Red aus (ohne PHP!)
     "type": "inject",
     "z": "test-db-flow",
     "name": "delete",
-    "props": [
-      {
-        "p": "payload"
-      },
-      {
-        "p": "topic",
-        "vt": "str"
-      }
-    ],
+    "props": [{ "p": "payload" }, { "p": "topic", "vt": "str" }],
     "repeat": "",
     "crontab": "",
     "once": false,
@@ -962,27 +960,91 @@ Datenbankoperationen(SQL) von Node-Red aus (ohne PHP!)
     "z": "test-db-flow",
     "mydb": "40c709131d86de40",
     "name": "",
-    "x": 820,
+    "x": 860,
     "y": 420,
     "wires": [["0562217e52ad1367"]]
   },
   {
+    "id": "bf5d02f742cc1e57",
+    "type": "inject",
+    "z": "test-db-flow",
+    "name": "",
+    "props": [{ "p": "payload" }, { "p": "topic", "vt": "str" }],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "iso",
+    "payloadType": "date",
+    "x": 400,
+    "y": 260,
+    "wires": [["49a9165eda699ced"]]
+  },
+  {
+    "id": "49a9165eda699ced",
+    "type": "function",
+    "z": "test-db-flow",
+    "name": "create table",
+    "func": "msg.topic = \"CREATE TABLE `weather_data` (`id` INT AUTO_INCREMENT PRIMARY KEY,`location` VARCHAR(255) NOT NULL,`temperature_celsius` FLOAT,`rain` FLOAT,`showers` FLOAT,`snowfall` FLOAT,`cloud_cover` INT,`weather_condition` VARCHAR(255),`created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP);\";\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 570,
+    "y": 260,
+    "wires": [["356a20e1ca0f6092"]]
+  },
+  {
+    "id": "3928d75451921b18",
+    "type": "inject",
+    "z": "test-db-flow",
+    "name": "",
+    "props": [{ "p": "payload" }, { "p": "topic", "vt": "str" }],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "iso",
+    "payloadType": "date",
+    "x": 380,
+    "y": 580,
+    "wires": [["51938b18be6344b6"]]
+  },
+  {
+    "id": "51938b18be6344b6",
+    "type": "function",
+    "z": "test-db-flow",
+    "name": "drop table",
+    "func": "msg.topic = \"DROP TABLE IF EXISTS `weather_data`;\";\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 570,
+    "y": 580,
+    "wires": [["356a20e1ca0f6092"]]
+  },
+  {
     "id": "40c709131d86de40",
     "type": "MySQLdatabase",
-    "name": "MariaDB local tinkergarden",
-    "host": "192.168.0.163",
+    "name": "MariaDB local ",
+    "host": "q7",
     "port": "3306",
     "db": "nodered",
     "tz": "",
     "charset": "UTF8"
   },
   {
-    "id": "94b927499fbb7f50",
+    "id": "85dfa84a1076e473",
     "type": "global-config",
     "env": [],
-    "modules": {
-      "node-red-node-mysql": "2.0.0"
-    }
+    "modules": { "node-red-node-mysql": "2.0.0" }
   }
 ]
 ```
@@ -993,32 +1055,34 @@ Datenbankoperationen(SQL) von Node-Red aus (ohne PHP!)
 
 IM3 ganz anschaulich - so einfach kann's gehen.
 
+![nodered04_etl](img/nodered04_etl.jpg)
+
 <details>
 <summary>Node-RED Flow anzeigen (JSON)</summary>
 
 ```json
 [
   {
-    "id": "a1f1f9f0.1a2b08",
+    "id": "94b55faa52c8768c",
     "type": "tab",
     "label": "04_ETL",
     "disabled": false,
     "info": "Extrakt -> Transform -> Load in MariaDB und HTTP /unload zum Abruf"
   },
   {
-    "id": "979c943703111661",
+    "id": "b25b83ce268ddac9",
     "type": "group",
-    "z": "a1f1f9f0.1a2b08",
+    "z": "94b55faa52c8768c",
     "name": "Extract - Transform - Load",
     "style": { "fill": "#6f2fa0", "label": true },
     "nodes": [
-      "http-request-open-meteo",
-      "fn-parse-transform",
-      "split-items",
-      "fn-build-sql",
-      "debug-insert-result",
-      "327aadb33ffc611d",
-      "ccd542195ea22c8c"
+      "e42fe5e2cc02847a",
+      "5a54c097c7d068d3",
+      "024537131b86baf0",
+      "ea561fda4842de5d",
+      "cd86fd2dcab47b12",
+      "4c72943c2792f177",
+      "782be00d9de0b573"
     ],
     "x": 374,
     "y": 279,
@@ -1026,20 +1090,20 @@ IM3 ganz anschaulich - so einfach kann's gehen.
     "h": 82
   },
   {
-    "id": "935332a3f8dfe995",
+    "id": "9ba065b35c0d78cc",
     "type": "group",
-    "z": "a1f1f9f0.1a2b08",
+    "z": "94b55faa52c8768c",
     "name": "Unload (API) + Frontend",
     "style": { "fill": "#6f2fa0", "label": true },
     "nodes": [
-      "http-in-unload",
-      "fn-build-select",
-      "fn-format-response",
-      "7e7a03476a0b117c",
-      "9d7bc9e5cffea53e",
-      "addc26107ffb7f25",
-      "da5ac56497d628f5",
-      "cb877bc7975159c6"
+      "88f926efd55d659b",
+      "cb09c7a597b21034",
+      "67bdd44af2ea57ad",
+      "22b94a0d6785024d",
+      "bd7b52176d198bc3",
+      "eccd478fbe085994",
+      "7b9b03ff3c47adba",
+      "40afcc05fd2305a6"
     ],
     "x": 374,
     "y": 479,
@@ -1047,10 +1111,10 @@ IM3 ganz anschaulich - so einfach kann's gehen.
     "h": 202
   },
   {
-    "id": "http-request-open-meteo",
+    "id": "e42fe5e2cc02847a",
     "type": "http request",
-    "z": "a1f1f9f0.1a2b08",
-    "g": "979c943703111661",
+    "z": "94b55faa52c8768c",
+    "g": "b25b83ce268ddac9",
     "name": "Extract from API",
     "method": "GET",
     "ret": "txt",
@@ -1065,15 +1129,15 @@ IM3 ganz anschaulich - so einfach kann's gehen.
     "headers": [],
     "x": 700,
     "y": 320,
-    "wires": [["fn-parse-transform"]]
+    "wires": [["5a54c097c7d068d3"]]
   },
   {
-    "id": "fn-parse-transform",
+    "id": "5a54c097c7d068d3",
     "type": "function",
-    "z": "a1f1f9f0.1a2b08",
-    "g": "979c943703111661",
+    "z": "94b55faa52c8768c",
+    "g": "b25b83ce268ddac9",
     "name": "Transform",
-    "func": "// Erwartet msg.payload als JSON-String oder bereits als Objekt-Array\nlet data = msg.payload;\nif (typeof data === 'string') {\n    try {\n        data = JSON.parse(data);\n    } catch (e) {\n        node.error('JSON parse error from Open-Meteo response', msg);\n        return null;\n    }\n}\n\n// Hilfsfunktionen\nfunction fToC(f) {\n    return Math.round(((f - 32) * (5/9)) * 100) / 100;\n}\nfunction determineLocation(lat, lon) {\n    lat = Math.round(lat * 100) / 100;\n    lon = Math.round(lon * 100) / 100;\n    if (lat === 46.94 && lon === 7.44) return 'Bern';\n    if (lat === 46.84 && lon === 9.52) return 'Chur';\n    if (lat === 47.36 && (lon === 8.56 || Math.round(lon*100)/100 === 8.56)) return 'Zürich';\n    return 'Unbekannt';\n}\nfunction determineWeatherCondition(cloud_cover, rain, showers, snowfall) {\n    if (snowfall > 0.0) return 'schneit';\n    if (rain > 0.0 || showers > 0.0) return 'regnerisch';\n    if (cloud_cover >= 85) return 'bewölkt';\n    if (cloud_cover >= 30) return 'teilweise bewölkt';\n    return 'sonnig';\n}\n\nlet transformed = [];\n\nif (!Array.isArray(data)) {\n    node.warn('Open-Meteo returned unexpected payload (not array)');\n} else {\n    for (let i=0;i<data.length;i++) {\n        let item = data[i];\n        let cur = item.current || {};\n        const temperature_celsius = (cur.temperature_2m !== undefined) ? fToC(cur.temperature_2m) : null;\n        const location = determineLocation(item.latitude, item.longitude);\n        const weather_condition = determineWeatherCondition(\n            parseInt(cur.cloud_cover || 0),\n            parseFloat(cur.rain || 0),\n            parseFloat(cur.showers || 0),\n            parseFloat(cur.snowfall || 0)\n        );\n        transformed.push({\n            location: location,\n            temperature_celsius: temperature_celsius,\n            rain: Math.round(parseFloat(cur.rain || 0)),\n            showers: Math.round(parseFloat(cur.showers || 0)),\n            snowfall: Math.round(parseFloat(cur.snowfall || 0)),\n            cloud_cover: parseInt(cur.cloud_cover || 0),\n            weather_condition: weather_condition,\n            source_time: cur.time || null\n        });\n    }\n}\n\nmsg.transformedData = transformed;\n// Weitergeben des Arrays zum Split (each item einzeln)\nmsg.payload = transformed;\nreturn msg;",
+    "func": "// Erwartet msg.payload als JSON-String oder bereits als Objekt-Array\nlet data = msg.payload;\nif (typeof data === 'string') {\n    try {\n        data = JSON.parse(data);\n    } catch (e) {\n        node.error('JSON parse error from Open-Meteo response', msg);\n        return null;\n    }\n}\n\n// Hilfsfunktionen\nfunction fToC(f) {\n    return Math.round(((f - 32) * (5/9)) * 100) / 100;\n}\nfunction determineLocation(lat, lon) {\n    lat = Math.round(lat * 100) / 100;\n    lon = Math.round(lon * 100) / 100;\n    if (lat === 46.95 && lon === 7.46) return 'Bern';\n    if (lat === 46.85 && lon === 9.52) return 'Chur';\n    if (lat === 47.37 && (lon === 8.56 || Math.round(lon*100)/100 === 8.56)) return 'Zürich';\n    return 'Unbekannt';\n}\nfunction determineWeatherCondition(cloud_cover, rain, showers, snowfall) {\n    if (snowfall > 0.0) return 'schneit';\n    if (rain > 0.0 || showers > 0.0) return 'regnerisch';\n    if (cloud_cover >= 85) return 'bewölkt';\n    if (cloud_cover >= 30) return 'teilweise bewölkt';\n    return 'sonnig';\n}\n\nlet transformed = [];\n\nif (!Array.isArray(data)) {\n    node.warn('Open-Meteo returned unexpected payload (not array)');\n} else {\n    for (let i=0;i<data.length;i++) {\n        let item = data[i];\n        let cur = item.current || {};\n        const temperature_celsius = (cur.temperature_2m !== undefined) ? fToC(cur.temperature_2m) : null;\n        const location = determineLocation(item.latitude, item.longitude);\n        const weather_condition = determineWeatherCondition(\n            parseInt(cur.cloud_cover || 0),\n            parseFloat(cur.rain || 0),\n            parseFloat(cur.showers || 0),\n            parseFloat(cur.snowfall || 0)\n        );\n        transformed.push({\n            location: location,\n            temperature_celsius: temperature_celsius,\n            rain: Math.round(parseFloat(cur.rain || 0)),\n            showers: Math.round(parseFloat(cur.showers || 0)),\n            snowfall: Math.round(parseFloat(cur.snowfall || 0)),\n            cloud_cover: parseInt(cur.cloud_cover || 0),\n            weather_condition: weather_condition,\n            source_time: cur.time || null\n        });\n    }\n}\n\nmsg.transformedData = transformed;\n// Weitergeben des Arrays zum Split (each item einzeln)\nmsg.payload = transformed;\nreturn msg;",
     "outputs": 1,
     "timeout": "",
     "noerr": 0,
@@ -1082,13 +1146,13 @@ IM3 ganz anschaulich - so einfach kann's gehen.
     "libs": [],
     "x": 880,
     "y": 320,
-    "wires": [["split-items"]]
+    "wires": [["024537131b86baf0"]]
   },
   {
-    "id": "split-items",
+    "id": "024537131b86baf0",
     "type": "split",
-    "z": "a1f1f9f0.1a2b08",
-    "g": "979c943703111661",
+    "z": "94b55faa52c8768c",
+    "g": "b25b83ce268ddac9",
     "name": "split transformedData → each item",
     "splt": "\\n",
     "spltType": "str",
@@ -1099,13 +1163,13 @@ IM3 ganz anschaulich - so einfach kann's gehen.
     "property": "payload",
     "x": 1100,
     "y": 320,
-    "wires": [["fn-build-sql"]]
+    "wires": [["ea561fda4842de5d"]]
   },
   {
-    "id": "fn-build-sql",
+    "id": "ea561fda4842de5d",
     "type": "function",
-    "z": "a1f1f9f0.1a2b08",
-    "g": "979c943703111661",
+    "z": "94b55faa52c8768c",
+    "g": "b25b83ce268ddac9",
     "name": "Load",
     "func": "// msg.payload is one transformed item\nlet it = msg.payload;\nif (!it) return null;\n\n// Prepare values, ensure numeric fields\nlet loc = it.location || 'Unbekannt';\nlet temp = (it.temperature_celsius === null || it.temperature_celsius === undefined) ? 'NULL' : Number(it.temperature_celsius);\nlet rain = (it.rain === undefined) ? 0 : Number(it.rain);\nlet showers = (it.showers === undefined) ? 0 : Number(it.showers);\nlet snowfall = (it.snowfall === undefined) ? 0 : Number(it.snowfall);\nlet cloud = (it.cloud_cover === undefined) ? 0 : Number(it.cloud_cover);\nlet cond = it.weather_condition || '';\n\n// Escape single quotes in strings\nfunction esc(s) { return String(s).replace(/'/g, \"''\"); }\n\n// Build SQL (note: values come from API -> considered safe here; replace with prepared statements if desired)\nlet sql = `INSERT INTO weather_data (location, temperature_celsius, rain, showers, snowfall, cloud_cover, weather_condition) VALUES ('${esc(loc)}', ${temp}, ${rain}, ${showers}, ${snowfall}, ${cloud}, '${esc(cond)}')`;\n\nmsg.topic = sql;\nreturn msg;\n\n\n\n/*\nSQL Command zur Erstellung der Tabelle:\n\nCREATE DATABASE `etl`;\n\n-- Zuerst die Datenbank auswählen, zu der die Tabelle gehören soll\nUSE etl;\n\n-- Nun die Tabelle in der ausgewählten Datenbank erstellen\nCREATE TABLE `weather_data` (\n  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,\n  `location` varchar(64) NOT NULL,\n  `temperature_celsius` float NOT NULL,\n  `rain` int(5) NOT NULL,\n  `showers` int(5) NOT NULL,\n  `snowfall` int(5) NOT NULL,\n  `cloud_cover` int(5) NOT NULL,\n  `weather_condition` varchar(64) NOT NULL,\n  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),\n  PRIMARY KEY (`id`)\n) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_general_ci;\n\n*/",
     "outputs": 1,
@@ -1116,13 +1180,13 @@ IM3 ganz anschaulich - so einfach kann's gehen.
     "libs": [],
     "x": 1330,
     "y": 320,
-    "wires": [["ccd542195ea22c8c"]]
+    "wires": [["782be00d9de0b573"]]
   },
   {
-    "id": "debug-insert-result",
+    "id": "cd86fd2dcab47b12",
     "type": "debug",
-    "z": "a1f1f9f0.1a2b08",
-    "g": "979c943703111661",
+    "z": "94b55faa52c8768c",
+    "g": "b25b83ce268ddac9",
     "name": "Insert result",
     "active": true,
     "tosidebar": true,
@@ -1135,10 +1199,10 @@ IM3 ganz anschaulich - so einfach kann's gehen.
     "wires": []
   },
   {
-    "id": "http-in-unload",
+    "id": "88f926efd55d659b",
     "type": "http in",
-    "z": "a1f1f9f0.1a2b08",
-    "g": "935332a3f8dfe995",
+    "z": "94b55faa52c8768c",
+    "g": "9ba065b35c0d78cc",
     "name": "HTTP GET /unload",
     "url": "/unload",
     "method": "get",
@@ -1147,13 +1211,13 @@ IM3 ganz anschaulich - so einfach kann's gehen.
     "swaggerDoc": "",
     "x": 490,
     "y": 560,
-    "wires": [["fn-build-select"]]
+    "wires": [["cb09c7a597b21034"]]
   },
   {
-    "id": "fn-build-select",
+    "id": "cb09c7a597b21034",
     "type": "function",
-    "z": "a1f1f9f0.1a2b08",
-    "g": "935332a3f8dfe995",
+    "z": "94b55faa52c8768c",
+    "g": "9ba065b35c0d78cc",
     "name": "Unload",
     "func": "// Optional: support ?location=Bern – wenn vorhanden, filter anwenden\nlet location = (msg.req && msg.req.query && msg.req.query.location) ? msg.req.query.location : null;\nlet sql = '';\nif (location) {\n    // Escape single quotes\n    location = String(location).replace(/'/g, \"''\");\n    sql = `SELECT * FROM weather_data WHERE location='${location}' ORDER BY created_at DESC LIMIT 216`;\n} else {\n    sql = `SELECT * FROM weather_data ORDER BY created_at DESC LIMIT 216`;\n}\nmsg.topic = sql;\nreturn msg;",
     "outputs": 1,
@@ -1164,13 +1228,13 @@ IM3 ganz anschaulich - so einfach kann's gehen.
     "libs": [],
     "x": 740,
     "y": 560,
-    "wires": [["7e7a03476a0b117c"]]
+    "wires": [["22b94a0d6785024d"]]
   },
   {
-    "id": "fn-format-response",
+    "id": "67bdd44af2ea57ad",
     "type": "function",
-    "z": "a1f1f9f0.1a2b08",
-    "g": "935332a3f8dfe995",
+    "z": "94b55faa52c8768c",
+    "g": "9ba065b35c0d78cc",
     "name": "Format as JSON + set headers",
     "func": "// mysql node returns rows in msg.payload\nmsg.headers = msg.headers || {};\nmsg.headers['Content-Type'] = 'application/json; charset=utf-8';\n// Pass through payload (array of rows)\n// In case of empty result, return 404 with JSON error (like PHP did)\nif (!msg.payload || (Array.isArray(msg.payload) && msg.payload.length === 0)) {\n    msg.statusCode = 404;\n    msg.payload = { error: 'No records found' };\n} else {\n    msg.statusCode = 200;\n}\nreturn msg;",
     "outputs": 1,
@@ -1181,13 +1245,13 @@ IM3 ganz anschaulich - so einfach kann's gehen.
     "libs": [],
     "x": 1430,
     "y": 560,
-    "wires": [["cb877bc7975159c6"]]
+    "wires": [["40afcc05fd2305a6"]]
   },
   {
-    "id": "327aadb33ffc611d",
+    "id": "4c72943c2792f177",
     "type": "inject",
-    "z": "a1f1f9f0.1a2b08",
-    "g": "979c943703111661",
+    "z": "94b55faa52c8768c",
+    "g": "b25b83ce268ddac9",
     "name": "alle 15 Minuten",
     "props": [{ "p": "payload" }, { "p": "topic", "vt": "str" }],
     "repeat": "900",
@@ -1199,24 +1263,24 @@ IM3 ganz anschaulich - so einfach kann's gehen.
     "payloadType": "date",
     "x": 500,
     "y": 320,
-    "wires": [["http-request-open-meteo"]]
+    "wires": [["e42fe5e2cc02847a"]]
   },
   {
-    "id": "9d7bc9e5cffea53e",
+    "id": "bd7b52176d198bc3",
     "type": "comment",
-    "z": "a1f1f9f0.1a2b08",
-    "g": "935332a3f8dfe995",
-    "name": "http://192.168.0.163:1880/unload",
+    "z": "94b55faa52c8768c",
+    "g": "9ba065b35c0d78cc",
+    "name": "http://[dein_hostname]:1880/unload",
     "info": "",
-    "x": 530,
+    "x": 540,
     "y": 520,
     "wires": []
   },
   {
-    "id": "addc26107ffb7f25",
+    "id": "eccd478fbe085994",
     "type": "function",
-    "z": "a1f1f9f0.1a2b08",
-    "g": "935332a3f8dfe995",
+    "z": "94b55faa52c8768c",
+    "g": "9ba065b35c0d78cc",
     "name": "Build HTML with Chart.js",
     "func": "const rawData = msg.payload || [];\n\n// 1. Daten filtern und extrahieren (Logik von script.js übernommen)\nconst temperature_bern = rawData\n  .filter(item => item.location === \"Bern\")\n  .map(item => item.temperature_celsius);\nconst temperature_chur = rawData\n  .filter(item => item.location === \"Chur\")\n  .map(item => item.temperature_celsius);\nconst temperature_zuerich = rawData\n  .filter(item => item.location === \"Zürich\")\n  .map(item => item.temperature_celsius);\nconst time = rawData\n  .filter(item => item.location === \"Bern\")\n  .map(item => item.created_at);\n\n// 2. Erzeuge den JavaScript-Code mit den eingebetteten Daten\nconst scriptCode = `\ndocument.addEventListener(\"DOMContentLoaded\", () => {\n  const temperature_bern = ${JSON.stringify(temperature_bern)};\n  const temperature_chur = ${JSON.stringify(temperature_chur)};\n  const temperature_zuerich = ${JSON.stringify(temperature_zuerich)};\n  const time = ${JSON.stringify(time)};\n\n  let myChart = document.querySelector('#temperatureChart').getContext(\"2d\");\n  const fridgeChart = new Chart(myChart, {\n    type: \"line\", \n    data: {\n      labels: time,\n      datasets:[\n        {\n            data: temperature_bern,\n            label: \"Bern\",\n            borderColor: 'rgb(255, 99, 132)',\n            tension: 0.1\n        },          \n        {\n            data: temperature_chur,\n            label: \"Chur\",\n            borderColor: 'rgb(54, 162, 235)',\n            tension: 0.1\n        },          \n        {\n            data: temperature_zuerich,\n            label: \"Zürich\",\n            borderColor: 'rgb(75, 192, 192)',\n            tension: 0.1\n        }          \n      ]\n    }\n  });\n});\n`;\n\n// 3. Erzeuge das vollständige HTML-Dokument\nconst html = `\n<!DOCTYPE html>\n<html lang=\"de\">\n  <head>\n    <meta charset=\"UTF-8\" />\n    <title>Stadttemperaturen</title>\n    <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>\n  </head>\n  <body>\n    <h1>Temperaturen aller 3 Städte</h1>\n    <p>Daten geladen von Node-RED Flow.</p>\n    <canvas id=\"temperatureChart\"></canvas>\n    <script>${scriptCode}</script>\n  </body>\n</html>\n`;\n\n// 4. Setze Header und Payload für die HTTP-Antwort\nmsg.headers = msg.headers || {};\nmsg.headers['Content-Type'] = 'text/html; charset=utf-8';\nmsg.statusCode = (rawData.length > 0) ? 200 : 404;\nmsg.payload = html;\n\nreturn msg;",
     "outputs": 1,
@@ -1227,13 +1291,13 @@ IM3 ganz anschaulich - so einfach kann's gehen.
     "libs": [],
     "x": 1410,
     "y": 640,
-    "wires": [["da5ac56497d628f5"]]
+    "wires": [["7b9b03ff3c47adba"]]
   },
   {
-    "id": "da5ac56497d628f5",
+    "id": "7b9b03ff3c47adba",
     "type": "http response",
-    "z": "a1f1f9f0.1a2b08",
-    "g": "935332a3f8dfe995",
+    "z": "94b55faa52c8768c",
+    "g": "9ba065b35c0d78cc",
     "name": "HTTP Response (HTML)",
     "statusCode": "",
     "headers": {},
@@ -1242,10 +1306,10 @@ IM3 ganz anschaulich - so einfach kann's gehen.
     "wires": []
   },
   {
-    "id": "cb877bc7975159c6",
+    "id": "40afcc05fd2305a6",
     "type": "debug",
-    "z": "a1f1f9f0.1a2b08",
-    "g": "935332a3f8dfe995",
+    "z": "94b55faa52c8768c",
+    "g": "9ba065b35c0d78cc",
     "name": "debug 2",
     "active": true,
     "tosidebar": true,
@@ -1259,39 +1323,39 @@ IM3 ganz anschaulich - so einfach kann's gehen.
     "wires": []
   },
   {
-    "id": "ccd542195ea22c8c",
+    "id": "782be00d9de0b573",
     "type": "mysql",
-    "z": "a1f1f9f0.1a2b08",
-    "g": "979c943703111661",
+    "z": "94b55faa52c8768c",
+    "g": "b25b83ce268ddac9",
     "mydb": "40c709131d86de40",
     "name": "",
     "x": 1500,
     "y": 320,
-    "wires": [["debug-insert-result"]]
+    "wires": [["cd86fd2dcab47b12"]]
   },
   {
-    "id": "7e7a03476a0b117c",
+    "id": "22b94a0d6785024d",
     "type": "mysql",
-    "z": "a1f1f9f0.1a2b08",
-    "g": "935332a3f8dfe995",
+    "z": "94b55faa52c8768c",
+    "g": "9ba065b35c0d78cc",
     "mydb": "40c709131d86de40",
     "name": "",
     "x": 940,
     "y": 560,
-    "wires": [["fn-format-response", "addc26107ffb7f25"]]
+    "wires": [["67bdd44af2ea57ad", "eccd478fbe085994"]]
   },
   {
     "id": "40c709131d86de40",
     "type": "MySQLdatabase",
-    "name": "MariaDB local",
-    "host": "mariadb",
+    "name": "MariaDB local ",
+    "host": "q7",
     "port": "3306",
-    "db": "etl",
+    "db": "nodered",
     "tz": "",
     "charset": "UTF8"
   },
   {
-    "id": "3b0c80acf2d65990",
+    "id": "b50f637891809bd0",
     "type": "global-config",
     "env": [],
     "modules": { "node-red-node-mysql": "2.0.0" }
@@ -1303,7 +1367,16 @@ IM3 ganz anschaulich - so einfach kann's gehen.
 
 ## 05: MQTT Test
 
-Standard-Kommunikation im Internet der Dinge
+MQTT ist ein leichtgewichtiges Kommunikationsprotokoll für Standard-Kommunikation im Internet der Dinge.
+Wir können als Kommunikationsserver (="Broker") den von uns per docker-compose installierten MQTT-Broker `mosquitto`verwenden.
+Da der Service `mosquitto`heisst und über das docker-interne Netzwerk über diese Adresse erreichbar ist, braucht es in der internen Kommunikation zwischen Node-Red und Mosquitto keinen Hostnamen oder IP-Adresse.
+Stattdessen kann auch ein Online-Broker verwendet werden. Zum Beispiel:
+
+- broker.emqx.io
+
+Der Port `1883` ist bei den gängigen Brokern Standard.
+
+![nodered05_mqtt_01](img/nodered05_mqtt_01.jpg)
 
 <details>
 <summary>Node-RED Flow anzeigen (JSON)</summary>

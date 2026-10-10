@@ -118,7 +118,7 @@ INFLUXDB_UID=999
 OS_USERNAME=$USER
 
 echo "============================================"
-echo "🎯 START: IoT Stack Setup"
+echo "🎯 START: IoT Stack Setup (Neustart-sicher)"
 echo "Stack-Verzeichnis: $STACK_DIR"
 echo "Benutzer: $OS_USERNAME"
 echo "============================================"
@@ -150,26 +150,48 @@ sudo apt-get install -y ca-certificates curl gnupg lsb-release python3 python3-p
 # ==============================
 # Docker Installation
 # ==============================
-echo "🐳 Docker installieren..."
-TMP_DOCKER_SCRIPT=$(mktemp)
-curl -fsSL https://get.docker.com -o "$TMP_DOCKER_SCRIPT"
-sudo sh "$TMP_DOCKER_SCRIPT"
-sudo rm -f "$TMP_DOCKER_SCRIPT"
-sudo apt-get install -y docker-compose-plugin
-sudo systemctl enable docker
-sudo systemctl start docker
+if ! command -v docker >/dev/null 2>&1; then
+    echo "🐳 Docker installieren..."
+    TMP_DOCKER_SCRIPT=$(mktemp)
+    curl -fsSL https://get.docker.com -o "$TMP_DOCKER_SCRIPT"
+    sudo sh "$TMP_DOCKER_SCRIPT"
+    sudo rm -f "$TMP_DOCKER_SCRIPT"
+    sudo apt-get install -y docker-compose-plugin
+    sudo systemctl enable docker
+    sudo systemctl start docker
+else
+    echo "✅ Docker ist bereits installiert. Überspringe Installation."
+fi
+
+# ==============================
+# Volume Berechtigungen & Ordner
+# ==============================
+echo "🔑 Berechtigungen und Ordner überprüfen/erstellen..."
+sudo mkdir -p "$STACK_DIR/influxdb"
+sudo chown -R $INFLUXDB_UID:$INFLUXDB_UID "$STACK_DIR/influxdb"
+sudo mkdir -p "$STACK_DIR/grafana"
+sudo chown -R $GRAFANA_UID:$GRAFANA_UID "$STACK_DIR/grafana"
+sudo mkdir -p "$STACK_DIR/mariadb"
+sudo mkdir -p "$STACK_DIR/wordpress"
+sudo mkdir -p "$STACK_DIR/homeassistant"
 
 # ==============================
 # Mosquitto Konfiguration
 # ==============================
-echo "🔑 Mosquitto Passwort generieren..."
 MOSQ_DIR="$STACK_DIR/mosquitto"
 sudo mkdir -p "$MOSQ_DIR/data" "$MOSQ_DIR/log" "$MOSQ_DIR/config"
-sudo docker run --rm -i -v "$MOSQ_DIR/config:/mosquitto/config" eclipse-mosquitto mosquitto_passwd -c -b /mosquitto/config/mosquitto.passwd "$USER_NAME" "$USER_PASS"
-sudo chmod 600 "$MOSQ_DIR/config/mosquitto.passwd"
-sudo chown root:root "$MOSQ_DIR/config/mosquitto.passwd"
 
-sudo tee "$MOSQ_DIR/config/mosquitto.conf" >/dev/null <<EOF
+if [ ! -f "$MOSQ_DIR/config/mosquitto.passwd" ]; then
+    echo "🔑 Mosquitto Passwort generieren..."
+    sudo docker run --rm -i -v "$MOSQ_DIR/config:/mosquitto/config" eclipse-mosquitto mosquitto_passwd -c -b /mosquitto/config/mosquitto.passwd "$USER_NAME" "$USER_PASS"
+    sudo chmod 600 "$MOSQ_DIR/config/mosquitto.passwd"
+else
+    echo "✅ Mosquitto Passwort-Datei existiert bereits."
+fi
+
+if [ ! -f "$MOSQ_DIR/config/mosquitto.conf" ]; then
+    echo "📝 Erstelle Mosquitto Konfiguration..."
+    sudo tee "$MOSQ_DIR/config/mosquitto.conf" >/dev/null <<EOF
 allow_anonymous true
 password_file /mosquitto/config/mosquitto.passwd
 listener 1883 0.0.0.0
@@ -177,22 +199,17 @@ persistence true
 persistence_location /mosquitto/data/
 log_dest file /mosquitto/log/mosquitto.log
 EOF
+else
+    echo "✅ Mosquitto Konfiguration existiert bereits."
+fi
 
-# ==============================
-# Volume Berechtigungen
-# ==============================
-echo "🔑 Berechtigungen für InfluxDB und Grafana Volumes setzen..."
-sudo mkdir -p "$STACK_DIR/influxdb"
-sudo chown -R $INFLUXDB_UID:$INFLUXDB_UID "$STACK_DIR/influxdb"
-sudo mkdir -p "$STACK_DIR/grafana"
-sudo chown -R $GRAFANA_UID:$GRAFANA_UID "$STACK_DIR/grafana"
-sudo mkdir -p "$STACK_DIR/mariadb"
-sudo mkdir -p "$STACK_DIR/wordpress"
+# Setze korrekte Rechte für den Mosquitto Docker-Nutzer (UID 1883)
+sudo chown -R 1883:1883 "$MOSQ_DIR"
 
 # ==============================
 # Node-RED Konfiguration
 # ==============================
-echo "🧩 Node-RED Konfiguration..."
+echo "🧩 Node-RED Konfiguration überprüfen..."
 NODERED_DIR="$STACK_DIR/nodered"
 SETTINGS_FILE="$NODERED_DIR/settings.js"
 sudo mkdir -p "$NODERED_DIR"
@@ -202,38 +219,56 @@ if [ ! -f "$NODERED_DIR/flows.json" ]; then
     sudo chown 1000:1000 "$NODERED_DIR/flows.json"
 fi
 
-TMP_NODE_DIR=$(mktemp -d)
-cd "$TMP_NODE_DIR"
-npm init -y >/dev/null
-npm install bcryptjs >/dev/null
-HASH=$(node -e "const bcrypt = require('bcryptjs'); bcrypt.hash('$USER_PASS', 12, (err, hash) => { if(err){console.error(err); process.exit(1);} console.log(hash); })")
-cd -
-rm -rf "$TMP_NODE_DIR"
+if [ ! -f "$SETTINGS_FILE" ]; then
+    echo "⚙️  Generiere Node-RED settings.js mit Passwort-Hash..."
+    TMP_NODE_DIR=$(mktemp -d)
+    cd "$TMP_NODE_DIR"
+    npm init -y >/dev/null
+    npm install bcryptjs >/dev/null
+    HASH=$(node -e "const bcrypt = require('bcryptjs'); bcrypt.hash('$USER_PASS', 12, (err, hash) => { if(err){console.error(err); process.exit(1);} console.log(hash); })")
+    cd - >/dev/null
+    rm -rf "$TMP_NODE_DIR"
 
-sudo tee "$SETTINGS_FILE" >/dev/null <<EOF
+    sudo tee "$SETTINGS_FILE" >/dev/null <<EOF
 module.exports = {
-    editorTheme: { theme: "dark", projects: { enabled: true } },
     adminAuth: { type: "credentials", users: [{ username: "${USER_NAME}", password: "${HASH}", permissions: "*" }] },
     flowFile: 'flows.json',
     ui: { path: "ui" }
 }
 EOF
+else
+    echo "✅ Node-RED settings.js existiert bereits."
+fi
 sudo chown -R 1000:1000 "$NODERED_DIR"
 
 # ==============================
 # docker-compose.yml erstellen
 # ==============================
+echo "📄 Schreibe docker-compose.yml (wird immer aktualisiert)..."
 DOCKER_COMPOSE_FILE="$STACK_DIR/docker-compose.yml"
 sudo tee "$DOCKER_COMPOSE_FILE" >/dev/null <<EOF
 version: '3.9'
 
 services:
+  homeassistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    container_name: homeassistant
+    restart: always
+    privileged: true
+    network_mode: host
+    volumes:
+      - ./homeassistant:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+
   nodered:
     image: nodered/node-red:latest
     container_name: nodered
     restart: always
     ports:
       - "1880:1880"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     volumes:
       - ./nodered:/data
       - ./nodered/settings.js:/data/settings.js
@@ -362,14 +397,18 @@ echo "============================================"
 echo "IoT Stack Setup abgeschlossen!"
 echo "Alle Microservices laufen."
 echo "Zugriff:"
-echo "Portainer: 9000"
+echo "Home Assistant: 8123"
 echo "Node-RED: 1880"
+echo "Portainer: 9000"
 echo "Mosquitto: 1883"
 echo "Grafana: 3000"
 echo "MariaDB: 3306"
 echo "Adminer: 8080"
 echo "InfluxDB: 8086"
 echo "WordPress: 80"
+echo ""
+echo "TIPP: In Node-RED erreichst du Home Assistant nun unter:"
+echo "http://host.docker.internal:8123"
 echo "============================================"
 ```
 
