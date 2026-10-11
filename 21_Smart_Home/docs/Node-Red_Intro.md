@@ -800,10 +800,10 @@ HTTP GET Request und POST Request
 
 </details>
 
-#### HTTP-Beispiel mit Node-Red und TouchDesigner
+#### Beispiele
 
-[TD HTTP](node-red_touchdesigner_http/node-red_touchdesigner_http)
-![TD HTTP](node-red_touchdesigner_http/node-red_touchdesigner_http.gif)
+- [HTTP-Beispiel mit Node-Red und TouchDesigner](HTTP_TouchDesigner_Node-Red/node-red_touchdesigner_http)
+  ![TD HTTP](HTTP_TouchDesigner_Node-Red/node-red_touchdesigner_http.gif)
 
 ## 03: Interaktion mit Maria DB
 
@@ -1372,14 +1372,18 @@ Wir können als Kommunikationsserver (="Broker") den von uns per docker-compose 
 Da der Service `mosquitto`heisst und über das docker-interne Netzwerk über diese Adresse erreichbar ist, braucht es in der internen Kommunikation zwischen Node-Red und Mosquitto keinen Hostnamen oder IP-Adresse.
 Stattdessen kann auch ein Online-Broker verwendet werden. Zum Beispiel:
 
-- broker.emqx.io
+- [broker.emqx.io](https://broker.emqx.io)
+- [test.mosquitto.org](http://test.mosquitto.org)
+- [broker.hivemq.com](http://broker.hivemq.com)
+- [public.mqttserver.eu](http://public.mqttserver.eu)
+- [broker.mqtt-dashboard.com](http://broker.mqtt-dashboard.com)
 
 Der Port `1883` ist bei den gängigen Brokern Standard.
 
 ![nodered05_mqtt_01](img/nodered05_mqtt_01.jpg)
 
 <details>
-<summary>Node-RED Flow anzeigen (JSON)</summary>
+<summary><b>Node-RED Flow anzeigen (JSON)</b></summary>
 
 ```json
 [
@@ -2394,7 +2398,12 @@ Der Port `1883` ist bei den gängigen Brokern Standard.
 ]
 ```
 
-</details>
+</details></b>
+
+### Beispiele
+
+- [Beispiel Node-Red <-> TouchDesigner via MQTT](MQTT_TouchDesigner_Node-Red)
+- [Beispiel Node-Red <-> ESP via MQTT](MQTT_ESP_Node-Red)
 
 ## 06: ESP32-Cam
 

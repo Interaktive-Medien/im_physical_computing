@@ -102,6 +102,9 @@ Dieses Script sollte für Raspberry Pi, wie auch für Hosting-Anbieter wie Infom
 
 ## 2.1. Installationsscript
 
+<details>
+<summary><b>Node-RED Flow anzeigen (JSON)</b></summary>
+
 ```bash
 #!/bin/bash
 set -e
@@ -411,6 +414,8 @@ echo "TIPP: In Node-RED erreichst du Home Assistant nun unter:"
 echo "http://host.docker.internal:8123"
 echo "============================================"
 ```
+
+</details><br>
 
 - Speichere die Datei: `CTRL + o`
 - Bestätige dies und verlasse die Datei: `CTRL + x`.
