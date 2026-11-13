@@ -10,11 +10,6 @@ Diese Anleitung führt dich Schritt für Schritt durch den Installationsprozess 
 
 # 1. Per SSH mit einem Server (Rpi) verbinden
 
-Verbindung vom Laptop zum Server herstellen  
-In diesem Abschnitt werden drei Möglichkeiten vorgestellt. Wähle eine davon aus:
-
-- 1.1. Raspberry Pi
-
 Egal ob Raspberry Pi oder ein Hosting-Anbieter (wie Infomaniak VPS oder Hetzner): es handelt sich jeweils um einen entfernten Computer (“Server”), auf den man sich zuerst einloggen muss, bevor man darauf arbeiten kann.  
 _Oder hast du etwa Zugriff auf ein fremdes Haus, wenn du keinen Schlüssel dafür hast?_
 
@@ -103,7 +98,7 @@ Dieses Script sollte für Raspberry Pi, wie auch für Hosting-Anbieter wie Infom
 ## 2.1. Installationsscript
 
 <details>
-<summary><b>Node-RED Flow anzeigen (JSON)</b></summary>
+<summary><b>Installationsscript ausklappen</b></summary>
 
 ```bash
 #!/bin/bash
@@ -441,82 +436,7 @@ Beispiel:
 sudo nano deinstall.sh
 ```
 
-Inhalt:
-
-```bash
-#!/bin/bash
-set -e
-
-# ==============================
-# Allgemeine Variablen
-# ==============================
-HOME_DIR="$HOME"
-STACK_DIR="$HOME_DIR/iot-stack"
-
-echo "============================================"
-echo "💥 START: IoT Stack Deinstallation"
-echo "Stack-Verzeichnis: $STACK_DIR"
-echo "============================================"
-
-## 1. Docker Container, Volumes und Netzwerke entfernen
-## ---------------------------------------------------
-echo "🐳 Stoppe und entferne alle Docker Container, Volumes und Netzwerke..."
-if [ -d "$STACK_DIR" ]; then
-    cd "$STACK_DIR"
-    # Container stoppen und entfernen, inklusive Netzwerken und benannten Volumes (portainer_data)
-    sudo docker compose down -v
-    cd "$HOME_DIR"
-else
-    echo "⚠️ Stack-Verzeichnis $STACK_DIR nicht gefunden. Überspringe Docker Compose down."
-fi
-
-## 2. Installationsverzeichnis löschen
-## -----------------------------------
-echo "🗑️ Lösche das gesamte Stack-Verzeichnis $STACK_DIR (inklusive aller Daten)..."
-sudo rm -rf "$STACK_DIR"
-
-## 3. Docker deinstallieren
-## -----------------------
-echo "❌ Deinstalliere Docker..."
-sudo systemctl stop docker
-sudo apt-get purge -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-sudo rm -rf /var/lib/docker
-sudo rm -rf /var/lib/containerd
-
-## 4. Node.js und dazugehörige Pakete deinstallieren
-## ------------------------------------------------
-echo "❌ Deinstalliere Node.js, npm und build-essential..."
-# Deinstalliere Node.js und das Paket, das bcryptjs zum Hashen benötigt
-sudo apt-get purge -y nodejs build-essential
-
-# Entferne das NodeSource Repository
-if [ -f /etc/apt/sources.list.d/nodesource.list ]; then
-    echo "🗑️ Entferne NodeSource Repository..."
-    sudo rm /etc/apt/sources.list.d/nodesource.list
-    sudo apt-get update -y
-fi
-
-## 5. Sonstige Pakete deinstallieren
-## --------------------------------
-echo "❌ Entferne sonstige installierte Pakete..."
-# Da Python3 oft ein Systembestandteil ist, entfernen wir nur die nachinstallierten Pakete.
-sudo apt-get purge -y python3-pip
-
-## 6. Cleanup
-## ----------
-echo "🧹 System-Cleanup..."
-# Entferne nicht mehr benötigte Abhängigkeiten
-sudo apt-get autoremove -y
-# Lösche heruntergeladene Installationsdateien
-sudo apt-get clean
-
-echo ""
-echo "============================================"
-echo "✅ DEINSTALLATION ABGESCHLOSSEN!"
-echo "Dein System ist weitestgehend in den Ursprungszustand zurückgesetzt."
-echo "Ein Neustart wird empfohlen."
-echo "============================================"
-```
+Speichere dort das generierte Deinstallationsscript
 
 Deinstallationsdatei ausführbar machen:
 

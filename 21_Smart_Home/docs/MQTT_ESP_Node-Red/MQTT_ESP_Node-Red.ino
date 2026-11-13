@@ -20,7 +20,7 @@ const char *pass = "strenggeheim"; // your WLAN PW
 bool isWlanConnected = 0;
 
 
-const char *broker = "q7"; // falls kein mDNS verfügbar: nimm IP Addresse. Finde heraus am Raspberry pi via "ip addr" "192.168.0.51";
+const char *broker = "192.168.0.51"; // falls kein mDNS verfügbar: nimm IP Addresse. Finde heraus am Raspberry pi via "ip addr" "192.168.0.51";
 const int mqtt_port = 1883;
 
 const char *subscribe_topics[] = {"erdgeschoss/wc/licht"};
